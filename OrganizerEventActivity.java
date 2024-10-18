@@ -21,7 +21,7 @@ public class OrganizerEventActivity extends AppCompatActivity {
     ArrayList<String> turn(ArrayList<Event> EventList){
         ArrayList<String> EventStringList = new ArrayList<>();
         for (Event event : EventList) {
-            EventStringList.add(event.name + '\n' + event.start_date + '\n' + event.end_date + '\n');
+            EventStringList.add("Name: "+event.name + '\n' + "Start Date: "+event.start_date + '\n' + "End Date: "+event.end_date + '\n');
         }
         return EventStringList;
     }
@@ -61,7 +61,7 @@ public class OrganizerEventActivity extends AppCompatActivity {
                                 String name = document.getString("name");
                                 String QRcode = document.getString("QRcode");
                                 String start_date = document.getString("start_date");
-                                String end_date = document.getString("end_date");
+                                 String end_date = document.getString("end_date");
                                 String poster_photo = document.getString("poster_photo");
 
                                 ArrayList<String> entrants = (ArrayList<String>) document.get("entrants");
