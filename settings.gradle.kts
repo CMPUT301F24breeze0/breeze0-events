@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "breeze0event"
+rootProject.name = "breeze0events"
 include(":app")
- 

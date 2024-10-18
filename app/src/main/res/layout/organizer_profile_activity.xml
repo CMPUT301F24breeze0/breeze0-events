@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/bottom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/button_events"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Events"
+            android:textColor="@android:color/white"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <Button
+            android:id="@+id/button_mylist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MyList"
+            android:textColor="@android:color/white"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <!-- Profile 按钮 -->
+        <Button
+            android:id="@+id/button_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/darker_gray"
+            android:text="Profile"
+            android:textColor="@android:color/white"
+            app:cornerRadius="0dp" />
+    </LinearLayout>
+
+</RelativeLayout>
