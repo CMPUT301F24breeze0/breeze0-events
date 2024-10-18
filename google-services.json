@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "537564806753",
-    "project_id": "breeze0-events",
-    "storage_bucket": "breeze0-events.appspot.com"
+    "project_number": "692563885738",
+    "project_id": "breeze0-events-bc0a6",
+    "storage_bucket": "breeze0-events-bc0a6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:537564806753:android:3ab64ce1fed41998247420",
+        "mobilesdk_app_id": "1:692563885738:android:0e1da9f0916db9ab44dad3",
         "android_client_info": {
           "package_name": "com.example.breeze0_events"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBviEDsJ4h6iIr2olgdy8v5ROGIfcFP6-c"
+          "current_key": "AIzaSyBta_lfZj_A4wEIpUSw8y5sSH9aFs9VSVY"
         }
       ],
       "services": {
