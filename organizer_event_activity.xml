@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_toolbar"
-        android:layout_marginBottom="180dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
         android:divider="@color/black"
         android:dividerHeight="1dp" />
 
