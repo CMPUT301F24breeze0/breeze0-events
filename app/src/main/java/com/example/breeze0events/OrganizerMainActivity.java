@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -35,20 +36,25 @@ public class OrganizerEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.organizer_event_activity);
+        setContentView(R.layout.organizer_main_activity);
 
-        Button button_mylist = findViewById(R.id.button_mylist);
-        Button button_profile = findViewById(R.id.button_profile);
-        Button button_events = findViewById(R.id.button_events);
-
-        // Get the ListView by its ID
-        ListView listView = findViewById(R.id.my_list_view);
+        Button map_button = findViewById(R.id.map_button);
+        Button my_facility_button = findViewById(R.id.my_facility_button);
+        Button new_event_button = findViewById(R.id.new_event_button);
+        ListView entrantListView = findViewById(R.id.organizer_event_list);
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("OverallDB");
         // Initialize the ArrayList
         ArrayList<Event> eventList = new ArrayList<>();
+        Adapter adapter = new ArrayAdapter<>(this,
+                R.layout.list_item_layout, R.id.text_item,
+                turn(eventList));
 
+        entrantListView.setAdapter(adapter);
+
+        db.collection("OverallDB")
 /*        db.collection("OverallDB")
+>>>>>>> main:app/src/main/java/com/example/breeze0events/OrganizerEventActivity.java
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -85,29 +91,23 @@ public class OrganizerEventActivity extends AppCompatActivity {
                     }
                 });*/
 
-        // Correctly set the ArrayAdapter with the custom layout and TextView ID
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.list_item_layout, R.id.text_item,
-                turn(eventList));
-
-        // Set the adapter to the ListView
-        listView.setAdapter(adapter);
-
-        // Set up button listeners
-        button_mylist.setOnClickListener(new View.OnClickListener() {
+        // by clicking "Map" button:
+        map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OrganizerEventActivity.this, OrganizerMyListActivity.class);
+                Intent intent = new Intent(OrganizerMainActivity.this, MapActivity.class);
+                startActivity(intent);
+            }
+                                      });
+        // by clicking "My Facility" button:
+        my_facility_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OrganizerMainActivity.this, OrganizerFacilityActivity.class);
                 startActivity(intent);
             }
         });
 
-        button_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(OrganizerEventActivity.this, OrganizerProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+
     }
 }
