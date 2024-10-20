@@ -1,10 +1,7 @@
 package com.example.breeze0events;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -12,19 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-public class OrganizerEventActivity extends AppCompatActivity {
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.CollectionReference;
+
+public class OrganizerMainActivity extends AppCompatActivity {
     ArrayList<String> turn(ArrayList<Event> EventList){
         ArrayList<String>EventStringList=new ArrayList<>();
         for (Event event:EventList) {
@@ -50,9 +39,10 @@ public class OrganizerEventActivity extends AppCompatActivity {
                 R.layout.list_item_layout, R.id.text_item,
                 turn(eventList));
 
-        entrantListView.setAdapter(adapter);
+        // 这行有报错，改一下
+        //entrantListView.setAdapter(adapter);
 
-        db.collection("OverallDB")
+        db.collection("OverallDB");
 /*        db.collection("OverallDB")
 >>>>>>> main:app/src/main/java/com/example/breeze0events/OrganizerEventActivity.java
                 .get()

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
 
+import com.example.breeze0events.databinding.OrganizerMainActivityBinding;
+
 public class OverallLoginPage extends AppCompatActivity {
 
     @Override
@@ -26,7 +28,7 @@ public class OverallLoginPage extends AppCompatActivity {
 
         // Set click listener for Organizer Button to navigate to OrganizerEventActivity
         organizerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OverallLoginPage.this, OrganizerEventActivity.class);
+            Intent intent = new Intent(OverallLoginPage.this, OrganizerMainActivityBinding.class);
             startActivity(intent);
         });
 
