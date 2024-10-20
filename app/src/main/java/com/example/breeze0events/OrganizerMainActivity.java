@@ -91,6 +91,15 @@ public class OrganizerMainActivity extends AppCompatActivity {
             }
         });
 
+        // by clicking "My Facility" button:
+        my_facility_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OrganizerMainActivity.this, OrganizerFacilityActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }

@@ -29,6 +29,11 @@
             android:theme="@style/Theme.Breeze0events">
         </activity>
 
+        <activity android:name=".OrganizerFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events">
+        </activity>
+
     </application>
 
 </manifest>
