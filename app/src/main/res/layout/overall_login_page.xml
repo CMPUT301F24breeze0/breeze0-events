@@ -7,13 +7,13 @@
     android:background="@color/material_dynamic_secondary10">
 
     <TextView
-        android:id="@+id/instruction"
+        android:id="@+id/overall_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="please select one role to enter"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+        android:layout_marginTop="100dp"
+        android:text="Welcome to The Event Lottery System!"
+        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textSize="20sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,47 +21,61 @@
 
     <Button
         android:id="@+id/entrant_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="200dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/material_dynamic_neutral30"
+        android:backgroundTint="@color/material_dynamic_neutral_variant30"
         android:gravity="center"
         android:text="Entrant"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/instruction"
-        tools:layout_editor_absoluteX="53dp" />
+        app:layout_constraintBottom_toTopOf="@+id/organizer_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/organizer_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/material_dynamic_neutral30"
+        android:backgroundTint="@color/material_dynamic_neutral_variant30"
         android:gravity="center"
         android:text="Organizer"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/entrant_button"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toTopOf="@+id/admin_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/admin_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="100dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/material_dynamic_neutral30"
+        android:backgroundTint="@color/material_dynamic_neutral_variant30"
         android:gravity="center"
         android:text="Admin"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/organizer_button"
-        tools:layout_editor_absoluteX="27dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="First Time Logging In?\nPlease Select Your Role:"
+        android:textColor="@color/material_dynamic_neutral_variant80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overall_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
