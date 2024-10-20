@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.CollectionReference;
 
-public class OrganizerEventActivity extends AppCompatActivity {
+public class OrganizerMainActivity extends AppCompatActivity {
 
     ArrayList<String> turn(ArrayList<Event> EventList){
         ArrayList<String> EventStringList = new ArrayList<>();
@@ -33,13 +33,13 @@ public class OrganizerEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.organizer_event_activity);
+        setContentView(R.layout.organizer_main_activity);
 
-        Button button_mylist = findViewById(R.id.button_mylist);
-        Button button_profile = findViewById(R.id.button_profile);
-        Button button_events = findViewById(R.id.button_events);
+        Button map_button = findViewById(R.id.map_button);
+        Button my_facility_button = findViewById(R.id.my_facility_button);
+        Button new_event_button = findViewById(R.id.new_event_button);
 
-        ListView listView = findViewById(R.id.my_list_view);
+        ListView entrantListView = findViewById(R.id.organizer_event_list);
 
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("OverallDB");
@@ -48,7 +48,7 @@ public class OrganizerEventActivity extends AppCompatActivity {
                 R.layout.list_item_layout, R.id.text_item,
                 turn(eventList));
 
-        listView.setAdapter(adapter);
+        entrantListView.setAdapter(adapter);
 
         db.collection("OverallDB")
                 .get()
@@ -82,20 +82,15 @@ public class OrganizerEventActivity extends AppCompatActivity {
                     }
                 });
 
-        button_mylist.setOnClickListener(new View.OnClickListener() {
+        // by clicking "Map" button:
+        map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OrganizerEventActivity.this, OrganizerMyListActivity.class);
+                Intent intent = new Intent(OrganizerMainActivity.this, MapActivity.class);
                 startActivity(intent);
             }
         });
 
-        button_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(OrganizerEventActivity.this, OrganizerProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+
     }
 }
