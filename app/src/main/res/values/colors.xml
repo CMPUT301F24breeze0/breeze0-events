@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ui_background">#1E1E1E</color>
+    <color name="text_color">#C0C7CD</color>
+    <color name="button_color">#40484D</color>
+    <color name="listview_divider_color">#585F65</color>
 </resources>
