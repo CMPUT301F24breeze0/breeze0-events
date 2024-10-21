@@ -1,4 +1,4 @@
 package com.example.breeze0events;
 
-public class OrganizerEventActivity {
+public class AdminOperateActivity {
 }
