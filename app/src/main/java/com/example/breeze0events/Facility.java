@@ -1,3 +1,5 @@
+package com.example.breeze0events;
+import java.util.List;
 public class Facility {
     private String facilityId; // Unique ID for the facility
     private String location; // Location of the facility
