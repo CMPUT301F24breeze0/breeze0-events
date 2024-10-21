@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +15,9 @@
         android:theme="@style/Theme.Breeze0events"
         tools:targetApi="31">
 
-        <!-- OrganizerEventActivity is the launcher activity -->
+        <!-- OverallLoginPage is the launcher activity -->
         <activity
-            android:name=".OrganizerEventActivity"
+            android:name=".OverallLoginPage"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events">
             <intent-filter>
@@ -23,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- OrganizerEventActivity -->
+        <activity
+            android:name=".OrganizerEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
 
         <!-- OrganizerMyListActivity -->
         <activity
@@ -36,6 +44,40 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
+        <activity
+            android:name=".OrganizerFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".EntrantEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".EntrantMylistActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".EntrantProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".AdminOperateActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".AdminProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <!-- OverallStorageController is not a UI activity, so it doesn't need to be exported or have a theme -->
+        <activity
+            android:name=".OverallStorageController"
+            android:exported="false" />
     </application>
 
 </manifest>
