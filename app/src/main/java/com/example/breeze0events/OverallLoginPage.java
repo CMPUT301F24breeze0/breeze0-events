@@ -28,7 +28,7 @@ public class OverallLoginPage extends AppCompatActivity {
 
         // Set click listener for Organizer Button to navigate to OrganizerEventActivity
         organizerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OverallLoginPage.this, OrganizerMainActivityBinding.class);
+            Intent intent = new Intent(OverallLoginPage.this, OrganizerMainActivity.class);
             startActivity(intent);
         });
 

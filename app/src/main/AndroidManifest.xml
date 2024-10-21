@@ -18,10 +18,7 @@
             android:name=".OrganizerMainActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".MapActivity"
@@ -32,6 +29,15 @@
         <activity android:name=".OrganizerFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events">
+        </activity>
+
+        <activity android:name=".OverallLoginPage"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
     </application>
