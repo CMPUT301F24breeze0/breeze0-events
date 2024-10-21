@@ -32,6 +32,7 @@ public class OrganizerMainActivity extends AppCompatActivity {
         Button new_event_button = findViewById(R.id.new_event_button);
         ListView entrantListView = findViewById(R.id.organizer_event_list);
         db = FirebaseFirestore.getInstance();
+
         final CollectionReference collectionReference = db.collection("OverallDB");
         // Initialize the ArrayList
         ArrayList<Event> eventList = new ArrayList<>();
@@ -39,7 +40,7 @@ public class OrganizerMainActivity extends AppCompatActivity {
                 R.layout.list_item_layout, R.id.text_item,
                 turn(eventList));
 
-        // 这行有报错，改一下
+        // 这行有报错，改一下: incompatible types: Adapter cannot be converted to ListAdapter:44
         //entrantListView.setAdapter(adapter);
 
         db.collection("OverallDB");

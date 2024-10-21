@@ -4,6 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
+import android.os.Bundle;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.CollectionReference;
 
 import com.example.breeze0events.databinding.OrganizerMainActivityBinding;
 
@@ -21,6 +33,7 @@ public class OverallLoginPage extends AppCompatActivity {
         Button adminButton = findViewById(R.id.admin_button);
 
         // Set click listener for Entrant Button to navigate to EntrantEventActivity
+
         entrantButton.setOnClickListener(v -> {
             Intent intent = new Intent(OverallLoginPage.this, EntrantEventActivity.class);
             startActivity(intent);
@@ -33,6 +46,7 @@ public class OverallLoginPage extends AppCompatActivity {
         });
 
         // Set click listener for Admin Button to navigate to AdminOperateActivity
+
         adminButton.setOnClickListener(v -> {
             Intent intent = new Intent(OverallLoginPage.this, AdminOperateActivity.class);
             startActivity(intent);
