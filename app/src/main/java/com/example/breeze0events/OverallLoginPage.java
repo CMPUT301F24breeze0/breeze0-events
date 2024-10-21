@@ -4,20 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
-import android.os.Bundle;
-import android.content.Intent;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.Button;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.CollectionReference;
-
-import com.example.breeze0events.databinding.OrganizerMainActivityBinding;
 
 public class OverallLoginPage extends AppCompatActivity {
 
@@ -41,7 +27,7 @@ public class OverallLoginPage extends AppCompatActivity {
 
         // Set click listener for Organizer Button to navigate to OrganizerEventActivity
         organizerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OverallLoginPage.this, OrganizerMainActivity.class);
+            Intent intent = new Intent(OverallLoginPage.this, OrganizerMyListActivity.class);
             startActivity(intent);
         });
 
