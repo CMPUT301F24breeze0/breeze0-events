@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1E1E1E">
+    android:background="@color/ui_background">
 
     <ListView
         android:id="@+id/organizer_event_list"
@@ -15,9 +15,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/view_background"
-        android:divider="@color/material_dynamic_neutral_variant40"
+        android:divider="@color/listview_divider_color"
         android:dividerHeight="2dp"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toTopOf="@id/my_facility_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,9 +29,9 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/material_dynamic_neutral_variant30"
+        android:backgroundTint="@color/button_color"
         android:text="Map"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -40,9 +40,9 @@
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/material_dynamic_neutral_variant30"
+        android:backgroundTint="@color/button_color"
         android:text="My Facility"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/new_event_button"
         app:layout_constraintStart_toEndOf="@+id/map_button" />
@@ -53,9 +53,9 @@
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/material_dynamic_neutral_variant30"
+        android:backgroundTint="@color/button_color"
         android:text="New"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Organizer Home"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
