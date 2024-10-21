@@ -5,10 +5,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class MapActivity extends AppCompatActivity {
+public class OrganizerMapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +16,7 @@ public class MapActivity extends AppCompatActivity {
 
         // by clicking "Back" button:
         back_button.setOnClickListener(v -> {
-            Intent intent = new Intent(MapActivity.this, OrganizerMainActivity.class);
+            Intent intent = new Intent(OrganizerMapActivity.this, OrganizerMyListActivity.class);
             startActivity(intent);
             finish();
         });

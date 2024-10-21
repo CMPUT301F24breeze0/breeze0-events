@@ -6,10 +6,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class OrganizerFacilityActivity extends AppCompatActivity {
     @Override
@@ -22,7 +18,7 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         // by clicking "Back" button:
         back_button.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerFacilityActivity.this, OrganizerMainActivity.class);
+            Intent intent = new Intent(OrganizerFacilityActivity.this, OrganizerMyListActivity.class);
             startActivity(intent);
             finish();
         });

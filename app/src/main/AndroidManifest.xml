@@ -28,22 +28,19 @@
 
         <!-- OrganizerEventActivity -->
         <activity
-            android:name=".OrganizerEventActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-
-        <!-- OrganizerMyListActivity -->
-        <activity
             android:name=".OrganizerMyListActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
-        <!-- OrganizerProfileActivity -->
+        <!-- OrganizerMapActivity -->
         <activity
-            android:name=".OrganizerProfileActivity"
+            android:name=".OrganizerMapActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-
+        <activity
+            android:name=".OrganizerEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
         <activity
             android:name=".OrganizerFacilityActivity"
             android:exported="true"
