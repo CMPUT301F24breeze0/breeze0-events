@@ -28,7 +28,7 @@
 
         <!-- OrganizerEventActivity -->
         <activity
-            android:name=".OrganizerMainActivity"
+            android:name=".OrganizerMyListActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -37,8 +37,10 @@
             android:name=".OrganizerMapActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-
-
+        <activity
+            android:name=".OrganizerEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
         <activity
             android:name=".OrganizerFacilityActivity"
             android:exported="true"
