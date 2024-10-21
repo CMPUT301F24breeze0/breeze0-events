@@ -6,11 +6,8 @@
 |               | `phone number`             | `string`                                      | Entrant's phone number                                                            |
 |               | `profile_photo`            | `string`                                      | Path or URL to the entrant's profile photo                                        |
 |               | `device`                   | `string`                                      | Device information                                                                |
-|               | `events_id`                | `array<event_id:string, location:string>`      | List of events the entrant is participating in, with event ID and location        |
+|               | `events_id`                | `array<event_id:string, location:string>`     | List of events the entrant is participating in, with event ID and location        |
 | **OrganizerDB**| `organizer_id` (document_id)| `string`                                      | Unique ID for the organizer                                                       |
-|               | `name`                     | `string`                                      | Organizer's name                                                                  |
-|               | `email`                    | `string`                                      | Organizer's email                                                                 |
-|               | `phone number`             | `string`                                      | Organizer's phone number                                                          |
 |               | `device`                   | `string`                                      | Device information                                                                |
 |               | `events_id`                | `array<event_id>`                              | List of event IDs organized by the organizer                                      |
 | **OverallDB** | `organizer_id` (document_id)| `string`                                      | Unique ID for the organizer                                                       |
@@ -25,6 +22,3 @@
 | **FacilityDB**| `facility_id` (document_id) | `string`                                      | Unique ID for the facility                                                        |
 |               | `location`                 | `string`                                      | Location of the facility                                                          |
 | **AdminDB**   | `admin_id` (document_id)    | `string`                                      | Unique ID for the admin                                                           |
-|               | `name`                     | `string`                                      | Admin's name                                                                      |
-|               | `email`                    | `string`                                      | Admin's email                                                                     |
-|               | `phone number`             | `string`                                      | Admin's phone number                                                              |
