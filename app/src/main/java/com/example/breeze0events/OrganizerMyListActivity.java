@@ -18,7 +18,8 @@ public class OrganizerMyListActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private ListView eventListView;
     private ArrayAdapter<String> eventListAdapter;
-    private ArrayList<String> eventList;
+    private ArrayList<String> eventList_display;
+    private ArrayList<Event> eventList;
     int limit=100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +32,21 @@ public class OrganizerMyListActivity extends AppCompatActivity {
 
         overallStorageController = new OverallStorageController();
         eventListView = findViewById(R.id.organizer_event_list);
-        eventList = new ArrayList<>();
-        eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventList);
+        eventList_display = new ArrayList<>();
+        eventList=new ArrayList<>();
+        eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventList_display);
         eventListView.setAdapter(eventListAdapter);
 
         for (int i=0; i<=limit; i++) {
             overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
                 @Override
                 public void onSuccess(Event event) {
-
+                 //   event.setStartDate("2001-10-21");
+                 //   overallStorageController.updateEvent("2",event);
                     String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                             + "\nEnd_date: " + event.getEndDate();
-                    eventList.add(eventInfo);
-
+                    eventList_display.add(eventInfo);
+                    eventList.add(event);
                     eventListAdapter.notifyDataSetChanged();
                 }
 
