@@ -25,6 +25,3 @@
 | **FacilityDB**| `facility_id` (document_id) | `string`                                      | Unique ID for the facility                                                        |
 |               | `location`                 | `string`                                      | Location of the facility                                                          |
 | **AdminDB**   | `admin_id` (document_id)    | `string`                                      | Unique ID for the admin                                                           |
-|               | `name`                     | `string`                                      | Admin's name                                                                      |
-|               | `email`                    | `string`                                      | Admin's email                                                                     |
-|               | `phone number`             | `string`                                      | Admin's phone number                                                              |
