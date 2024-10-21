@@ -1,3 +1,5 @@
+package com.example.breeze0events;
+import java.util.List;
 public class Admin {
     private String adminId; // Unique ID for the admin
     private String device; // Device information
