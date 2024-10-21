@@ -24,4 +24,6 @@
 |               | `organizers`               | `array<organizer_id:string>`                  | List of organizer IDs managing the event                                          |
 | **FacilityDB**| `facility_id` (document_id) | `string`                                      | Unique ID for the facility                                                        |
 |               | `location`                 | `string`                                      | Location of the facility                                                          |
+|               | `device`                   | `string`                                      | Device information                                                                |
 | **AdminDB**   | `admin_id` (document_id)    | `string`                                      | Unique ID for the admin                                                           |
+|               | `device`                   | `string`                                      | Device information                                                                |

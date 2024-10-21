@@ -14,13 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 
 public class OrganizerMyListActivity extends AppCompatActivity {
-    ArrayList<String> turn(ArrayList<Event> EventList){
-        ArrayList<String>EventStringList=new ArrayList<>();
-        for (Event event:EventList) {
-            EventStringList.add(event.name + '\n' + event.start_date + '\n' + event.end_date + '\n');
-        }
-        return EventStringList;
-    }
     private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +24,7 @@ public class OrganizerMyListActivity extends AppCompatActivity {
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
         ListView entrantListView = findViewById(R.id.organizer_event_list);
-        db = FirebaseFirestore.getInstance();
 
-        final CollectionReference collectionReference = db.collection("OverallDB");
-        // Initialize the ArrayList
-        ArrayList<Event> eventList = new ArrayList<>();
-        Adapter adapter = new ArrayAdapter<>(this,
-                R.layout.list_item_layout, R.id.text_item,
-                turn(eventList));
-
-
-        db.collection("OverallDB");
         // by clicking "Map" button:
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
