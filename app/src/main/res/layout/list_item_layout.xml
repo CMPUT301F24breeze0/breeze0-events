@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_item"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp">
-
-    <!-- Ensure the TextView has an ID, like 'text_item' -->
-    <TextView
-        android:id="@+id/text_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="Item Text"
-        android:textColor="@color/text_color"
-        android:textSize="15sp"
-        android:padding="5dp"
-        android:layout_weight="1"
-        android:singleLine="true"
-        android:ellipsize="end" />
-
-</LinearLayout>
+    android:layout_weight="1"
+    android:fontFamily="sans-serif"
+    android:padding="20dp"
+    android:text="Item Text"
+    android:textColor="@color/text_color"
+    android:textSize="25sp"
+    android:textStyle="bold"
+    android:breakStrategy="high_quality"
+    android:scrollHorizontally="false" />
