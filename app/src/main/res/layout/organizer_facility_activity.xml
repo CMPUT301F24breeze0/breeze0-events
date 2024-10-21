@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1E1E1E">
+    android:background="@color/ui_background">
 
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="My Facility"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintEnd_toStartOf="@+id/new_facility_button"
         app:layout_constraintStart_toEndOf="@+id/organizer_facility_activity_back_button"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,8 +23,8 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Back"
-        android:textColor="@color/material_dynamic_neutral_variant80"
-        android:backgroundTint="#1E1E1E"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,8 +33,8 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="New"
-        android:textColor="@color/material_dynamic_neutral_variant80"
-        android:backgroundTint="#1E1E1E"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +46,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/view_background"
-        android:divider="@color/material_dynamic_neutral_variant40"
+        android:divider="@color/listview_divider_color"
         android:dividerHeight="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

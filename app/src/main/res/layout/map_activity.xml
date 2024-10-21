@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#1E1E1E"
+    android:background="@color/ui_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:text="Entrants Map"
         android:textAlignment="center"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,9 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:backgroundTint="#1E1E1E"
+        android:backgroundTint="@color/ui_background"
         android:text="Back"
-        android:textColor="@color/material_dynamic_neutral_variant80"
+        android:textColor="@color/text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
