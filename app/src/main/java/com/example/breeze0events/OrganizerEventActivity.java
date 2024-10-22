@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import java.util.ArrayList;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.AlertDialog;
@@ -18,7 +20,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 
-public class OrganizerEventActivity exteds DialogFragment{
+public class OrganizerEventActivity extends DialogFragment {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -35,10 +37,10 @@ public class OrganizerEventActivity exteds DialogFragment{
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
-/*
+
     @Override
     public void onAttach(@NonNull Context context) {
-        super.wait(context);
+        super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener){
             listener = (OnFragmentInteractionListener) context;
         }
@@ -83,5 +85,5 @@ public class OrganizerEventActivity exteds DialogFragment{
     }
 
 }
-*/
+
 
