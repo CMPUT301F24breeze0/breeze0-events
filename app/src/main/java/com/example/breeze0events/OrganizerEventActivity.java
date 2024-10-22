@@ -9,30 +9,15 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.os.Bundle;
-import android.content.Intent;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.Button;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
-import android.widget.Toast;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import java.util.ArrayList;
-import androidx.fragment.app.DialogFragment;
-/*
+
+
 public class OrganizerEventActivity exteds DialogFragment{
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -50,7 +35,7 @@ public class OrganizerEventActivity exteds DialogFragment{
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
-
+/*
     @Override
     public void onAttach(@NonNull Context context) {
         super.wait(context);
