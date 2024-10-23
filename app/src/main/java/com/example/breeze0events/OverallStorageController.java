@@ -242,6 +242,8 @@ public class OverallStorageController {
         db.collection("OverallDB").document(event.getEventId()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));
+
+        Log.d("OverallStorageController","Attempting to add event: " + event.toString());
     }
 
     // Add a Facility to Firestore
@@ -271,7 +273,7 @@ public class OverallStorageController {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding admin", e));
     }
     // Update an Entrant in Firestore
-    public void updateEntrant(String entrantId, Entrant entrant) {
+    public void updateEntrant(Entrant entrant) {
         // Creating a map for the Entrant data
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("entrantId", entrant.getEntrantId());
@@ -292,13 +294,13 @@ public class OverallStorageController {
         entrantData.put("events", eventData);
 
         // Update the entrant data in Firestore
-        db.collection("EntrantDB").document(entrantId).update(entrantData)
+        db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating entrant", e));
     }
 
     // Update an Organizer in Firestore
-    public void updateOrganizer(String organizerId, Organizer organizer) {
+    public void updateOrganizer(Organizer organizer) {
         // Creating a map for the Organizer data
         Map<String, Object> organizerData = new HashMap<>();
         organizerData.put("organizerId", organizer.getOrganizerId());
@@ -309,13 +311,13 @@ public class OverallStorageController {
         organizerData.put("events", eventData);
 
         // Update the organizer data in Firestore
-        db.collection("OrganizerDB").document(organizerId).update(organizerData)
+        db.collection("OrganizerDB").document(organizer.getOrganizerId()).update(organizerData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Organizer successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating organizer", e));
     }
 
     // Update an Event in Firestore
-    public void updateEvent(String eventId, Event event) {
+    public void updateEvent(Event event) {
         // Creating a map for the Event data
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("eventId", event.getEventId());
@@ -331,13 +333,13 @@ public class OverallStorageController {
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
         // Update the event data in Firestore
-        db.collection("OverallDB").document(eventId).update(eventData)
+        db.collection("OverallDB").document(event.getEventId()).update(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating event", e));
     }
 
     // Update a Facility in Firestore
-    public void updateFacility(String facilityId, Facility facility) {
+    public void updateFacility(Facility facility) {
         // Creating a map for the Facility data
         Map<String, Object> facilityData = new HashMap<>();
         facilityData.put("facilityId", facility.getFacilityId());
@@ -345,20 +347,20 @@ public class OverallStorageController {
         facilityData.put("device", facility.getDevice());
 
         // Update the facility data in Firestore
-        db.collection("FacilityDB").document(facilityId).update(facilityData)
+        db.collection("FacilityDB").document(facility.getFacilityId()).update(facilityData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Facility successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating facility", e));
     }
 
     // Update an Admin in Firestore
-    public void updateAdmin(String adminId, Admin admin) {
+    public void updateAdmin(Admin admin) {
         // Creating a map for the Admin data
         Map<String, Object> adminData = new HashMap<>();
         adminData.put("adminId", admin.getAdminId());
         adminData.put("device", admin.getDevice());
 
         // Update the admin data in Firestore
-        db.collection("AdminDB").document(adminId).update(adminData)
+        db.collection("AdminDB").document(admin.getAdminId()).update(adminData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating admin", e));
     }
