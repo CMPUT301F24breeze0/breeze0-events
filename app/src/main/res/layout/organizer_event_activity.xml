@@ -93,7 +93,8 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/event_qr_image" />
+                android:id="@+id/event_qr_image"/>
+
             <Space
                 android:layout_width="20dp"
                 android:layout_height="100dp"/>
