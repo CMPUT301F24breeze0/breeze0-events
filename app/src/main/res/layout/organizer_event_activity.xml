@@ -23,14 +23,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Date"/>
+        android:text="Event Start Date"/>
     <EditText
-        android:id="@+id/event_date_bar"
+        android:id="@+id/event_start_date_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="yyyymmdd"
-        android:inputType="textPersonName"
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck"
         android:importantForAutofill="no" />
@@ -38,44 +37,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Time"/>
+        android:text="Event End Date"/>
     <EditText
-        android:id="@+id/event_time_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="hhmm"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="TextContrastCheck"
-        android:importantForAutofill="no" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Max No. of Entrants"/>
-    <EditText
-        android:id="@+id/max_entrants_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter the maximum No. of entrans here"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="TextContrastCheck"
-        android:importantForAutofill="no" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up Due Date"/>
-    <EditText
-        android:id="@+id/sighup_due_date_bar"
+        android:id="@+id/event_end_date_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="yyyymmdd"
-        android:inputType="textPersonName"
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck"
         android:importantForAutofill="no" />
@@ -83,14 +51,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Description"/>
+        android:text="No. of Entrants"/>
     <EditText
-        android:id="@+id/event_description_bar"
+        android:id="@+id/entrants_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter event description here"
-        android:inputType="textPersonName"
+        android:hint="Enter the No. of entrans here"
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck"
         android:importantForAutofill="no" />
@@ -98,17 +65,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No. of Attendees"/>
+        android:text="Event Facility"/>
     <EditText
-        android:id="@+id/no_of_attendees_bar"
+        android:id="@+id/event_facility_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter No. of Attendees here"
+        android:hint="Enter event facility here"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         tools:ignore="TextContrastCheck"
         android:importantForAutofill="no" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -126,6 +94,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/event_qr_image"/>
+
             <Space
                 android:layout_width="20dp"
                 android:layout_height="100dp"/>
