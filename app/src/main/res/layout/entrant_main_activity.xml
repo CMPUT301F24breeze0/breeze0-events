@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ui_background"
-    tools:context=".EntrantMylistActivity">
+    tools:context=".EntrantEventActivity">
 
     <ImageView
         android:id="@+id/profileImage"
@@ -16,8 +16,8 @@
         android:contentDescription="Profile Image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/entrantName"
         app:layout_constraintVertical_bias="0" />
 
@@ -30,8 +30,8 @@
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/profileImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="8dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-1dp" />
 
     <Button
         android:id="@+id/buttonQRScan"
@@ -42,8 +42,8 @@
         android:textColor="@color/text_color"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintMarginEnd="16dp"
-        app:layout_constraintMarginTop="16dp" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/buttonEventSearch"
@@ -55,8 +55,8 @@
         android:textColor="@color/text_color"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonQRScan"
-        app:layout_constraintMarginEnd="8dp"
-        app:layout_constraintMarginTop="16dp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp" />
 
     <LinearLayout
         android:id="@+id/waitlistContainer"
@@ -101,6 +101,7 @@
         <!-- Repeat this block for other events or use a RecyclerView -->
     </LinearLayout>
 
+    <!-- Bottom Buttons: Blacklist, Quiet Mode, Profile -->
     <Button
         android:id="@+id/buttonBlacklist"
         android:layout_width="0dp"
@@ -111,7 +112,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonQuietMode"
-        app:layout_constraintHorizontalChainStyle="spread"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp" />
 
