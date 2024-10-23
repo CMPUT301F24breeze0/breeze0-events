@@ -14,6 +14,8 @@ public class Event {
     private List<String> organizers; // List of organizer IDs managing the event
 
 
+    public Event(){}
+
     public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, List<String> entrants, List<String> organizers) {
         this.eventId = eventId != null ? eventId : "";;
         this.name = name != null ? name : "";

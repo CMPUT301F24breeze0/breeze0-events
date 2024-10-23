@@ -3,6 +3,7 @@ package com.example.breeze0events;
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -113,6 +114,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventList_display.add(eventInfo);
         eventList.add(newEvent);
         eventListAdapter.notifyDataSetChanged();
+        Log.d("Event","Event to add: " + newEvent.toString());
     }
 
     // load from firebase
