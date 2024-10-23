@@ -242,6 +242,8 @@ public class OverallStorageController {
         db.collection("OverallDB").document(event.getEventId()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));
+
+        Log.d("OverallStorageController","Attempting to add event: " + event.toString());
     }
 
     // Add a Facility to Firestore
