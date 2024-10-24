@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Breeze0event" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Breeze0events" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 设置状态栏颜色 -->
+        <item name="android:statusBarColor">@color/ui_background</item>
+
+        <!-- 设置导航栏颜色 -->
+        <item name="android:navigationBarColor">@color/ui_background</item>
     </style>
 
-    <style name="Theme.Breeze0event" parent="Base.Theme.Breeze0event" />
+   <!-- <style name="Theme.Breeze0events" parent="Base.Theme.Breeze0events" /> -->
+
+
 </resources>
