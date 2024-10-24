@@ -6,25 +6,12 @@
     android:layout_height="match_parent">
 
 
+
     <ListView
-        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
-
-
-    </ListView>
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="406dp"
-        android:layout_height="29dp"
-        android:fontFamily="cursive"
-        android:text="Images"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints" />
+        android:visibility="invisible"
+        />
 
     <ImageView
         android:id="@+id/imageView4"
