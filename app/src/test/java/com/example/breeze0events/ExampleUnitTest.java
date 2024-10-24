@@ -1,4 +1,4 @@
-package com.example.breeze0event;
+package com.example.breeze0events;
 
 import org.junit.Test;
 
