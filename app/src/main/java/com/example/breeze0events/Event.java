@@ -1,4 +1,5 @@
 package com.example.breeze0events;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
@@ -12,16 +13,19 @@ public class Event {
     private List<String> entrants; // List of entrant IDs participating in the event
     private List<String> organizers; // List of organizer IDs managing the event
 
+
+    public Event(){}
+
     public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, List<String> entrants, List<String> organizers) {
-        this.eventId = eventId;
-        this.name = name;
-        this.qrCode = qrCode;
-        this.posterPhoto = posterPhoto;
-        this.facility = facility;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.entrants = entrants;
-        this.organizers = organizers;
+        this.eventId = eventId != null ? eventId : "";;
+        this.name = name != null ? name : "";
+        this.qrCode = qrCode != null ? qrCode : "";
+        this.posterPhoto = posterPhoto != null ? posterPhoto : "";
+        this.facility = facility != null ? facility : "";
+        this.startDate = startDate != null ? startDate : "";
+        this.endDate = endDate != null ? endDate : "";
+        this.entrants = entrants != null ? entrants : new ArrayList<>();
+        this.organizers = organizers != null ? organizers : new ArrayList<>();
     }
 
     // Getters and setters
@@ -40,6 +44,8 @@ public class Event {
     public void setName(String name) {
         this.name = name;
     }
+
+
 
     public String getQrCode() {
         return qrCode;
