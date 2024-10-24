@@ -98,4 +98,3 @@ public class OrganizerEventActivity extends DialogFragment {
 
 }
 
-

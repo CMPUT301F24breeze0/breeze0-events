@@ -1,6 +1,7 @@
 
 package com.example.breeze0events;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
@@ -10,7 +11,14 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
@@ -20,7 +28,6 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityList;
-    int limit=100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,23 +42,37 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityList);
         facilityListView.setAdapter(facilityListAdapter);
 
-        for(int i=1; i<=100; i++) {
-            overallStorageController.getFacility(String.valueOf(i), new FacilityCallback() {
-                @Override
-                public void onSuccess(Facility facility) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("FacilityDB");
 
-                    String facilityInfo = "Facility: " + facility.getLocation();
-                    facilityList.add(facilityInfo);
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String docId = document.getId();
+                        overallStorageController.getFacility(String.valueOf(docId), new FacilityCallback() {
+                            @Override
+                            public void onSuccess(Facility facility) {
 
-                    facilityListAdapter.notifyDataSetChanged();
+                                String facilityInfo = "Facility: " + facility.getLocation();
+                                facilityList.add(facilityInfo);
+
+                                facilityListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+
+                            }
+                        });
+                    }
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
                 }
+            }
+        });
 
-                @Override
-                public void onFailure(String errorMessage) {
-
-                }
-            });
-        }
 
         // by clicking "Back" button:
         back_button.setOnClickListener(v -> {
