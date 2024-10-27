@@ -75,6 +75,10 @@
             android:name=".AdminProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".EntrantSearchingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
 
         <!-- OverallStorageController is not a UI activity, so it doesn't need to be exported or have a theme -->
         <activity
