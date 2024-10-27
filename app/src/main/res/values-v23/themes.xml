@@ -5,5 +5,7 @@
         <item name="android:navigationBarColor">#1E1E1E</item>
         <item name="android:statusBarColor">#1E1E1E</item>
         <item name="android:windowBackground">#1E1E1E</item>
+        <item name="android:textColorPrimary">#C0C7CD</item>
+        <item name="colorAccent">#40484D</item>
     </style>
 </resources>
