@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "830447862092",
+    "firebase_url": "https://breeze0events-default-rtdb.firebaseio.com",
     "project_id": "breeze0events",
     "storage_bucket": "breeze0events.appspot.com"
   },
@@ -10,6 +11,44 @@
         "mobilesdk_app_id": "1:830447862092:android:4f0941b6c7c2e0f6644fe9",
         "android_client_info": {
           "package_name": "com.example.breeze0events"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8BEtcTXLvsp7zO7qzTQaY7AB7EgLbJkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830447862092:android:a7d45bcc60432beb644fe9",
+        "android_client_info": {
+          "package_name": "com.example.firebasetest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8BEtcTXLvsp7zO7qzTQaY7AB7EgLbJkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830447862092:android:eaf0148d1caa5c05644fe9",
+        "android_client_info": {
+          "package_name": "com.example.listycity5"
         }
       },
       "oauth_client": [],
