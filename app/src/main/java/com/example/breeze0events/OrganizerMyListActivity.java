@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Map;
@@ -33,6 +35,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     private ArrayAdapter<String> eventListAdapter;
     private ArrayList<String> eventList_display;
     private ArrayList<Event> eventList;
+    private int pos;
+    public Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +124,35 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
+                pos = position;
+                setEventList(eventList.get(pos));
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerMyListActivity.this);
+                alert.setTitle("Delete/ Edit");
+                alert.setMessage("Do you want to delete or edit this event?");
+                alert.show();
+                // delete event
+                alert.setNeutralButton("Delete",(dialogInterface, j) ->{
+                    if(eventList.size() != 0){
+                        Event item = eventList.get(pos);
+                        // boolean check_done = item.getStatus();
+                        eventListAdapter.remove(String.valueOf(item));
+                        eventList.remove(item);
+                        update();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Nothing to delete",Toast.LENGTH_LONG).show();
+                    }
+                });
+                // edit event
+                alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
+                // cancel button
+                alert.setNegativeButton("Cancel",(dialog, which) -> {
+                    dialog.dismiss();
+                });
+                alert.show();
+                return true;
             }
+
         });
 
 
@@ -137,6 +168,15 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventList.add(newEvent);
         eventListAdapter.notifyDataSetChanged();
         Log.d("Event","Event to add: " + newEvent.toString());
+    }
+
+    private void setEventList(Event event)  {
+        this.event = event;
+        update();
+    }
+
+    public void update() {
+        eventListAdapter.notifyDataSetChanged();
     }
 
     // load from firebase
