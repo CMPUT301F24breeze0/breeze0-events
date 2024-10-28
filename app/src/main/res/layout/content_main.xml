@@ -3,28 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<<<<<<< HEAD:app/src/main/res/layout/activity_main.xml
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello World!"
-=======
+        android:text="Hello World!"/>
     <fragment
         android:id="@+id/nav_host_fragment_content_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
->>>>>>> main:app/src/main/res/layout/content_main.xml
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-<<<<<<< HEAD:app/src/main/res/layout/activity_main.xml
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
@@ -42,9 +39,13 @@
         android:id="@+id/imageView3"
         android:layout_width="530dp"
         android:layout_height="514dp"
-        app:srcCompat="@android:drawable/alert_light_frame"
-        tools:layout_editor_absoluteX="-46dp"
-        tools:layout_editor_absoluteY="108dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/alert_light_frame" />
 
     <TextView
         android:id="@+id/textView2"
@@ -55,14 +56,15 @@
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="165dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginBottom="12dp"
         android:ems="10"
         android:inputType="text"
@@ -75,7 +77,7 @@
     <EditText
         android:id="@+id/password"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginBottom="232dp"
         android:ems="10"
         android:inputType="text"
@@ -88,12 +90,10 @@
     <Button
         android:id="@+id/login_button"
         android:layout_width="137dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:text="Login"
-        tools:layout_editor_absoluteX="137dp"
-        tools:layout_editor_absoluteY="410dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
-=======
-        app:navGraph="@navigation/nav_graph" />
->>>>>>> main:app/src/main/res/layout/content_main.xml
 </androidx.constraintlayout.widget.ConstraintLayout>
