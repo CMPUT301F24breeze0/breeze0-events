@@ -1,4 +1,7 @@
 package com.example.breeze0events;
 
-public class AdminOperateActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class AdminOperateActivity extends AppCompatActivity {
 }
+
