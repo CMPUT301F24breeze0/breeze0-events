@@ -52,6 +52,16 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+            android:name=".EntrantLoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".EntrantPreLoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
             android:name=".EntrantMylistActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
