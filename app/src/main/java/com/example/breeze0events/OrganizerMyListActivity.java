@@ -1,3 +1,4 @@
+
 package com.example.breeze0events;
 
 import android.os.Bundle;
@@ -10,11 +11,22 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.Map;
+
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class OrganizerMyListActivity extends AppCompatActivity implements OrganizerEventActivity.OnFragmentInteractionListener{
     private FirebaseFirestore db;
@@ -23,7 +35,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     private ArrayAdapter<String> eventListAdapter;
     private ArrayList<String> eventList_display;
     private ArrayList<Event> eventList;
-    int limit = 100;
+    private int pos;
+    public Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +54,38 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventList_display);
         eventListView.setAdapter(eventListAdapter);
 
-        for (int i = 0; i <= limit; i++) {
-            overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
-                @Override
-                public void onSuccess(Event event) {
-                    //   event.setStartDate("2001-10-21");
-                    //   overallStorageController.updateEvent("2",event);
-                    String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
-                            + "\nEnd_date: " + event.getEndDate();
-                    eventList_display.add(eventInfo);
-                    eventList.add(event);
-                    eventListAdapter.notifyDataSetChanged();
-                }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
 
-                @Override
-                public void onFailure(String errorMessage) {
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String docId = document.getId();
+                        overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
+                            @Override
+                            public void onSuccess(Event event) {
+                                //   event.setStartDate("2001-10-21");
+                                //   overallStorageController.updateEvent("2",event);
+                                String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
+                                        + "\nEnd_date: " + event.getEndDate();
+                                eventList_display.add(eventInfo);
+                                eventList.add(event);
+                                eventListAdapter.notifyDataSetChanged();
+                            }
 
+                            @Override
+                            public void onFailure(String errorMessage) {
+
+                            }
+                        });
+                    }
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
                 }
-            });
-        }
+            }
+        });
         // by clicking "Map" button:
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,8 +124,35 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
+                pos = position;
+                setEventList(eventList.get(pos));
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerMyListActivity.this);
+                alert.setTitle("Delete/ Edit");
+                alert.setMessage("Do you want to delete or edit this event?");
+                alert.show();
+                // delete event
+                alert.setNeutralButton("Delete",(dialogInterface, j) ->{
+                    if(eventList.size() != 0){
+                        Event item = eventList.get(pos);
+                        // boolean check_done = item.getStatus();
+                        eventListAdapter.remove(String.valueOf(item));
+                        eventList.remove(item);
+                        update();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Nothing to delete",Toast.LENGTH_LONG).show();
+                    }
+                });
+                // edit event
+                alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
+                // cancel button
+                alert.setNegativeButton("Cancel",(dialog, which) -> {
+                    dialog.dismiss();
+                });
+                alert.show();
+                return true;
             }
+
         });
 
 
@@ -117,26 +170,47 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         Log.d("Event","Event to add: " + newEvent.toString());
     }
 
+    private void setEventList(Event event)  {
+        this.event = event;
+        update();
+    }
+
+    public void update() {
+        eventListAdapter.notifyDataSetChanged();
+    }
+
     // load from firebase
     private void loadEventsFromFirebase() {
-        for (int i = 0; i <= limit; i++) {
-            overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
-                @Override
-                public void onSuccess(Event event) {
-                    String eventInfo = "Name: " + event.getName() +
-                            "\nStart_date: " + event.getStartDate() +
-                            "\nEnd_date: " + event.getEndDate();
-                    eventList_display.add(eventInfo);
-                    eventList.add(event);
-                    eventListAdapter.notifyDataSetChanged();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String docId = document.getId();
+                        Map<String, Object> data = document.getData();
+                        overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
+                            @Override
+                            public void onSuccess(Event event) {
+                                String eventInfo = "Name: " + event.getName() +
+                                        "\nStart_date: " + event.getStartDate() +
+                                        "\nEnd_date: " + event.getEndDate();
+                                eventList_display.add(eventInfo);
+                                eventList.add(event);
+                                eventListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                            }
+                        });
+                    }
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
                 }
-
-                @Override
-                public void onFailure(String errorMessage) {
-                }
-            });
-
-
-        }
+            }
+        });
     }
 }

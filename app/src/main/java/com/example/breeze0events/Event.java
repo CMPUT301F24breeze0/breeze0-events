@@ -16,10 +16,7 @@ public class Event {
 
     public Event(){}
 
-    public Event(
-            String eventId, String name, String qrCode, String posterPhoto,
-            String facility, String startDate, String endDate, List<String> entrants,
-            List<String> organizers) {
+    public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, List<String> entrants, List<String> organizers) {
         this.eventId = eventId != null ? eventId : "";;
         this.name = name != null ? name : "";
         this.qrCode = qrCode != null ? qrCode : "";

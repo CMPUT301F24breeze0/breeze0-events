@@ -72,7 +72,7 @@ public class OrganizerEventActivity extends DialogFragment {
                 .setNeutralButton("Upload Poster",(dialoginterface,i)->{
                     // openGallery();
                 })
-                .setPositiveButton("Add and Save",(dialoginterface,i) ->{
+                .setPositiveButton("Save",(dialoginterface,i) ->{
                     String name = event_name_bar.getText().toString();
                     String facility = event_facility_bar.getText().toString();
                     String start_date = event_start_date_bar.getText().toString();
