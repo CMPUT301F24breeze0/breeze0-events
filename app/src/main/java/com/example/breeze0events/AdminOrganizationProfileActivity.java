@@ -12,7 +12,7 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private ListView organizationListView;
     private ArrayAdapter<String> organizationListAdapter;
-    private ArrayList<String> organizationList;
+    private ArrayList<String> organizationList;    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
