@@ -29,11 +29,6 @@ public class EntrantEventActivity extends AppCompatActivity {
 
         // Handle already have an account button click
         buttonAlreadyHaveAccount.setOnClickListener(v -> {
-            // FIXME: 2024/10/26 The following is for testing UI
-            Intent test = new Intent(EntrantEventActivity.this, EntrantMylistActivity.class);
-            startActivity(test);
-            // FIXME: 2024/10/26 
-            
             String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
             new OverallStorageController().getEntrant(deviceId, new EntrantCallback() {
                 @Override

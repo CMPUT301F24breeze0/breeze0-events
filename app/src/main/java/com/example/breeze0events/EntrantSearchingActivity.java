@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,11 +33,11 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
     private ListView event_search_List;
     private ArrayList<Event> dataList;
     SearchingAdapter eventAdapter;
-    private String keyword = null;
-    private String location = null;
+    private String keyword = "";
+    private String location = "";
     private Button refreshButton;
     private OverallStorageController overallStorageController;
-    int limit = 100;
+    int limit = 20, semaphore = 0;
     @Override
     public void UpdateKeyword(String keyword, String location) {
         this.keyword = keyword;
@@ -84,7 +85,7 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), EntrantEventDetail.class);
-                intent.putExtra("eventID", dataList.get(i).getName());
+                intent.putExtra("eventID", dataList.get(i).getEventId());
                 startActivity(intent);
             }
         });
@@ -92,19 +93,30 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
 
     // Synchronize data by loading from database
     private void updateList(){
+        if (semaphore != 0){
+            Toast.makeText(this,"Loading data", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        dataList.clear();
+        eventAdapter.notifyDataSetChanged();
         for (int i=0; i<=limit; i++){
+            semaphore++;
             overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
                 @Override
                 public void onSuccess(Event event) {
-                    // FIXME: 2024/10/27 geolocation filter will be updated latter
-                    if(event.getName().toLowerCase().contains(keyword.toLowerCase())){
+                    if (event.getName().toLowerCase().contains(keyword.toLowerCase()) &&
+                                    event.getFacility().toLowerCase().contains(location.toLowerCase())){
                         dataList.add(event);
+                        eventAdapter.notifyDataSetChanged();
                     }
+                    semaphore--;
                 }
                 @Override
-                public void onFailure(String errorMessage) {}
+                public void onFailure(String errorMessage) {
+                    semaphore--;
+                    Log.e("EntrantSearchingActivity", "Error loading event: " + errorMessage);
+                }
             });
         }
-        eventAdapter.notifyDataSetChanged();
     }
 }
