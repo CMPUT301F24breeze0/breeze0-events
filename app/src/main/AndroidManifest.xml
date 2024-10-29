@@ -67,7 +67,7 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminProfileActivity"
+            android:name=".AdminOrganizationProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
