@@ -55,6 +55,8 @@ public class EntrantMylistActivity extends AppCompatActivity  {
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
+                entrantName.setText(entrant.getName());
+
                 profileImage.setImageBitmap(decodeBase64Image(entrant.getProfilePhoto()));
             }
 

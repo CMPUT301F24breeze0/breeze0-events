@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +25,8 @@ public class EntrantEventDetail extends AppCompatActivity {
     private Button event_cancel;
     private ImageView event_poster;
     private OverallStorageController overallStorageController;
+    private String eventID;
+    private String eventLocation;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,8 @@ public class EntrantEventDetail extends AppCompatActivity {
             // FIXME: 2024/10/27 Add functionality to show Max number of entrants
             @Override
             public void onSuccess(Event event) {
+                eventID = event.getEventId();
+                eventLocation = event.getFacility();
                 event_title.setText(event.getName());
                 String information = "Event Name: "+event.getName()
                         +"\nEvent Date: "+event.getStartDate()
@@ -57,6 +63,34 @@ public class EntrantEventDetail extends AppCompatActivity {
             @Override
             public void onFailure(String errorMessage) {
 
+            }
+        });
+
+        event_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        event_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                overallStorageController.getEntrant(deviceId, new EntrantCallback() {
+                    @Override
+                    public void onSuccess(Entrant entrant) {
+                        entrant.addEvents(eventID, eventLocation);
+                        overallStorageController.updateEntrant(entrant);
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+
+                    }
+                });
+                Intent go_back = new Intent(EntrantEventDetail.this, EntrantMylistActivity.class);
+                go_back.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(go_back);
             }
         });
     }

@@ -77,6 +77,9 @@ public class Entrant {
     public void setEvents(List<Pair<String, String>> events) {
         this.events = events;
     }
+    public void addEvents(String eventID, String eventLocation){
+        this.events.add(new Pair<String, String>(eventID, eventLocation));
+    }
 
     @Override
     public String toString() {
@@ -90,4 +93,5 @@ public class Entrant {
                 ", events=" + events +
                 '}';
     }
+
 }
