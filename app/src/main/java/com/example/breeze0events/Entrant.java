@@ -87,6 +87,9 @@ public class Entrant {
     public void setStatus(List<String> status) {
         this.status = status;
     }
+    public void addEvents(String eventID) {
+        events.add(eventID);
+    }
 
     @Override
     public String toString() {
