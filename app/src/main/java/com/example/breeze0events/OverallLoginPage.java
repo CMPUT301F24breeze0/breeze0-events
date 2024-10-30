@@ -34,7 +34,7 @@ public class OverallLoginPage extends AppCompatActivity {
         // Set click listener for Admin Button to navigate to AdminOperateActivity
 
         adminButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OverallLoginPage.this, AdminOperateActivity.class);
+            Intent intent = new Intent(OverallLoginPage.this, AdminLoginActivity.class);
             startActivity(intent);
         });
     }
