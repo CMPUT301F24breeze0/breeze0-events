@@ -8,9 +8,10 @@ public class Entrant {
     private String phoneNumber;
     private String profilePhoto;
     private String device;
-    private List<Pair<String, String>> events; // Each Pair represents <eventId, location>
+    private List<String> events; // Each Pair represents <eventId, location>
+    private List<String> status;
 
-    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device, List<Pair<String, String>> events) {
+    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device, List<String> events, List<String> status) {
         this.entrantId = entrantId;
         this.name = name;
         this.email = email;
@@ -18,6 +19,7 @@ public class Entrant {
         this.profilePhoto = profilePhoto;
         this.device = device;
         this.events = events;
+        this.status = status;
     }
 
     // Getters and setters for all fields
@@ -70,15 +72,20 @@ public class Entrant {
         this.device = device;
     }
 
-    public List<Pair<String, String>> getEvents() {
+    public List<String> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Pair<String, String>> events) {
+    public void setEvents(List<String> events) {
         this.events = events;
     }
-    public void addEvents(String eventID, String eventLocation){
-        this.events.add(new Pair<String, String>(eventID, eventLocation));
+
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<String> status) {
+        this.status = status;
     }
 
     @Override
@@ -91,7 +98,7 @@ public class Entrant {
                 ", profilePhoto='" + profilePhoto + '\'' +
                 ", device='" + device + '\'' +
                 ", events=" + events +
+                ", status=" + status +
                 '}';
     }
-
 }

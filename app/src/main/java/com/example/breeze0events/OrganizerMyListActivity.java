@@ -1,4 +1,5 @@
 
+
 package com.example.breeze0events;
 
 import android.os.Bundle;
@@ -112,13 +113,23 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             }
         });
 
-        // by short clicking anything on the list, display event detail
+// By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected event item
+                Event selectedEvent = eventList.get(position);
 
+                // Create an Intent to navigate to OrganizerEventInformationActivity
+                Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventInformationActivity.class);
+
+                // Pass relevant event information to the target Activity (e.g., event ID or name)
+                intent.putExtra("selected_event_id",  selectedEvent.getEventId());
+                // Start OrganizerEventInformationActivity
+                startActivity(intent);
             }
         });
+
 
         // by long clicking anything on the list, the organizer can choose to delete the event or edit the event
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
