@@ -45,18 +45,21 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonEventSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="24sp"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/text_color"
+        android:clickable="true"
+        app:backgroundTint="@color/button_color"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:layout_editor_absoluteX="132dp"
+        tools:layout_editor_absoluteY="40dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonQRScan"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp" />
+
+
 
     <LinearLayout
         android:id="@+id/waitlistContainer"
