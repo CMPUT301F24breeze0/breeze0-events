@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ui_background">
+
+    <TextView
+        android:id="@+id/entrant_event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Event Name"
+        android:textColor="@color/text_color"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="319dp"
+        android:layout_height="598dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/entrant_event_title"
+        app:layout_constraintVertical_bias="0.333">
+
+        <TextView
+            android:id="@+id/Event_Maintitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Event General Information"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Event_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Event Name: \n Event Date:\nMAX No. of Entrants\n Sign up Due Date\n Event Description\n No. of Attendee"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Event_Maintitle" />
+
+        <ImageView
+            android:id="@+id/Entrent_event_QRcode"
+            android:layout_width="84dp"
+            android:layout_height="82dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/view_background"
+            app:layout_constraintBottom_toTopOf="@+id/entrant_event_join"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/entrant_event_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Join"
+            android:layout_marginBottom="36dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/entrant_event_cancel"
+            app:layout_constraintHorizontal_bias="0.405"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/entrant_event_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="36dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/Event_QRcode_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="Scan this QR Code\n for more information"
+            app:layout_constraintBottom_toTopOf="@+id/Entrent_event_QRcode"
+            app:layout_constraintEnd_toStartOf="@+id/Entrant_event_poster"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/Entrant_event_poster"
+            android:layout_width="152dp"
+            android:layout_height="110dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/button_wallpaper"
+            app:layout_constraintBottom_toTopOf="@+id/entrant_event_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toEndOf="@+id/Entrent_event_QRcode" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

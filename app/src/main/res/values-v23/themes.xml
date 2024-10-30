@@ -2,8 +2,10 @@
 
     <style name="Theme.Breeze0events" parent="Base.Theme.Breeze0events">
         <!-- Transparent system bars for edge-to-edge. -->
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:navigationBarColor">#1E1E1E</item>
+        <item name="android:statusBarColor">#1E1E1E</item>
+        <item name="android:windowBackground">#1E1E1E</item>
+        <item name="android:textColorPrimary">#C0C7CD</item>
+        <item name="colorAccent">#40484D</item>
     </style>
 </resources>
