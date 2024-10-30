@@ -79,7 +79,7 @@ public class EntrantEventDetail extends AppCompatActivity {
                 overallStorageController.getEntrant(deviceId, new EntrantCallback() {
                     @Override
                     public void onSuccess(Entrant entrant) {
-                        entrant.addEvents(eventID, eventLocation);
+                        entrant.addEvents(eventID);
                         overallStorageController.updateEntrant(entrant);
                     }
 

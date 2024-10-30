@@ -52,7 +52,7 @@ public class EntrantLoginActivity extends AppCompatActivity {
                 profileImageString = generateDefaultProfileImage(name);
             }
 
-            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new ArrayList<>());
+            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new ArrayList<>(), new ArrayList<>());
             new OverallStorageController().addEntrant(newEntrant);
 
             Intent intent = new Intent(EntrantLoginActivity.this, EntrantMylistActivity.class);
