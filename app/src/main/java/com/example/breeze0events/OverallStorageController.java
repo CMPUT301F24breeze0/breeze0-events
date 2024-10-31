@@ -97,7 +97,7 @@ public class OverallStorageController {
     // Fetch Organizer data from Firestore
     public void getOrganizer(String organizerId, final OrganizerCallback callback) {
         DocumentReference docRef = db.collection("OrganizerDB").document(organizerId);
-
+        
         // Retrieve organizer data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
