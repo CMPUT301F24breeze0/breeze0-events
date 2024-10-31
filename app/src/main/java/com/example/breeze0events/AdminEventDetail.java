@@ -19,6 +19,7 @@ public class AdminEventDetail extends AppCompatActivity {
     private TextView maxEntrants;
     private TextView signUpDueDay;
     private TextView eventDescription;
+
     private String eventID;
 
     @Override
@@ -33,11 +34,14 @@ public class AdminEventDetail extends AppCompatActivity {
         eventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
         Intent intent = getIntent();
+
         String id = intent.getStringExtra("eventID");
+
 
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             @Override
             public void onSuccess(Event event) {
+
                 eventID = event.getEventId();
                 eventTitle.setText("Event Details");
                 eventName.setText(event.getName());
@@ -45,6 +49,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 maxEntrants.setText(String.valueOf(event.getEntrants().size()));
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
+
                 Log.d("AdminOrganizerProfile", "Organizer data fetched successfully: ");
             }
             @Override

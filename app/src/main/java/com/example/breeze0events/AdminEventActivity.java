@@ -80,8 +80,21 @@ public class AdminEventActivity extends AppCompatActivity {
         });
 
         return_button.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminEventActivity.this, AdminLoginActivity.class);
-            startActivity(intent);
+            finish();
+        });
+
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (eventList != null && position >= 0 && position < eventList.size()) {
+                    Event selectedEvent = eventList.get(position);
+                    Intent intent = new Intent(AdminEventActivity.this, AdminSelectedEvents.class);
+                    intent.putExtra("selectedID", selectedEvent.getEventId());
+                    startActivity(intent);
+                } else {
+                    Log.e("ItemClickError", "Invalid position or eventList is null");
+                }
+            }
         });
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
