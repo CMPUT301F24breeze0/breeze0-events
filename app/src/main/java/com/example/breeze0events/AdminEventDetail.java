@@ -19,13 +19,14 @@ public class AdminEventDetail extends AppCompatActivity {
     private TextView maxEntrants;
     private TextView signUpDueDay;
     private TextView eventDescription;
-
+    Event selected_event;
     private String eventID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.events_detail_fragment);
+
         eventTitle = findViewById(R.id.EventDetail);
         eventName = findViewById(R.id.EventName);
         eventDate = findViewById(R.id.EventDate);
@@ -33,20 +34,17 @@ public class AdminEventDetail extends AppCompatActivity {
         signUpDueDay = findViewById(R.id.duedate);
         eventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
-        Intent intent = getIntent();
-
-        String id = intent.getStringExtra("eventID");
+        String id = (String)getIntent().getSerializableExtra("selectedID");
 
 
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             @Override
             public void onSuccess(Event event) {
-
-                eventID = event.getEventId();
-                eventTitle.setText("Event Details");
-                eventName.setText(event.getName());
-                eventDate.setText(event.getStartDate() + " - " + event.getEndDate());
-                maxEntrants.setText(String.valueOf(event.getEntrants().size()));
+                selected_event=event;
+                eventTitle.setText("Event Detail");
+                eventName.setText("Event Name: " + selected_event.getName());
+                eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
+                maxEntrants.setText("Max number of entrants: " + String.valueOf(event.getEntrants().size()));
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
 
