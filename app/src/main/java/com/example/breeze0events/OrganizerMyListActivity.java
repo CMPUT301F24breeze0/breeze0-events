@@ -1,4 +1,5 @@
 
+
 package com.example.breeze0events;
 
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -66,6 +68,20 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
+            @Override
+            public void onSuccess(Organizer organizer) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Organizer organizer=new Organizer(androidId, androidId,new ArrayList<>());
+                overallStorageController.addOrganizer(organizer);
+            }
+        });
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -76,8 +92,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
                             public void onSuccess(Event event) {
-                                //   event.setStartDate("2001-10-21");
-                                //   overallStorageController.updateEvent("2",event);
                                 String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                         + "\nEnd_date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
