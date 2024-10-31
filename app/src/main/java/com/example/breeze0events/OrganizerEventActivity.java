@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
+public class OrganizerEventActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -48,6 +48,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private Uri selectedPosterUri = null;
     Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
     private String eventFacility;
+    ArrayList<String> facilityList;
 
 
 
@@ -85,9 +86,8 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            // 显示 AddFacilityActivity 对话框
-            AddFacilityActivity addFacilityDialog = new AddFacilityActivity();
-            addFacilityDialog.show(getSupportFragmentManager(), "AddFacilityDialog");
+            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
 
@@ -127,11 +127,16 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         back_button.setOnClickListener(v-> finish());
     }
 
+    /*
     @Override
     public void onFacilitySelected(String selectedFacility) {
+
         eventFacility = selectedFacility;
         facilityButton.setText(eventFacility);
     }
+    */
+
+
     /*
 
     @Override

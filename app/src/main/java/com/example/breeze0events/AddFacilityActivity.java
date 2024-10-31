@@ -7,25 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
-public class AddFacilityActivity extends DialogFragment{
+public class AddFacilityActivity extends DialogFragment {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityList;
-    private FirebaseFirestore db;
     private FacilitySelectListener listener;
+
+    private static final String ARG_FACILITY_LIST = "facility_list";
 
     public interface FacilitySelectListener {
         void onFacilitySelected(String selectedFacility);
+    }
+
+    public static AddFacilityActivity newInstance(ArrayList<String> facilityList) {
+        AddFacilityActivity fragment = new AddFacilityActivity();
+        Bundle args = new Bundle();
+        args.putStringArrayList(ARG_FACILITY_LIST, facilityList);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -41,33 +46,22 @@ public class AddFacilityActivity extends DialogFragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_add_facility, container, false);
+        View view = inflater.inflate(R.layout.add_facility_activity, container, false);
+
+        if (getArguments() != null) {
+            facilityList = getArguments().getStringArrayList(ARG_FACILITY_LIST);
+        } else {
+            facilityList = new ArrayList<>();
+        }
 
         facilityListView = view.findViewById(R.id.facility_list_view);
-        facilityList = new ArrayList<>();
         facilityListAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_single_choice, facilityList);
         facilityListView.setAdapter(facilityListAdapter);
 
-        db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection("FacilityDB");
-
-        // Load facilities from Firestore
-        collectionRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    String facilityName = document.getString("location");
-                    facilityList.add(facilityName);
-                    facilityListAdapter.notifyDataSetChanged();
-                }
-            } else {
-                Toast.makeText(getContext(), "Error loading facilities", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Set item click listener to handle facility selection
+        // select facility
         facilityListView.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedFacility = facilityList.get(position);
-            listener.onFacilitySelected(selectedFacility); // Pass selected facility back to OrganizerEventActivity
+            listener.onFacilitySelected(selectedFacility);
             dismiss();
         });
 
