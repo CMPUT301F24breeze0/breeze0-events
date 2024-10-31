@@ -85,6 +85,9 @@
         <activity
             android:name=".OverallStorageController"
             android:exported="false" />
+        <activity android:name=".AdminOrganizationProfileActivity" />
+
+        <activity android:name=".AdminOrganizerProfile" />
     </application>
 
 </manifest>
