@@ -15,7 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
+
 import android.util.Base64;
+import android.widget.Toast;
 
 public class EntrantEventDetail extends AppCompatActivity {
     private TextView event_title;
@@ -27,6 +30,7 @@ public class EntrantEventDetail extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private String eventID;
     private String eventLocation;
+    private Event eventLocal;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class EntrantEventDetail extends AppCompatActivity {
             // FIXME: 2024/10/27 Add functionality to show Max number of entrants
             @Override
             public void onSuccess(Event event) {
+                eventLocal = event;
                 eventID = event.getEventId();
                 eventLocation = event.getFacility();
                 event_title.setText(event.getName());
@@ -79,8 +84,13 @@ public class EntrantEventDetail extends AppCompatActivity {
                 overallStorageController.getEntrant(deviceId, new EntrantCallback() {
                     @Override
                     public void onSuccess(Entrant entrant) {
-                        entrant.addEvents(eventID);
-                        overallStorageController.updateEntrant(entrant);
+                        if(Objects.equals(entrant.getEntrantId(), eventID)){
+                            Toast.makeText(EntrantEventDetail.this,"You have joined this event", Toast.LENGTH_SHORT ).show();
+                        }else{
+                            entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
+                            overallStorageController.updateEntrant(entrant);
+                            Toast.makeText(EntrantEventDetail.this,"Join successfully", Toast.LENGTH_SHORT ).show();
+                        }
                     }
 
                     @Override

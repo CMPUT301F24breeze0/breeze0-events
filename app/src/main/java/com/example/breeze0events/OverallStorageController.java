@@ -30,14 +30,14 @@ public class OverallStorageController {
                 String device = documentSnapshot.getString("device");
 
                 // Retrieve events and status lists
-                List<String> events = (List<String>) documentSnapshot.get("events");
-                List<String> status = (List<String>) documentSnapshot.get("status");
+                Map<String, String> eventsName = (Map<String, String>)documentSnapshot.get("events");
+                Map<String, String> eventsStatus = (Map<String, String>)documentSnapshot.get("status");
 
-                if (events == null) events = new ArrayList<>();
-                if (status == null) status = new ArrayList<>();
+                if (eventsName == null) eventsName = new HashMap<>();
+                if (eventsStatus == null) eventsStatus = new HashMap<>();
 
                 // Create Entrant object
-                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, events, status);
+                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device,  eventsName, eventsStatus);
 
                 // Use the callback to pass the Entrant object
                 callback.onSuccess(entrant);
@@ -61,8 +61,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         // Add the entrant data to Firestore
         db.collection("EntrantDB").document(entrant.getEntrantId()).set(entrantData)
@@ -80,8 +80,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         // Update the entrant data in Firestore
         db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)

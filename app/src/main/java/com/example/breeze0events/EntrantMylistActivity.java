@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // This is the main page of the Entrant containing the wishlist, profile of Entrant
 public class EntrantMylistActivity extends AppCompatActivity  {
@@ -27,6 +33,7 @@ public class EntrantMylistActivity extends AppCompatActivity  {
     private Button Blacklist;
     private Button QuietMode;
     private Button ProfileModify;
+    private ListView mylist;
     private OverallStorageController overallStorageController;
 
     @Override
@@ -38,12 +45,13 @@ public class EntrantMylistActivity extends AppCompatActivity  {
         profileImage = findViewById(R.id.profileImage);
         entrantName = findViewById(R.id.entrantName);
         QR_Scan = findViewById(R.id.buttonQRScan);
-        eventName = findViewById(R.id.eventName);
-        EventStatus = findViewById(R.id.buttonEventStatus);
+
         Blacklist = findViewById(R.id.buttonBlacklist);
         QuietMode = findViewById(R.id.buttonQuietMode);
         ProfileModify = findViewById(R.id.buttonProfile);
         overallStorageController = new OverallStorageController();
+        mylist = findViewById(R.id.entrant_mylist);
+
 
         // Event Searching Functionality
         FloatingActionButton EventSearch = findViewById(R.id.buttonEventSearch);
@@ -57,6 +65,19 @@ public class EntrantMylistActivity extends AppCompatActivity  {
             public void onSuccess(Entrant entrant) {
                 entrantName.setText(entrant.getName());
                 profileImage.setImageBitmap(decodeBase64Image(entrant.getProfilePhoto()));
+                Map<String, String> eventsName = entrant.getEventsName();
+                Map<String, String> eventsStatus = entrant.getEventsStatus();
+                List<Pair<String, String>> eventsList = new ArrayList<>();
+                for (String eventId:  eventsName.keySet()) {
+                    String eventName = eventsName.get(eventId);
+                    String eventStatus = eventsStatus.get(eventId);
+                    if (eventStatus != null) {
+                        eventsList.add(new Pair<>(eventName, eventStatus));
+                    }
+                }
+                EntrantMyListAdapter adapter = new EntrantMyListAdapter(EntrantMylistActivity.this, eventsList);
+
+                mylist.setAdapter(adapter);
             }
 
             @Override

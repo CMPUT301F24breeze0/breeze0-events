@@ -1,5 +1,10 @@
 package com.example.breeze0events;
+import android.app.usage.EventStats;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Entrant {
     private String entrantId;
@@ -8,18 +13,18 @@ public class Entrant {
     private String phoneNumber;
     private String profilePhoto;
     private String device;
-    private List<String> events; // Each Pair represents <eventId, location>
-    private List<String> status;
+    private Map<String, String> eventsStatus; // Each Pair represents <eventId, Status>
+    private Map<String, String> eventsName; // Each Pair represents <eventId, Status>
 
-    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device, List<String> events, List<String> status) {
+    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device, Map<String, String> eventsName, Map<String, String> eventsStatus) {
         this.entrantId = entrantId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.profilePhoto = profilePhoto;
         this.device = device;
-        this.events = events;
-        this.status = status;
+        this.eventsStatus = eventsStatus;
+        this.eventsName = eventsName;
     }
 
     // Getters and setters for all fields
@@ -72,23 +77,38 @@ public class Entrant {
         this.device = device;
     }
 
-    public List<String> getEvents() {
-        return events;
+    public Map<String, String> getEventsName() {
+        return eventsName;
+    }
+    public Map<String, String> getEventsStatus() {
+        return eventsStatus;
     }
 
-    public void setEvents(List<String> events) {
-        this.events = events;
+    public void setAllEvents(Map<String, String> eventsName, Map<String, String> eventsStatus) {
+        this.eventsName = eventsName;
+        this.eventsStatus = eventsStatus;
     }
 
-    public List<String> getStatus() {
-        return status;
+    public String getStatus(String EventId) {
+        String Status = eventsStatus.get(EventId);
+        if(Status != null){
+            return Status;
+        } else {
+            return "-1";
+        }
+    }
+    public String getName(String EventId) {
+        String name = eventsName.get(EventId);
+        if(name != null){
+            return name;
+        } else {
+            return "-1";
+        }
     }
 
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
-    public void addEvents(String eventID) {
-        events.add(eventID);
+    public void set_add_Event(String eventId, String eventName, String Status) {
+        eventsStatus.put(eventId, Status);
+        eventsName.put(eventId, eventName);
     }
 
     @Override
@@ -100,8 +120,8 @@ public class Entrant {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", profilePhoto='" + profilePhoto + '\'' +
                 ", device='" + device + '\'' +
-                ", events=" + events +
-                ", status=" + status +
+                ", events=" + eventsName +
+                ", status=" + eventsStatus +
                 '}';
     }
 }
