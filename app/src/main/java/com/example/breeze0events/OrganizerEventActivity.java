@@ -19,11 +19,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class OrganizerEventActivity extends AppCompatActivity {
@@ -52,20 +55,43 @@ public class OrganizerEventActivity extends AppCompatActivity {
         setContentView(R.layout.organizer_event_activity);
 
         Button back_button = findViewById(R.id.organizer_event_activity_back_button);
-
-        // 获取传递的文本信息
         String headerText = getIntent().getStringExtra("header_text");
+        String newEventId = getIntent().getStringExtra("new_event_id");
+        TextView idTextView = findViewById(R.id.organizer_event_activity_id);
+        Button addButton = findViewById(R.id.organizer_event_activity_add_button);
+        Button backButton = findViewById(R.id.organizer_event_activity_back_button);
+        Button uploadPosterButton = findViewById(R.id.organizer_facility_event_poster_upload_button);
+        Button generateQRButton = findViewById(R.id.organizer_event_activity_generate_qr_button);
+        Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+        EditText name = findViewById(R.id.event_name_bar);
+        EditText start_date = findViewById(R.id.event_start_date_bar);
+        EditText end_date = findViewById(R.id.event_end_date_bar);
+        EditText entrants = findViewById(R.id.entrants_bar);
 
-        // 获取TextView并设置文本
+        // set header
         TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
         if (headerText != null) {
-            headerTextView.setText(headerText);  // 设置TextView的内容
+            headerTextView.setText(headerText);
         }
 
-        back_button.setOnClickListener(v->{
-            Intent intent = new Intent(OrganizerEventActivity.this, OrganizerMyListActivity.class);
-            startActivity(intent);
+        // display new id
+        if (newEventId != null) {
+            idTextView.setText(newEventId);
+        }
+
+        // by clicking "Add" button
+        addButton.setOnClickListener(v->{
+            String eventName = name.getText().toString();
+            String startDate = start_date.getText().toString();
+            String endDate = end_date.getText().toString();
+            String entrantsList = entrants.getText().toString();
+            // 其他属性的获取方式相似
+
+
         });
+
+        // by clicking "Back" button
+        back_button.setOnClickListener(v-> finish());
     }
     /*
 

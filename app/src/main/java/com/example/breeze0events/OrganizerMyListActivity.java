@@ -1,6 +1,9 @@
 
 package com.example.breeze0events;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.MediaStore;
@@ -25,6 +28,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -105,9 +115,36 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
         // by clicking "New" button
         new_event_button.setOnClickListener(v->{
-            Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-            intent.putExtra("header_text", "Add Event");
-            startActivity(intent);
+            // notify user if there's not network connection
+            if(!isNetworkAvailable(this)){
+                Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
+            }
+
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("events");
+            databaseRef.orderByKey().limitToLast(1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                    Log.d("OrganizerMyListActivity","Task completed: " + task.isSuccessful());
+                    String newEventId;
+                    if (task.isSuccessful() && task.getResult() != null && task.getResult().hasChildren()) {
+                        String maxId = task.getResult().getChildren().iterator().next().getKey();
+                        int nextId = Math.min(Integer.parseInt(maxId) + 1, 100); // id should be 1-100
+                        newEventId = String.valueOf(nextId);
+                        Log.d("OrganizerMyListActivity", "New event ID: " + newEventId);
+                    } else {
+                        Log.e("OrganizerMyListActivity", "Failed to fetch max ID or no events found.");
+                        newEventId = "1";
+                    }
+
+                    // jump to organizer event activity and pass id info
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+                    intent.putExtra("new_event_id", newEventId);
+                    intent.putExtra("header_text", "Add New Event");
+                    Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
+                    startActivity(intent);
+                }
+
+            });
         });
         /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +239,12 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
     public void update() {
         eventListAdapter.notifyDataSetChanged();
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     // load from firebase

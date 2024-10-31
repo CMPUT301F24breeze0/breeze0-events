@@ -92,15 +92,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/organizer_event_activity_id_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="14dp"
+            android:text="Event ID: "
+            android:textColor="@color/text_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
             android:id="@+id/organizer_event_activity_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="14dp"
-            android:text="Event ID: %s"
+            android:text="ID"
             android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/organizer_event_activity_id_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -188,9 +199,10 @@
             android:id="@+id/entrants_bar"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:hint="Enter the Number of Entrants Here"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/organizer_event_activity_no_of_entrant_title"
-            app:layout_constraintTop_toTopOf="parent"
-            android:hint="Enter the Number of Entrants Here"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
