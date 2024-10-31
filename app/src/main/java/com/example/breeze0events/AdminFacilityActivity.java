@@ -6,17 +6,15 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-
-public class AdminEventActivity extends AppCompatActivity {
+public class AdminFacilityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.remove_events_page);
+        setContentView(R.layout.admin_facility_page);
         Button return_button = findViewById(R.id.backButton);
 
         return_button.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminEventActivity.this, AdminLoginActivity.class);
+            Intent intent = new Intent(AdminFacilityActivity.this, AdminLoginActivity.class);
             startActivity(intent);
         });
     }

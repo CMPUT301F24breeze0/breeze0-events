@@ -1,9 +1,11 @@
 
+
 package com.example.breeze0events;
 
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -56,6 +58,20 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
+            @Override
+            public void onSuccess(Organizer organizer) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Organizer organizer=new Organizer(androidId, androidId,new ArrayList<>());
+                overallStorageController.addOrganizer(organizer);
+            }
+        });
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -66,8 +82,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
                             public void onSuccess(Event event) {
-                                //   event.setStartDate("2001-10-21");
-                                //   overallStorageController.updateEvent("2",event);
                                 String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                         + "\nEnd_date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
@@ -112,13 +126,23 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             }
         });
 
-        // by short clicking anything on the list, display event detail
+// By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected event item
+                Event selectedEvent = eventList.get(position);
 
+                // Create an Intent to navigate to OrganizerEventInformationActivity
+                Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventInformationActivity.class);
+
+                // Pass relevant event information to the target Activity (e.g., event ID or name)
+                intent.putExtra("selected_event_id",  selectedEvent.getEventId());
+                // Start OrganizerEventInformationActivity
+                startActivity(intent);
             }
         });
+
 
         // by long clicking anything on the list, the organizer can choose to delete the event or edit the event
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
