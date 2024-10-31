@@ -122,6 +122,7 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+
             android:name=".AdminEventActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
@@ -155,6 +156,7 @@
             android:name=".OrganizerEventDisplayFacility"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+
     </application>
 
 </manifest>
