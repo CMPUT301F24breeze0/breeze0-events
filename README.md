@@ -6,7 +6,7 @@
 |               | `phone number`             | `string`                                      | Entrant's phone number                                                            |
 |               | `profile_photo`            | `string`                                      | Path or URL to the entrant's profile photo                                        |
 |               | `device`                   | `string`                                      | Device information                                                                |
-|               | `events_id`                | `array<event_id:string, location:string>`     | List of events the entrant is participating in, with event ID and location        |
+|               | `events_id`                | `array<event_id:string>`     | List of events the entrant is participating in, with event ID and location        |
 | **OrganizerDB**| `organizer_id` (document_id)| `string`                                      | Unique ID for the organizer                                                       |
 |               | `name`                     | `string`                                      | Organizer's name                                                                  |
 |               | `email`                    | `string`                                      | Organizer's email                                                                 |
