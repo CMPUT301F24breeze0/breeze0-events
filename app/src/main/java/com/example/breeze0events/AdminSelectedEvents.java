@@ -36,7 +36,6 @@ public class AdminSelectedEvents extends AppCompatActivity {
 
         // Set click listener for back button
         backButton.setOnClickListener(v -> {
-            // Return to OrganizerMyListActivity and destroy current activity
             finish(); // Close current activity
         });
 
@@ -58,7 +57,7 @@ public class AdminSelectedEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminSelectedEvents.this, AdminEventDetail.class);
-
+                intent.putExtra("selectedID", selected_event.getEventId());
                 intent.putExtra("start_date",selected_event.getStartDate());
                 intent.putExtra("end_date",selected_event.getEndDate());
                 startActivity(intent);
