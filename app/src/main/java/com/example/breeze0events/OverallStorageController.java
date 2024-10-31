@@ -185,6 +185,7 @@ public class OverallStorageController {
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
+
         db.collection("OverallDB").document(event.getEventId()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));

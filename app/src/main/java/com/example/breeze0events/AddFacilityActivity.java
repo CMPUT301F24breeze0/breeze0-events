@@ -14,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import java.util.ArrayList;
 
 public class AddFacilityActivity extends DialogFragment {
-    /*
+
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityList;
@@ -49,6 +49,7 @@ public class AddFacilityActivity extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_facility_activity, container, false);
 
+        // Get the facility list from arguments
         if (getArguments() != null) {
             facilityList = getArguments().getStringArrayList(ARG_FACILITY_LIST);
         } else {
@@ -59,7 +60,7 @@ public class AddFacilityActivity extends DialogFragment {
         facilityListAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_single_choice, facilityList);
         facilityListView.setAdapter(facilityListAdapter);
 
-        // select facility
+        // Select facility
         facilityListView.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedFacility = facilityList.get(position);
             listener.onFacilitySelected(selectedFacility);
@@ -69,5 +70,5 @@ public class AddFacilityActivity extends DialogFragment {
         return view;
     }
 
-     */
+
 }
