@@ -1,37 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/ui_background">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/EventName"
+        android:layout_width="275dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="72dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Select Event Name"
-        android:textSize="20sp" />
+        android:textAlignment="center"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#000000"
-        android:text="Image" />
+        android:text="Image"
+        app:layout_constraintBottom_toTopOf="@+id/QRCodeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/QRCodeButton"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#000000"
-        android:text="QR Code" />
+        android:text="QR Code"
+        app:layout_constraintBottom_toTopOf="@+id/DetailButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/DetailButton"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="276dp"
         android:backgroundTint="#000000"
-        android:text="Event Detail" />
+        android:text="Event Detail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#000000"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DetailButton"
+        app:layout_constraintVertical_bias="0.052" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
