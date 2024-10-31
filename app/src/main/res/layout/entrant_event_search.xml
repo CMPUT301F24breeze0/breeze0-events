@@ -18,21 +18,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/location_filter"
+        android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:backgroundTint="@color/button_color"
-        android:text="Location"
+        android:text="Filter"
         android:textColor="@color/text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_title" />
 
     <Button
-        android:id="@+id/keyword_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/refresh"
+        android:layout_width="99dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/button_color"
-        android:text="Location"
+        android:text="Refresh"
         android:textColor="@color/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_title" />
@@ -43,7 +46,7 @@
         android:layout_height="0dp"
         android:background="@color/listview_divider_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_filter"
+        app:layout_constraintTop_toBottomOf="@+id/refresh"
         tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
