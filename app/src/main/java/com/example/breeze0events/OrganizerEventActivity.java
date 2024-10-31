@@ -46,7 +46,7 @@ public class OrganizerEventActivity extends AppCompatActivity {
     private OnFragmentInteractionListener listener;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedPosterUri = null;
-    Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+
     private String eventFacility;
     ArrayList<String> facilityList;
 
@@ -72,6 +72,7 @@ public class OrganizerEventActivity extends AppCompatActivity {
         EditText start_date = findViewById(R.id.event_start_date_bar);
         EditText end_date = findViewById(R.id.event_end_date_bar);
         EditText entrants = findViewById(R.id.entrants_bar);
+        Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
 
         // set header
         TextView headerTextView = findViewById(R.id.organizer_event_activity_header);

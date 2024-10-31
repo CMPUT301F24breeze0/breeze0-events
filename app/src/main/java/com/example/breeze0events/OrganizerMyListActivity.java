@@ -116,7 +116,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         // by clicking "New" button
         new_event_button.setOnClickListener(v->{
             // notify user if there's not network connection
-            if(!isNetworkAvailable(this)){
+            if(!isNetworkAvailable(OrganizerMyListActivity.this)){
                 Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -202,9 +202,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 alert.setPositiveButton("Edit", (dialogInterface, j) -> {
                     Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
                     intent.putExtra("header_text", "Edit Event");
-                    // 传递活动信息，例如活动 ID 或其他所需的事件信息
                     Event item = eventList.get(pos);
-                    // intent.putExtra("event_id", item.getId()); // 假设 Event 类中有 getId() 方法
+                    // intent.putExtra("event_id", item.getId());
                     startActivity(intent);
                 });
                 //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
