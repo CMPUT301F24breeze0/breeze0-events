@@ -4,6 +4,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.ArrayAdapter;
@@ -29,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class OrganizerEventActivity extends AppCompatActivity {
+public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -43,6 +44,10 @@ public class OrganizerEventActivity extends AppCompatActivity {
     private EditText event_facility_bar;
     private EditText no_of_attendees_bar;
     private OnFragmentInteractionListener listener;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri selectedPosterUri = null;
+    Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+    private String eventFacility;
 
 
 
@@ -62,7 +67,6 @@ public class OrganizerEventActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.organizer_event_activity_back_button);
         Button uploadPosterButton = findViewById(R.id.organizer_facility_event_poster_upload_button);
         Button generateQRButton = findViewById(R.id.organizer_event_activity_generate_qr_button);
-        Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
         EditText name = findViewById(R.id.event_name_bar);
         EditText start_date = findViewById(R.id.event_start_date_bar);
         EditText end_date = findViewById(R.id.event_end_date_bar);
@@ -79,19 +83,54 @@ public class OrganizerEventActivity extends AppCompatActivity {
             idTextView.setText(newEventId);
         }
 
+        //  by clicking "Select Facility" button
+        facilityButton.setOnClickListener(v -> {
+            // 显示 AddFacilityActivity 对话框
+            AddFacilityActivity addFacilityDialog = new AddFacilityActivity();
+            addFacilityDialog.show(getSupportFragmentManager(), "AddFacilityDialog");
+        });
+
+
+
+
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
-            String eventName = name.getText().toString();
-            String startDate = start_date.getText().toString();
-            String endDate = end_date.getText().toString();
-            String entrantsList = entrants.getText().toString();
-            // 其他属性的获取方式相似
+            String eventName = name.getText().toString().trim();
+            String startDate = start_date.getText().toString().trim();
+            String endDate = end_date.getText().toString().trim();
+            String entrantsList = entrants.getText().toString().trim();
+            String eventId = idTextView.getText().toString();
+            String qrCodePath = "android.resource://" + getPackageName() + "/drawable/example_qr";
+            String posterUri = "android.resource://" + getPackageName() + "/drawable/default_poster";
+            String organizerId = android.os.Build.SERIAL; // device id as organizer id
+
+            // Check if required fields are empty
+            if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrantsList.isEmpty()) {
+                Toast.makeText(OrganizerEventActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> organizers = new ArrayList<>();
+            organizers.add(organizerId);
+            List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
+
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, newEntrants, organizers);
+            overallStorageController.addEvent(newEvent);
 
 
+            Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
+
+            finish(); // Close activity
         });
 
         // by clicking "Back" button
         back_button.setOnClickListener(v-> finish());
+    }
+
+    @Override
+    public void onFacilitySelected(String selectedFacility) {
+        eventFacility = selectedFacility;
+        facilityButton.setText(eventFacility);
     }
     /*
 
