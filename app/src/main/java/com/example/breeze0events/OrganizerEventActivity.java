@@ -56,7 +56,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
     @Override
     public void onFacilitySelected(String selectedFacility) {
-        // Handle the selected facility here
+        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -99,7 +99,6 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
-
 
 
 
