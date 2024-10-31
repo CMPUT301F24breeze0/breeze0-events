@@ -86,8 +86,8 @@ public class OrganizerEventActivity extends AppCompatActivity {
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
-            dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
+            // AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            // dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
 
@@ -95,6 +95,8 @@ public class OrganizerEventActivity extends AppCompatActivity {
 
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
+
+
             String eventName = name.getText().toString().trim();
             String startDate = start_date.getText().toString().trim();
             String endDate = end_date.getText().toString().trim();

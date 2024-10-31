@@ -118,6 +118,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             // notify user if there's not network connection
             if(!isNetworkAvailable(this)){
                 Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
+                return;
             }
 
             DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("events");

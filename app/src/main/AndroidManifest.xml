@@ -155,10 +155,6 @@
             android:name=".OrganizerEventDisplayFacility"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".AddFacilityActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
 
     </application>
 

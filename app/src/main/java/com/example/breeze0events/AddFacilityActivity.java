@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import java.util.ArrayList;
 
 public class AddFacilityActivity extends DialogFragment {
+    /*
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityList;
@@ -67,4 +68,6 @@ public class AddFacilityActivity extends DialogFragment {
 
         return view;
     }
+
+     */
 }
