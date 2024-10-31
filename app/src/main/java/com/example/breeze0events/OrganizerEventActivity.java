@@ -4,8 +4,10 @@ import static android.app.PendingIntent.getActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,7 +20,9 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class OrganizerEventActivity extends AppCompatActivity {
+public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -50,6 +54,10 @@ public class OrganizerEventActivity extends AppCompatActivity {
     private String eventFacility;
     ArrayList<String> facilityList;
 
+    @Override
+    public void onFacilitySelected(String selectedFacility) {
+        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
+    }
 
 
     public interface OnFragmentInteractionListener{
@@ -87,10 +95,10 @@ public class OrganizerEventActivity extends AppCompatActivity {
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            // AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
-            // dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
+            ArrayList<String> facilityList = getFacilityListFromSharedPreferences();
+            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
-
 
 
 
@@ -129,6 +137,14 @@ public class OrganizerEventActivity extends AppCompatActivity {
         // by clicking "Back" button
         back_button.setOnClickListener(v-> finish());
     }
+
+    private ArrayList<String> getFacilityListFromSharedPreferences() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> facilitySet = prefs.getStringSet("facilityList", new HashSet<>());
+        return new ArrayList<>(facilitySet);
+    }
+
+
 
     /*
     @Override

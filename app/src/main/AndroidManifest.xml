@@ -168,6 +168,7 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
+
     </application>
 
 </manifest>
