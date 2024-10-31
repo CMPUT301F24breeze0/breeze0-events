@@ -19,7 +19,7 @@ public class AdminEventDetail extends AppCompatActivity {
     private TextView maxEntrants;
     private TextView signUpDueDay;
     private TextView eventDescription;
-    private String eventID;
+    Event selected_event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,23 +33,23 @@ public class AdminEventDetail extends AppCompatActivity {
         eventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
         Intent intent = getIntent();
-        String id = intent.getStringExtra("eventID");
+        String id = (String)getIntent().getSerializableExtra("selectedID");
 
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             @Override
             public void onSuccess(Event event) {
-                eventID = event.getEventId();
-                eventTitle.setText("Event Details");
+                selected_event=event;
+                eventTitle.setText(selected_event.getName());
                 eventName.setText(event.getName());
                 eventDate.setText(event.getStartDate() + " - " + event.getEndDate());
                 maxEntrants.setText(String.valueOf(event.getEntrants().size()));
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
-                Log.d("AdminOrganizerProfile", "Organizer data fetched successfully: ");
+                Log.d("AdminEventDetail", "Organizer data fetched successfully: ");
             }
             @Override
             public void onFailure(String errorMessage) {
-                Log.e("AdminOrganizerProfile", "Failed to fetch organizer: " + errorMessage);
+                Log.e("AdminEventDetail", "Failed to fetch data: " + errorMessage);
 
             }
         });

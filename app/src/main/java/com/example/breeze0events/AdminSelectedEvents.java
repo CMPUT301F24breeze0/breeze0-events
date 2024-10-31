@@ -25,17 +25,16 @@ public class AdminSelectedEvents extends AppCompatActivity {
         // Retrieve the Event object from the Intent
         String Id = (String)getIntent().getSerializableExtra("selectedID");
 
-        // Initialize the back button
         backButton = findViewById(R.id.backButton);
         DetailButton=findViewById(R.id.DetailButton);
         QRCodeButton=findViewById(R.id.QRCodeButton);
         EventName=findViewById(R.id.EventName);
         imageButton=findViewById(R.id.imageButton);
-        // Set click listener for back button
+
         backButton.setOnClickListener(v -> {
-            // Return to OrganizerMyListActivity and destroy current activity
-            finish(); // Close current activity
+            finish();
         });
+
         overallStorageController=new OverallStorageController();
         overallStorageController.getEvent(Id, new EventCallback() {
             @Override
@@ -54,6 +53,7 @@ public class AdminSelectedEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminSelectedEvents.this, AdminEventDetail.class);
+                intent.putExtra("selectedID", selected_event.getEventId());
                 intent.putExtra("start_date",selected_event.getStartDate());
                 intent.putExtra("end_date",selected_event.getEndDate());
                 startActivity(intent);

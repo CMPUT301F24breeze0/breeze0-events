@@ -80,8 +80,7 @@ public class AdminEventActivity extends AppCompatActivity {
         });
 
         return_button.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminEventActivity.this, AdminLoginActivity.class);
-            startActivity(intent);
+            finish();
         });
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
