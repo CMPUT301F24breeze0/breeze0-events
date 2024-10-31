@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
@@ -21,9 +23,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.TextView;
 
 
-public class OrganizerEventActivity extends DialogFragment {
+public class OrganizerEventActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -37,9 +40,34 @@ public class OrganizerEventActivity extends DialogFragment {
     private EditText event_facility_bar;
     private EditText no_of_attendees_bar;
     private OnFragmentInteractionListener listener;
+
+
+
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.organizer_event_activity);
+
+        Button back_button = findViewById(R.id.organizer_event_activity_back_button);
+
+        // 获取传递的文本信息
+        String headerText = getIntent().getStringExtra("header_text");
+
+        // 获取TextView并设置文本
+        TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
+        if (headerText != null) {
+            headerTextView.setText(headerText);  // 设置TextView的内容
+        }
+
+        back_button.setOnClickListener(v->{
+            Intent intent = new Intent(OrganizerEventActivity.this, OrganizerMyListActivity.class);
+            startActivity(intent);
+        });
+    }
+    /*
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -60,7 +88,7 @@ public class OrganizerEventActivity extends DialogFragment {
         event_start_date_bar = view.findViewById(R.id.event_start_date_bar);
         event_end_date_bar = view.findViewById(R.id.event_end_date_bar);
         entrants_bar = view.findViewById(R.id.entrants_bar);
-        event_facility_bar = view.findViewById(R.id.event_facility_bar);
+        // event_facility_bar = view.findViewById(R.id.event_facility_bar);
 
         final OrganizerMyListActivity current = (OrganizerMyListActivity) getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -95,7 +123,7 @@ public class OrganizerEventActivity extends DialogFragment {
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE);
     }
-
+*/
 }
 
 

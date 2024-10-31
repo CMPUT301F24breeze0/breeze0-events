@@ -104,15 +104,22 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
 
         // by clicking "New" button
+        new_event_button.setOnClickListener(v->{
+            Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+            intent.putExtra("header_text", "Add Event");
+            startActivity(intent);
+        });
+        /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OrganizerEventActivity dialog = new OrganizerEventActivity();
-                dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
-            }
-        });
+                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
 
-// By short-clicking anything on the list, display event details
+            }
+        });*/
+
+        // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -154,7 +161,15 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                     }
                 });
                 // edit event
-                alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
+                alert.setPositiveButton("Edit", (dialogInterface, j) -> {
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+                    intent.putExtra("header_text", "Edit Event");
+                    // 传递活动信息，例如活动 ID 或其他所需的事件信息
+                    Event item = eventList.get(pos);
+                    // intent.putExtra("event_id", item.getId()); // 假设 Event 类中有 getId() 方法
+                    startActivity(intent);
+                });
+                //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
                 // cancel button
                 alert.setNegativeButton("Cancel",(dialog, which) -> {
                     dialog.dismiss();
