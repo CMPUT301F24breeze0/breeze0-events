@@ -2,9 +2,13 @@
 
 package com.example.breeze0events;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -26,6 +30,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -57,6 +68,20 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
+            @Override
+            public void onSuccess(Organizer organizer) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Organizer organizer=new Organizer(androidId, androidId,new ArrayList<>());
+                overallStorageController.addOrganizer(organizer);
+            }
+        });
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -67,8 +92,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
                             public void onSuccess(Event event) {
-                                //   event.setStartDate("2001-10-21");
-                                //   overallStorageController.updateEvent("2",event);
                                 String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                         + "\nEnd_date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
@@ -105,15 +128,50 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
 
         // by clicking "New" button
+        new_event_button.setOnClickListener(v->{
+            // notify user if there's not network connection
+            if(!isNetworkAvailable(OrganizerMyListActivity.this)){
+                Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("events");
+            databaseRef.orderByKey().limitToLast(1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                    Log.d("OrganizerMyListActivity","Task completed: " + task.isSuccessful());
+                    String newEventId;
+                    if (task.isSuccessful() && task.getResult() != null && task.getResult().hasChildren()) {
+                        String maxId = task.getResult().getChildren().iterator().next().getKey();
+                        int nextId = Math.min(Integer.parseInt(maxId) + 1, 100); // id should be 1-100
+                        newEventId = String.valueOf(nextId);
+                        Log.d("OrganizerMyListActivity", "New event ID: " + newEventId);
+                    } else {
+                        Log.e("OrganizerMyListActivity", "Failed to fetch max ID or no events found.");
+                        newEventId = "1";
+                    }
+
+                    // jump to organizer event activity and pass id info
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+                    intent.putExtra("new_event_id", newEventId);
+                    intent.putExtra("header_text", "Add New Event");
+                    Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
+                    startActivity(intent);
+                }
+
+            });
+        });
+        /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OrganizerEventActivity dialog = new OrganizerEventActivity();
-                dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
-            }
-        });
+                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
 
-// By short-clicking anything on the list, display event details
+            }
+        });*/
+
+        // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -155,7 +213,14 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                     }
                 });
                 // edit event
-                alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
+                alert.setPositiveButton("Edit", (dialogInterface, j) -> {
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+                    intent.putExtra("header_text", "Edit Event");
+                    Event item = eventList.get(pos);
+                    // intent.putExtra("event_id", item.getId());
+                    startActivity(intent);
+                });
+                //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
                 // cancel button
                 alert.setNegativeButton("Cancel",(dialog, which) -> {
                     dialog.dismiss();
@@ -188,6 +253,12 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
     public void update() {
         eventListAdapter.notifyDataSetChanged();
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     // load from firebase
