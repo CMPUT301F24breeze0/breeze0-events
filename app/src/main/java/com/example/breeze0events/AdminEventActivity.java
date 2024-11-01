@@ -29,7 +29,6 @@ public class AdminEventActivity extends AppCompatActivity {
     private ArrayList<Event> eventList;
     public Event event;
     private OverallStorageController overallStorageController;
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +40,8 @@ public class AdminEventActivity extends AppCompatActivity {
         eventList_display = new ArrayList<>();
         eventList = new ArrayList<>();
         overallStorageController = new OverallStorageController();
-
         eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventList_display);
         eventListView.setAdapter(eventListAdapter);
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
@@ -54,13 +51,13 @@ public class AdminEventActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
+                        String id = document.getId();
+                        overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
                             @Override
                             public void onSuccess(Event event) {
-                                String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
+                                String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                         + "\nEnd_date: " + event.getEndDate();
-                                eventList_display.add(eventInfo);
+                                eventList_display.add(info);
                                 eventList.add(event);
                                 eventListAdapter.notifyDataSetChanged();
                                 Log.d("AdminEventData", "Event data fetched successfully: ");
@@ -68,7 +65,7 @@ public class AdminEventActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(String errorMessage) {
-                                Log.e("AdminEventData", "Failed to fetch organizer: " + errorMessage);
+                                Log.e("AdminEventData", "Failed to fetch admins: " + errorMessage);
 
                             }
                         });
@@ -81,20 +78,6 @@ public class AdminEventActivity extends AppCompatActivity {
 
         return_button.setOnClickListener(v -> {
             finish();
-        });
-
-        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (eventList != null && position >= 0 && position < eventList.size()) {
-                    Event selectedEvent = eventList.get(position);
-                    Intent intent = new Intent(AdminEventActivity.this, AdminSelectedEvents.class);
-                    intent.putExtra("selectedID", selectedEvent.getEventId());
-                    startActivity(intent);
-                } else {
-                    Log.e("ItemClickError", "Invalid position or eventList is null");
-                }
-            }
         });
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

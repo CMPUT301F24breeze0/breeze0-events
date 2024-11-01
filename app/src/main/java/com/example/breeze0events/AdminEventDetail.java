@@ -3,6 +3,7 @@ package com.example.breeze0events;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminEventDetail extends AppCompatActivity {
-    private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private TextView eventTitle;
     private TextView eventName;
@@ -27,6 +27,7 @@ public class AdminEventDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.events_detail_fragment);
 
+        Button return_button = findViewById(R.id.cancelButton);
         eventTitle = findViewById(R.id.EventDetail);
         eventName = findViewById(R.id.EventName);
         eventDate = findViewById(R.id.EventDate);
@@ -35,7 +36,6 @@ public class AdminEventDetail extends AppCompatActivity {
         eventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
         String id = (String)getIntent().getSerializableExtra("selectedID");
-
 
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             @Override
@@ -48,13 +48,18 @@ public class AdminEventDetail extends AppCompatActivity {
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
 
-                Log.d("AdminOrganizerProfile", "Organizer data fetched successfully: ");
+                Log.d("AdminEventDetail", "Admins data fetched successfully: ");
             }
             @Override
             public void onFailure(String errorMessage) {
-                Log.e("AdminOrganizerProfile", "Failed to fetch organizer: " + errorMessage);
+                Log.e("AdminEventDetail", "Failed to fetch admins: " + errorMessage);
 
             }
         });
+
+        return_button.setOnClickListener(v -> {
+            finish();
+        });
+
     }
 }
