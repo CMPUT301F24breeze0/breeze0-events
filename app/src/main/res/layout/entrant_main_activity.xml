@@ -12,7 +12,7 @@
         android:id="@+id/profileImage"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/circle_background"
+        android:background="@drawable/circle_background"
         android:contentDescription="Profile Image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,17 +60,17 @@
         android:layout_marginTop="16dp" />
 
 
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:background="@color/button_color"
-        app:layout_constraintTop_toBottomOf="@id/profileImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBlacklist"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:background="@color/button_color"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/profileImage"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/buttonBlacklist"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginBottom="16dp"/>-->
 <!--    <LinearLayout-->
 <!--        android:id="@+id/waitlistContainer"-->
 <!--        android:layout_width="0dp"-->
