@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 // This is the main page of the Entrant containing the wishlist, profile of Entrant
-public class EntrantMylistActivity extends AppCompatActivity  {
+public class EntrantMylistActivity extends AppCompatActivity implements EntrantMyListAdapter.OnUnjoinListener, EntrantMyListAdapter.EventNameProvider{
     private ImageView profileImage;
     private TextView entrantName;
     private Button QR_Scan;
@@ -34,7 +35,12 @@ public class EntrantMylistActivity extends AppCompatActivity  {
     private Button QuietMode;
     private Button ProfileModify;
     private ListView mylist;
+    private EntrantMyListAdapter EntrantAdapter;
     private OverallStorageController overallStorageController;
+    private Entrant myEntrant;
+    private  List<Pair<String, String>> eventsList;
+    private String deviceId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +57,24 @@ public class EntrantMylistActivity extends AppCompatActivity  {
         ProfileModify = findViewById(R.id.buttonProfile);
         overallStorageController = new OverallStorageController();
         mylist = findViewById(R.id.entrant_mylist);
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+//        Intent intent = getIntent();
+//        String update_event_id = intent.getStringExtra("update");
+//        if(update_event_id != null){
+//            overallStorageController.getEntrant(deviceId, new EntrantCallback() {
+//                @Override
+//                public void onSuccess(Entrant entrant) {
+//                    myEntrant = entrant;
+//                    eventsList.add(new Pair<>(update_event_id, myEntrant.getStatus(update_event_id)));
+//                }
+//                @Override
+//                public void onFailure(String errorMessage) {
+//
+//                }
+//            });
+//            updateUI();
+//        }
 
 
         // Event Searching Functionality
@@ -59,25 +83,22 @@ public class EntrantMylistActivity extends AppCompatActivity  {
             Intent OnlineSearching = new Intent(EntrantMylistActivity.this, EntrantSearchingActivity.class);
             startActivity(OnlineSearching);
         });
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
+                myEntrant = entrant;
                 entrantName.setText(entrant.getName());
                 profileImage.setImageBitmap(decodeBase64Image(entrant.getProfilePhoto()));
-                Map<String, String> eventsName = entrant.getEventsName();
                 Map<String, String> eventsStatus = entrant.getEventsStatus();
-                List<Pair<String, String>> eventsList = new ArrayList<>();
-                for (String eventId:  eventsName.keySet()) {
-                    String eventName = eventsName.get(eventId);
+                eventsList = new ArrayList<>();
+                for (String eventId:  eventsStatus.keySet()) {
                     String eventStatus = eventsStatus.get(eventId);
                     if (eventStatus != null) {
-                        eventsList.add(new Pair<>(eventName, eventStatus));
+                        eventsList.add(new Pair<>(eventId, eventStatus));
                     }
                 }
-                EntrantMyListAdapter adapter = new EntrantMyListAdapter(EntrantMylistActivity.this, eventsList);
-
-                mylist.setAdapter(adapter);
+                EntrantAdapter = new EntrantMyListAdapter(EntrantMylistActivity.this, eventsList);
+                mylist.setAdapter(EntrantAdapter);
             }
 
             @Override
@@ -93,4 +114,41 @@ public class EntrantMylistActivity extends AppCompatActivity  {
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
+    public void updateUI(){
+        EntrantAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onUnjoin(String eventId, int id) {
+        myEntrant.UnjoinEvent(eventId);
+        overallStorageController.updateEntrant(myEntrant);
+        eventsList.remove(id);
+        updateUI();
+    }
+    @Override
+    public String getEventNameById(String eventId) {
+        return myEntrant.getName(eventId);
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);  // 更新当前的 Intent
+        String update_event_id = intent.getStringExtra("update");
+
+        if (update_event_id != null) {
+            overallStorageController.getEntrant(deviceId, new EntrantCallback() {
+                @Override
+                public void onSuccess(Entrant entrant) {
+                    myEntrant = entrant;
+                    eventsList.add(new Pair<>(update_event_id, myEntrant.getStatus(update_event_id)));
+                    updateUI();  // 在成功回调中调用 updateUI
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // 可以在这里处理错误
+                }
+            });
+        }
+    }
+
 }

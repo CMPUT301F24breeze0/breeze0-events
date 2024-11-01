@@ -97,13 +97,20 @@ public class Entrant {
             return "-1";
         }
     }
+    public boolean checkEventId(String EventId){
+        return eventsName.containsKey(EventId);
+    }
     public String getName(String EventId) {
         String name = eventsName.get(EventId);
         if(name != null){
             return name;
         } else {
-            return "-1";
+            return null;
         }
+    }
+    public void UnjoinEvent(String EventId){
+        eventsName.remove(EventId);
+        eventsStatus.remove(EventId);
     }
 
     public void set_add_Event(String eventId, String eventName, String Status) {
