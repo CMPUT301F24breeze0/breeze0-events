@@ -96,9 +96,10 @@ public class EntrantEventDetail extends AppCompatActivity {
                             entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
                             overallStorageController.updateEntrant(entrant);
                             Toast.makeText(EntrantEventDetail.this,"Join successfully", Toast.LENGTH_SHORT ).show();
+                            backToMyList();
                         }
                         Mutex = 1;
-                        backToMyList();
+
                     }
                     @Override
                     public void onFailure(String errorMessage) {
