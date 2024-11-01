@@ -95,8 +95,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            ArrayList<String> facilityList = getFacilityListFromSharedPreferences();
-            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            AddFacilityActivity dialog = new AddFacilityActivity();
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
