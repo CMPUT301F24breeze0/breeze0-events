@@ -15,11 +15,15 @@ import java.util.List;
 public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
     private OnUnjoinListener unjoinListener;
     private EventNameProvider eventNameProvider;
+    private ViewListener viewListener;
     public interface OnUnjoinListener {
-        void onUnjoin(String eventName, int id);
+        void onUnjoin(String eventId, int id);
     }
     public interface EventNameProvider {
         String getEventNameById(String eventId);
+    }
+    public interface ViewListener {
+        void onView(String eventId);
     }
 
     public EntrantMyListAdapter(Context context, List<Pair<String, String>> events) {
@@ -34,8 +38,11 @@ public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
         }else{
             throw new RuntimeException(context + "need to implement eventNameProvider");
         }
-
-
+        if (context instanceof EntrantMyListAdapter.ViewListener){
+            this.viewListener = (EntrantMyListAdapter.ViewListener) context;
+        }else{
+            throw new RuntimeException(context + "need to implement eventNameProvider");
+        }
     }
 
     @Override
@@ -64,6 +71,9 @@ public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Unjoin?")
                     .setMessage("Do you wish to unjoin this event?" + name)
+                    .setNeutralButton("View", (dialog, which)->{
+                        viewListener.onView(eventId);
+                    })
                     .setPositiveButton("Yes", (dialog, which) -> {
                         unjoinListener.onUnjoin(eventId, position);
                     })

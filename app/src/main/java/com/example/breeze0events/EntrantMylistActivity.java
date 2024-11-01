@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 // This is the main page of the Entrant containing the wishlist, profile of Entrant
-public class EntrantMylistActivity extends AppCompatActivity implements EntrantMyListAdapter.OnUnjoinListener, EntrantMyListAdapter.EventNameProvider{
+public class EntrantMylistActivity extends AppCompatActivity implements EntrantMyListAdapter.OnUnjoinListener, EntrantMyListAdapter.EventNameProvider, EntrantMyListAdapter.ViewListener{
     private ImageView profileImage;
     private TextView entrantName;
     private Button QR_Scan;
@@ -59,24 +60,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         mylist = findViewById(R.id.entrant_mylist);
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-//        Intent intent = getIntent();
-//        String update_event_id = intent.getStringExtra("update");
-//        if(update_event_id != null){
-//            overallStorageController.getEntrant(deviceId, new EntrantCallback() {
-//                @Override
-//                public void onSuccess(Entrant entrant) {
-//                    myEntrant = entrant;
-//                    eventsList.add(new Pair<>(update_event_id, myEntrant.getStatus(update_event_id)));
-//                }
-//                @Override
-//                public void onFailure(String errorMessage) {
-//
-//                }
-//            });
-//            updateUI();
-//        }
-
-
         // Event Searching Functionality
         FloatingActionButton EventSearch = findViewById(R.id.buttonEventSearch);
         EventSearch.setOnClickListener(v->{
@@ -106,7 +89,16 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
 
             }
         });
-
+        mylist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String eventId = eventsList.get(i).getLeft();
+                Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
+                intent.putExtra("eventID", eventId);
+                startActivity(intent);
+                return false;
+            }
+        });
     }
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
@@ -140,15 +132,18 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
                 public void onSuccess(Entrant entrant) {
                     myEntrant = entrant;
                     eventsList.add(new Pair<>(update_event_id, myEntrant.getStatus(update_event_id)));
-                    updateUI();  // 在成功回调中调用 updateUI
+                    updateUI();
                 }
-
                 @Override
                 public void onFailure(String errorMessage) {
-                    // 可以在这里处理错误
                 }
             });
         }
     }
-
+    @Override
+    public void onView(String eventId) {
+        Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
+        intent.putExtra("eventID", eventId);
+        startActivity(intent);
+    }
 }
