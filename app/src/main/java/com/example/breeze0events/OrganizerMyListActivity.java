@@ -49,11 +49,14 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     private ArrayList<Event> eventList;
     private int pos;
     public Event event;
+    private String newEventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_main_activity);
+
+        loadEventsFromFirebase();
 
         Button map_button = findViewById(R.id.map_button);
         Button my_facility_button = findViewById(R.id.my_facility_button);
@@ -128,39 +131,21 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
 
         // by clicking "New" button
+        findSmallestAvailableId();
         new_event_button.setOnClickListener(v->{
-            // notify user if there's not network connection
-            if(!isNetworkAvailable(OrganizerMyListActivity.this)){
+
+            if (!isNetworkAvailable(OrganizerMyListActivity.this)) {
                 Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("events");
-            databaseRef.orderByKey().limitToLast(1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
-                    Log.d("OrganizerMyListActivity","Task completed: " + task.isSuccessful());
-                    String newEventId;
-                    if (task.isSuccessful() && task.getResult() != null && task.getResult().hasChildren()) {
-                        String maxId = task.getResult().getChildren().iterator().next().getKey();
-                        int nextId = Math.min(Integer.parseInt(maxId) + 1, 100); // id should be 1-100
-                        newEventId = String.valueOf(nextId);
-                        Log.d("OrganizerMyListActivity", "New event ID: " + newEventId);
-                    } else {
-                        Log.e("OrganizerMyListActivity", "Failed to fetch max ID or no events found.");
-                        newEventId = "1";
-                    }
-
-                    // jump to organizer event activity and pass id info
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("new_event_id", newEventId);
-                    intent.putExtra("header_text", "Add New Event");
-                    Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
-                    startActivity(intent);
-                }
-
-            });
+            Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+            intent.putExtra("new_event_id", newEventId);
+            intent.putExtra("header_text", "Add New Event");
+            Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
+            startActivity(intent);
         });
+        loadEventsFromFirebase();
         /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,6 +229,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventList.add(newEvent);
         eventListAdapter.notifyDataSetChanged();
         Log.d("Event","Event to add: " + newEvent.toString());
+        loadEventsFromFirebase();
     }
 
     private void setEventList(Event event)  {
@@ -255,6 +241,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListAdapter.notifyDataSetChanged();
     }
 
+    // there has to be a network connection when creating new event, this method will check if there's network connection
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -294,5 +281,45 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 }
             }
         });
+    }
+
+    // calculate the next available id
+    private void findSmallestAvailableId() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // 获取所有 eventId 的列表
+                    ArrayList<Integer> existingIds = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        try {
+                            int eventId = Integer.parseInt(document.getId());
+                            existingIds.add(eventId);
+                        } catch (NumberFormatException e) {
+                            Log.e("OrganizerMyListActivity", "Invalid eventId format: " + document.getId());
+                        }
+                    }
+
+                    // 找到 1 到 100 中最小的未占用 ID
+                    newEventId = findNextAvailableId(existingIds);
+                    Log.d("OrganizerMyListActivity", "Calculated new event ID: " + newEventId);
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
+                    newEventId = "1"; // 如果数据库读取失败，默认 ID 为 1
+                }
+            }
+        });
+    }
+
+    private String findNextAvailableId(ArrayList<Integer> existingIds) {
+        for (int i = 1; i <= 100; i++) {
+            if (!existingIds.contains(i)) {
+                return String.valueOf(i);
+            }
+        }
+        return null;
     }
 }
