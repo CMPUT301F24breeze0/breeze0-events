@@ -131,6 +131,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
 
         // by clicking "New" button
+        findSmallestAvailableId();
         new_event_button.setOnClickListener(v->{
 
             if (!isNetworkAvailable(OrganizerMyListActivity.this)) {
@@ -138,16 +139,13 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 return;
             }
 
-            // 获取并设置新的 eventId
-            findSmallestAvailableId();
-
-            // 使用存储的 newEventId 跳转到 OrganizerEventActivity
             Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
             intent.putExtra("new_event_id", newEventId);
             intent.putExtra("header_text", "Add New Event");
             Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
             startActivity(intent);
         });
+        loadEventsFromFirebase();
         /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
