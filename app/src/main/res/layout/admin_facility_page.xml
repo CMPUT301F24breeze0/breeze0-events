@@ -3,19 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/ui_background">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/mainpagebackground1" />
 
 
     <TextView
-        android:id="@+id/textTitle"
+        android:id="@+id/facilityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -23,16 +17,18 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/listView2"
+        android:textColor="#C0C7CD"
+        app:layout_constraintBottom_toTopOf="@+id/facilityList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
-        android:id="@+id/listView2"
+        android:id="@+id/facilityList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="2dp"
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="50dp"
         android:layout_marginLeft="10dp"

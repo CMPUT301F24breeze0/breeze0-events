@@ -85,10 +85,17 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminProfileActivity"
+            android:name=".AdminOrganizerProfile"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"
             tools:ignore="Instantiatable" />
+
+        <activity
+            android:name=".AdminOrganizationProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"
+            tools:ignore="Instantiatable" />
+
         <activity
             android:name=".EntrantSearchingActivity"
             android:exported="true"
@@ -167,6 +174,7 @@
             android:name=".OrganizerEventDisplayFacility"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+
 
     </application>
 
