@@ -53,9 +53,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_main_activity);
-
-        loadEventsFromFirebase();
-
         Button map_button = findViewById(R.id.map_button);
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
@@ -115,7 +112,9 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             intent.putExtra("header_text", "Add New Event");
             Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
             startActivity(intent);
+            loadEventsFromFirebase();
         });
+
 
         /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +125,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
             }
         });*/
+
 
         // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -156,16 +156,29 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 alert.setMessage("Do you want to delete or edit this event?");
                 alert.show();
                 // delete event
-                alert.setNeutralButton("Delete",(dialogInterface, j) ->{
-                    if(eventList.size() != 0){
+                alert.setNeutralButton("Delete", (dialogInterface, j) -> {
+                    if(eventList.size() != 0) {
                         Event item = eventList.get(pos);
-                        // boolean check_done = item.getStatus();
-                        eventListAdapter.remove(String.valueOf(item));
-                        eventList.remove(item);
-                        update();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Nothing to delete",Toast.LENGTH_LONG).show();
+                        String eventIdToDelete = item.getEventId();
+
+                        // 从 Firebase 删除事件
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference collectionRef = db.collection("OverallDB");
+
+                        collectionRef.document(eventIdToDelete).delete().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // 成功删除后，从列表中移除事件并刷新适配器
+                                eventList_display.remove(pos);
+                                eventList.remove(pos);
+                                eventListAdapter.notifyDataSetChanged();
+                                Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e("FirestoreError", "Error deleting document: ", task.getException());
+                                Toast.makeText(getApplicationContext(), "Failed to delete event", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nothing to delete", Toast.LENGTH_LONG).show();
                     }
                 });
                 // edit event
@@ -200,7 +213,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventList.add(newEvent);
         eventListAdapter.notifyDataSetChanged();
         Log.d("Event","Event to add: " + newEvent.toString());
-        loadEventsFromFirebase();
     }
 
     private void setEventList(Event event)  {

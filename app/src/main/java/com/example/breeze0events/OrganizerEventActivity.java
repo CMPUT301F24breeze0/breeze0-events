@@ -56,7 +56,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private EditText no_of_attendees_bar;
     private OnFragmentInteractionListener listener;
     private Uri selectedPosterUri = null;
+
+    private ImageView posterImageView;
     private String eventFacility,qrHashCode,ImageHashCode;
+
     ArrayList<String> facilityList;
     ImageView posterImageView;
     public interface OnFragmentInteractionListener{
@@ -81,6 +84,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
         overallStorageController = new OverallStorageController();
         posterImageView = findViewById(R.id.organizer_facility_event_poster_image);
+
         // set header
         TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
         if (headerText != null) {
@@ -98,8 +102,12 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
-        //by uploading QRButton
+        // by clicking "Upload Poster" button
+        uploadPosterButton.setOnClickListener(v->openGallery());
+
+        //by clicking "uploading QR" Button
         // Request code for image picker
+
 
         uploadPosterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +118,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
+
 
         //by clicking "Generate" Button
         generateQRButton.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +131,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             }
         });
 
+
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
             String eventName = name.getText().toString().trim();
@@ -129,9 +139,11 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             String endDate = end_date.getText().toString().trim();
             String entrantsList = entrants.getText().toString().trim();
             String eventId = idTextView.getText().toString();
+
             String qrCodePath = qrHashCode;
             String posterUri = ImageHashCode;
             String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // device id as organizer id
+
 
             // Check if required fields are empty
             if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrantsList.isEmpty()) {
@@ -155,6 +167,21 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         // by clicking "Back" button
         backButton.setOnClickListener(v-> finish());
+    }
+
+    private void openGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedPosterUri = data.getData();
+            posterImageView.setImageURI(selectedPosterUri);
+        }
     }
 
     @Override
