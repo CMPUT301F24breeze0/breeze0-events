@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -82,7 +83,11 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
+        Button back_button=findViewById(R.id.back_in_organ_list);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminOrganizationProfileActivity.this,AdminOperateActivity.class);
+            startActivity(intent1);
+        });
         organizerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

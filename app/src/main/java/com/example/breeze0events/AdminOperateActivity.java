@@ -16,6 +16,11 @@ public class AdminOperateActivity extends AppCompatActivity {
         setContentView(R.layout.admin_main_activity);
         Button organization_button=findViewById(R.id.organization);
         Button entrant_button=findViewById(R.id.entrant);
+        Button back_button=findViewById(R.id.back_in_main);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminOperateActivity.this,OverallLoginPage.class);
+            startActivity(intent1);
+        });
         //by clicking organization profile button
         organization_button.setOnClickListener(new View.OnClickListener() {
             @Override

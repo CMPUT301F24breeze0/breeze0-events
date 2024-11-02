@@ -75,9 +75,12 @@
             android:name=".AdminOperateActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-
         <activity
-            android:name=".AdminProfileActivity"
+            android:name=".AdminOrganizationProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".AdminLoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -85,6 +88,10 @@
         <activity
             android:name=".OverallStorageController"
             android:exported="false" />
+        <activity
+            android:name=".AdminOrganizerProfile"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
     </application>
 
 </manifest>

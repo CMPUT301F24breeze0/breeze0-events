@@ -38,9 +38,14 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                 Log.e("AdminOrganizerProfile", "Failed to fetch organizer: " + errorMessage);
             }
         });
-
+        Button back_button=findViewById(R.id.back_in_profile_detail);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminOrganizerProfile.this,AdminOrganizationProfileActivity.class);
+            startActivity(intent1);
+        });
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
+            overallStorageController.deleteOrganizer(String.valueOf(id));
             organizerList.remove(position);
             Intent result=new Intent();
             result.putStringArrayListExtra("UPDATED_LIST",organizerList);
