@@ -35,12 +35,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Empty ImageView for QR Code Placeholder -->
+
     <!-- QR Code Button -->
+
+    <ImageView
+        android:id="@+id/qr_code_image"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="QR Code Image Placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/qr_code_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="QR Code"
@@ -48,11 +62,10 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_name" />
+        app:layout_constraintTop_toBottomOf="@id/qr_code_image" />
 
-    <!-- Swimming Pool Button -->
+    <!-- Facility Button -->
     <Button
         android:id="@+id/facility_text"
         android:layout_width="300dp"
