@@ -1,5 +1,3 @@
-
-
 package com.example.breeze0events;
 
 import android.content.Context;
@@ -83,33 +81,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             }
         });
 
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
-                            @Override
-                            public void onSuccess(Event event) {
-                                String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
-                                        + "\nEnd_date: " + event.getEndDate();
-                                eventList_display.add(eventInfo);
-                                eventList.add(event);
-                                eventListAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onFailure(String errorMessage) {
-
-                            }
-                        });
-                    }
-                } else {
-                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
-                }
-            }
-        });
         // by clicking "Map" button:
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +114,18 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             startActivity(intent);
             loadEventsFromFirebase();
         });
+
+
+        /*
+        new_event_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrganizerEventActivity dialog = new OrganizerEventActivity();
+                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
+
+            }
+        });*/
+
 
         // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -264,8 +247,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                             @Override
                             public void onSuccess(Event event) {
                                 String eventInfo = "Name: " + event.getName() +
-                                        "\nStart_date: " + event.getStartDate() +
-                                        "\nEnd_date: " + event.getEndDate();
+                                        "\nStart date: " + event.getStartDate() +
+                                        "\nEnd date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
                                 eventList.add(event);
                                 eventListAdapter.notifyDataSetChanged();

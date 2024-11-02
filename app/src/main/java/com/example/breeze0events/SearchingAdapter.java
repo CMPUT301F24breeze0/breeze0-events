@@ -15,24 +15,22 @@ public class SearchingAdapter extends ArrayAdapter<Event> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // 获取当前的事件对象
+        // Get the current event object
         Event event = getItem(position);
 
-        // 如果没有可重用的视图，加载新视图
+        // If there is no reusable view, load a new view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.entrant_event_search_content, parent, false);
         }
 
-        // 查找 TextView
+        // Find TextViews
         TextView idTextView = convertView.findViewById(R.id.Event_id);
         TextView nameTextView = convertView.findViewById(R.id.Event_title);
 
-        // 设置 ID 和 Event name
+        // Set ID and event name
         idTextView.setText(String.valueOf(event.getEventId()));
         nameTextView.setText(event.getName());
 
         return convertView;
     }
 }
-
-
