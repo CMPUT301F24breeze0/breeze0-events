@@ -235,8 +235,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                             @Override
                             public void onSuccess(Event event) {
                                 String eventInfo = "Name: " + event.getName() +
-                                        "\nStart_date: " + event.getStartDate() +
-                                        "\nEnd_date: " + event.getEndDate();
+                                        "\nStart date: " + event.getStartDate() +
+                                        "\nEnd date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
                                 eventList.add(event);
                                 eventListAdapter.notifyDataSetChanged();
