@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -51,6 +52,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private OnFragmentInteractionListener listener;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedPosterUri = null;
+    private ImageView posterImageView;
 
     private String eventFacility;
     ArrayList<String> facilityList;
@@ -81,6 +83,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
         overallStorageController = new OverallStorageController();
+        posterImageView = findViewById(R.id.organizer_facility_event_poster_image);
 
         // set header
         TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
@@ -99,19 +102,20 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
+        // by clicking "Upload Poster" button
+        uploadPosterButton.setOnClickListener(v->openGallery());
+
 
 
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
-
-
             String eventName = name.getText().toString().trim();
             String startDate = start_date.getText().toString().trim();
             String endDate = end_date.getText().toString().trim();
             String entrantsList = entrants.getText().toString().trim();
             String eventId = idTextView.getText().toString();
             String qrCodePath = "android.resource://" + getPackageName() + "/drawable/example_qr";
-            String posterUri = "android.resource://" + getPackageName() + "/drawable/default_poster";
+            String posterUri = (selectedPosterUri != null) ? selectedPosterUri.toString() : "android.resource://" + getPackageName() + "/drawable/default_poster";
             String organizerId = android.os.Build.SERIAL; // device id as organizer id
 
             // Check if required fields are empty
@@ -136,6 +140,21 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         // by clicking "Back" button
         back_button.setOnClickListener(v-> finish());
+    }
+
+    private void openGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedPosterUri = data.getData();
+            posterImageView.setImageURI(selectedPosterUri);
+        }
     }
 
     @Override
