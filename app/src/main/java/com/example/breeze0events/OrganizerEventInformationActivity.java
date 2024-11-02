@@ -50,7 +50,6 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
                 // Assuming `encryptedImageString` is the encrypted Base64 string you got from generateHashCode
                 try {
                     // Decrypt the Base64 string to get the Bitmap
-                    System.out.println(selected_event.getPosterPhoto());
                     Bitmap decryptedBitmap = ImageHashGenerator.decryptImage(selected_event.getPosterPhoto());
 
                     // Set the decrypted Bitmap to ImageView

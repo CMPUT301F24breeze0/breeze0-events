@@ -7,33 +7,8 @@
     android:background="@color/ui_background">
 
     <!-- Back Button -->
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/button_color"
-        android:text="Back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Event Name Button -->
-    <Button
-        android:id="@+id/event_name"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="120dp"
-        android:backgroundTint="@color/button_color"
-        android:gravity="center"
-        android:text="Swimming Course"
-        android:textColor="@color/text_color"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Empty ImageView for QR Code Placeholder -->
 
@@ -47,6 +22,33 @@
         android:contentDescription="QR Code Image Placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/button_color"
+        android:text="Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/event_name"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="120dp"
+        android:backgroundTint="@color/button_color"
+        android:gravity="center"
+        android:text="Swimming Course"
+        android:textColor="@color/text_color"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
