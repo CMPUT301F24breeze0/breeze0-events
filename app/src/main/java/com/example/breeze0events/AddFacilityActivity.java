@@ -80,8 +80,8 @@ public class AddFacilityActivity extends DialogFragment {
         });
 
         facilityListView.setOnItemClickListener((parent, view1, position, id) -> {
-            String selectedFacility = facilityIdList.get(position);
-            listener.onFacilitySelected(selectedFacility);
+            String selectedFacilityName = facilityList.get(position);
+            listener.onFacilitySelected(selectedFacilityName);
             dismiss();
         });
 
