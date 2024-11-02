@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,10 +55,8 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private String eventFacility;
     ArrayList<String> facilityList;
 
-    @Override
-    public void onFacilitySelected(String selectedFacility) {
-        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
-    }
+
+
 
 
     public interface OnFragmentInteractionListener{
@@ -81,6 +80,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         EditText end_date = findViewById(R.id.event_end_date_bar);
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+        overallStorageController = new OverallStorageController();
 
         // set header
         TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
@@ -95,8 +95,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            ArrayList<String> facilityList = getFacilityListFromSharedPreferences();
-            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            AddFacilityActivity dialog = new AddFacilityActivity();
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
@@ -126,6 +125,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
             Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, newEntrants, organizers);
+            Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId);
             overallStorageController.addEvent(newEvent);
 
 
@@ -136,6 +136,12 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         // by clicking "Back" button
         back_button.setOnClickListener(v-> finish());
+    }
+
+    @Override
+    public void onFacilitySelected(String selectedFacility) {
+        eventFacility = selectedFacility;
+        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
     }
 
     private ArrayList<String> getFacilityListFromSharedPreferences() {
@@ -155,64 +161,6 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     }
     */
 
-
-    /*
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener){
-            listener = (OnFragmentInteractionListener) context;
-        }
-        else{
-            throw new RuntimeException(context + "need to implement OnFragmentInteractionListener");
-        }
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@NonNull Bundle savedInstanceState){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.organizer_event_activity, null);
-        event_name_bar = view.findViewById(R.id.event_name_bar);
-        event_start_date_bar = view.findViewById(R.id.event_start_date_bar);
-        event_end_date_bar = view.findViewById(R.id.event_end_date_bar);
-        entrants_bar = view.findViewById(R.id.entrants_bar);
-        // event_facility_bar = view.findViewById(R.id.event_facility_bar);
-
-        final OrganizerMyListActivity current = (OrganizerMyListActivity) getActivity();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        return builder.setView(view).setTitle("Create New Event")
-                .setCancelable(true)
-                .setNegativeButton("Cancel",null)
-                .setNeutralButton("Generate QR",(dialoginterface,i)->{})
-                .setNeutralButton("Upload Poster",(dialoginterface,i)->{
-                    // openGallery();
-                })
-                .setPositiveButton("Save",(dialoginterface,i) ->{
-                    String name = event_name_bar.getText().toString();
-                    String facility = event_facility_bar.getText().toString();
-                    String start_date = event_start_date_bar.getText().toString();
-                    String end_date = event_end_date_bar.getText().toString();
-                    String entrants = entrants_bar.getText().toString();
-                    List<String> entrantsList = Arrays.asList(entrants.split(",\\s*")); // when entering multiple entrants, use ',' to split each other
-
-
-                    Event newEvent = new Event(null, name, null, null, facility,start_date, end_date, entrantsList, null);
-                    listener.onOkPressed(newEvent);
-
-                }).create();
-
-
-    }
-
-    private static final int PICK_IMAGE = 1;
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-*/
 }
 
 

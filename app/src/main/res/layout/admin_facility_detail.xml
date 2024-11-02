@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,10 +17,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/EventDetail"
+            android:id="@+id/FacilityDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Event Detail"
+            android:text="Facility Detail"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,11 +29,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/EventName"
+            android:id="@+id/facilityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Event Name"
+            android:text="Facility Name"
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,11 +42,11 @@
             app:layout_constraintTop_toBottomOf="@+id/EventDetail" />
 
         <TextView
-            android:id="@+id/EventDate"
+            android:id="@+id/facilityID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Event Date"
+            android:text="Facility ID"
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,11 +55,11 @@
             app:layout_constraintTop_toBottomOf="@+id/EventName" />
 
         <TextView
-            android:id="@+id/MaxEntrants"
+            android:id="@+id/ViolatedPolicies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="MAX No. of Entrants"
+            android:text="Violated Policies"
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,11 +68,11 @@
             app:layout_constraintTop_toBottomOf="@+id/EventDate" />
 
         <TextView
-            android:id="@+id/duedate"
+            android:id="@+id/Evidence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Sign up due date"
+            android:text="Evidence"
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,40 +80,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/MaxEntrants" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Event description"
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duedate" />
-
-        <TextView
-            android:id="@+id/posterText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
-            android:layout_marginBottom="16dp"
-            android:text="Poster"
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duedate" />
-
-        <ImageView
-            android:id="@+id/poster"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-
-            />
     </LinearLayout>
 
     <Button
