@@ -69,6 +69,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         CollectionReference collectionRef = db.collection("OverallDB");
         String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        loadEventsFromFirebase();
+
         overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
             @Override
             public void onSuccess(Organizer organizer) {
@@ -113,7 +115,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             intent.putExtra("header_text", "Add New Event");
             Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
             startActivity(intent);
-            loadEventsFromFirebase();
         });
 
 

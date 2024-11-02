@@ -181,15 +181,6 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            selectedPosterUri = data.getData();
-            posterImageView.setImageURI(selectedPosterUri);
-        }
-    } */
 
     @Override
     public void onFacilitySelected(String selectedFacilityName) {
