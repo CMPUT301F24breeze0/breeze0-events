@@ -56,6 +56,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         Button map_button = findViewById(R.id.map_button);
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
+        Button refresh_button = findViewById(R.id.refresh_button);
 
         overallStorageController = new OverallStorageController();
         eventListView = findViewById(R.id.organizer_event_list);
@@ -125,6 +126,9 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
             }
         });*/
+
+        // by clicking "Refresh" button
+        refresh_button.setOnClickListener(v -> loadEventsFromFirebase());
 
 
         // By short-clicking anything on the list, display event details
@@ -305,4 +309,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         }
         return null;
     }
+
+
 }

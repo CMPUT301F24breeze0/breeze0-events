@@ -212,7 +212,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/facility_qr_code_layout"
         android:layout_width="match_parent"
-        android:layout_height="168dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
 
@@ -242,7 +242,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="N/A"
+            android:text="Not selected yet"
             android:textColor="@color/text_color"
             app:layout_constraintStart_toEndOf="@+id/facility_header"
             app:layout_constraintTop_toTopOf="parent" />
@@ -253,10 +253,11 @@
             android:layout_height="120dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/facility_header"
-            app:srcCompat="@drawable/empty_qr"
-            />
+            app:srcCompat="@drawable/empty_qr" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button

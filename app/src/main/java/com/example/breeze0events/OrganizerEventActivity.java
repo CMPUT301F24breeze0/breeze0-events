@@ -5,6 +5,7 @@ import static android.app.PendingIntent.getActivity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +33,8 @@ import java.util.Set;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -61,7 +64,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private String eventFacility,qrHashCode,ImageHashCode;
 
     ArrayList<String> facilityList;
-    ImageView posterImageView;
+    // ImageView posterImageView;
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
@@ -120,7 +123,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         });
 
 
-        //by clicking "Generate" Button
+        //by clicking "Generate QR Code" Button
         generateQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +131,9 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
                 qrHashCode = QRHashGenerator.generateHash(eventId);
                 Log.d("OrganizerEventActivity", "Generated QR HashCode: " + qrHashCode);
 
+                ImageView qrImageView = findViewById(R.id.selected_qr_image_view);
+                Bitmap qrBitmap = QRHashGenerator.generateQRCode(qrHashCode);
+                qrImageView.setImageBitmap(qrBitmap);
             }
         });
 
@@ -142,8 +148,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
             String qrCodePath = qrHashCode;
             String posterUri = ImageHashCode;
-            String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // device id as organizer id
-
+            String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // Device ID as organizer ID
 
             // Check if required fields are empty
             if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrantsList.isEmpty()) {
@@ -155,10 +160,11 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
+            // Use facility name instead of an ID
             Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, new ArrayList<>(), organizers);
-            Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId);
-            overallStorageController.addEvent(newEvent);
+            Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
 
+            overallStorageController.addEvent(newEvent);
 
             Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
 
@@ -175,6 +181,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -182,12 +189,14 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             selectedPosterUri = data.getData();
             posterImageView.setImageURI(selectedPosterUri);
         }
-    }
+    } */
 
     @Override
-    public void onFacilitySelected(String selectedFacility) {
-        eventFacility = selectedFacility;
-        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
+    public void onFacilitySelected(String selectedFacilityName) {
+        eventFacility = selectedFacilityName;
+        Toast.makeText(this, "Selected Facility: " + selectedFacilityName, Toast.LENGTH_SHORT).show();
+        TextView selectedFacilityTextView = findViewById(R.id.selected_facility_text_view);
+        selectedFacilityTextView.setText(selectedFacilityName);
     }
 
     private ArrayList<String> getFacilityListFromSharedPreferences() {
