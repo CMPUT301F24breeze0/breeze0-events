@@ -208,29 +208,80 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/facility_qr_code_layout"
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/view_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout"
+
+
+        >
+
+        <TextView
+            android:id="@+id/facility_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Selected Facility: "
+            android:textColor="@color/text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/selected_facility_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="N/A"
+            android:textColor="@color/text_color"
+            app:layout_constraintStart_toEndOf="@+id/facility_header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/selected_qr_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/facility_header"
+            app:srcCompat="@drawable/empty_qr"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
         android:id="@+id/organizer_event_activity_facility_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/button_color"
         android:text="Select Facility"
         android:textColor="@color/text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/facility_qr_code_layout" />
 
     <Button
         android:id="@+id/organizer_event_activity_generate_qr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/button_color"
         android:text="Generate QR Code"
         android:textColor="@color/text_color"
         app:layout_constraintStart_toEndOf="@+id/organizer_event_activity_facility_button"
-        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/facility_qr_code_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
