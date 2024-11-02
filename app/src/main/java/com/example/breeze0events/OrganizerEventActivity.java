@@ -143,7 +143,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
-            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, null, organizers);
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, new ArrayList<>(), organizers);
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId);
             overallStorageController.addEvent(newEvent);
 
