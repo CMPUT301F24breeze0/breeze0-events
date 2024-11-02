@@ -25,7 +25,7 @@ public class AddFacilityActivity extends DialogFragment {
 
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
-    private ArrayList<String> facilityList;
+    private ArrayList<String> facilityList,facilityIdList;
     private FacilitySelectListener listener;
     private FirebaseFirestore db; // Firebase instance
 
@@ -46,7 +46,7 @@ public class AddFacilityActivity extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         facilityList = new ArrayList<>(); // Initialize facility list
-
+        facilityIdList = new ArrayList<>();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_facility_activity, null);
@@ -67,8 +67,10 @@ public class AddFacilityActivity extends DialogFragment {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Assuming Facility object has a method to get location or other details
-                        String facilityInfo = "Facility: " + document.getString("location"); // Adjust field name as needed
+                        String facilityInfo =  document.getString("location"); // Adjust field name as needed
+                        String facilityIdInfo = document.getId();
                         facilityList.add(facilityInfo);
+                        facilityIdList.add(facilityIdInfo);
                     }
                     facilityListAdapter.notifyDataSetChanged();
                 } else {
@@ -78,7 +80,7 @@ public class AddFacilityActivity extends DialogFragment {
         });
 
         facilityListView.setOnItemClickListener((parent, view1, position, id) -> {
-            String selectedFacility = facilityList.get(position);
+            String selectedFacility = facilityIdList.get(position);
             listener.onFacilitySelected(selectedFacility);
             dismiss();
         });

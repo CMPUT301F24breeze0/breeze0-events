@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,13 +52,8 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private OnFragmentInteractionListener listener;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedPosterUri = null;
-
-    private String eventFacility;
+    private String eventFacility,qrHashCode;
     ArrayList<String> facilityList;
-
-
-
-
 
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
@@ -67,7 +63,6 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_event_activity);
 
-        Button back_button = findViewById(R.id.organizer_event_activity_back_button);
         String headerText = getIntent().getStringExtra("header_text");
         String newEventId = getIntent().getStringExtra("new_event_id");
         TextView idTextView = findViewById(R.id.organizer_event_activity_id);
@@ -99,20 +94,35 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
+        //by uploading QRButton
+        uploadPosterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+        //by clicking "Generate" Button
+        generateQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eventId = idTextView.getText().toString();
+                qrHashCode = QRHashGenerator.generateHash(eventId);
+                Log.d("OrganizerEventActivity", "Generated QR HashCode: " + qrHashCode);
+
+            }
+        });
 
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
-
-
             String eventName = name.getText().toString().trim();
             String startDate = start_date.getText().toString().trim();
             String endDate = end_date.getText().toString().trim();
             String entrantsList = entrants.getText().toString().trim();
             String eventId = idTextView.getText().toString();
-            String qrCodePath = "android.resource://" + getPackageName() + "/drawable/example_qr";
+            String qrCodePath = qrHashCode;
             String posterUri = "android.resource://" + getPackageName() + "/drawable/default_poster";
-            String organizerId = android.os.Build.SERIAL; // device id as organizer id
+            String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // device id as organizer id
 
             // Check if required fields are empty
             if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrantsList.isEmpty()) {
@@ -124,7 +134,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
-            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, newEntrants, organizers);
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, null, organizers);
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId);
             overallStorageController.addEvent(newEvent);
 
@@ -135,7 +145,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         });
 
         // by clicking "Back" button
-        back_button.setOnClickListener(v-> finish());
+        backButton.setOnClickListener(v-> finish());
     }
 
     @Override

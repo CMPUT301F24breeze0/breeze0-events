@@ -26,14 +26,18 @@ public class OverallStorageController {
                 String phoneNumber = documentSnapshot.getString("phoneNumber");
                 String profilePhoto = documentSnapshot.getString("profilePhoto");
                 String device = documentSnapshot.getString("device");
+                
+                // Retrieve events and status lists
+                Map<String, String> eventsName = (Map<String, String>)documentSnapshot.get("events");
+                Map<String, String> eventsStatus = (Map<String, String>)documentSnapshot.get("status");
 
-                List<String> events = (List<String>) documentSnapshot.get("events");
-                List<String> status = (List<String>) documentSnapshot.get("status");
+                if (eventsName == null) eventsName = new HashMap<>();
+                if (eventsStatus == null) eventsStatus = new HashMap<>();
 
-                if (events == null) events = new ArrayList<>();
-                if (status == null) status = new ArrayList<>();
+                // Create Entrant object
+                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device,  eventsName, eventsStatus);
 
-                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, events, status);
+                // Use the callback to pass the Entrant object
                 callback.onSuccess(entrant);
             } else {
                 Log.d(TAG, "Entrant not found!");
@@ -54,8 +58,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).set(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully added!"))
@@ -71,8 +75,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully updated!"))
