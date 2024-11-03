@@ -1,10 +1,14 @@
 package com.example.breeze0events;
 
 import android.util.Log;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +114,40 @@ public class OverallStorageController {
         }).addOnFailureListener(e -> {
             Log.w(TAG, "Failed to read organizer data.", e);
             callback.onFailure(e.getMessage());
+        });
+    }
+
+    public void addEventWithOrganizerCheck(Event event, String organizerId) {
+        CollectionReference organizersRef = db.collection("OrganizerDB");
+        organizersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean organizerExists = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String device = document.getString("device");
+                    List<String> events = (List<String>) document.get("events");
+
+                    if (device != null && device.equals(organizerId)) {
+                        organizerExists = true;
+                        if (events == null) {
+                            events = new ArrayList<>();
+                        }
+                        events.add(event.getEventId());
+
+                        document.getReference().update("events", events)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Organizer updated with new event!"))
+                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer", e));
+                        break;
+                    }
+                }
+
+                if (!organizerExists) {
+                    Organizer newOrganizer = new Organizer(organizerId, organizerId, new ArrayList<>(Arrays.asList(event.getEventId())));
+                    addOrganizer(newOrganizer);
+                    Log.d("Firestore", "New Organizer created!");
+                }
+            } else {
+                Log.w("Firestore", "Error getting organizers: ", task.getException());
+            }
         });
     }
 
