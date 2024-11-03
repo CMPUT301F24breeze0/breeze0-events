@@ -67,7 +67,7 @@ public class ImageHashGenerator {
     }
 
     // Helper method: Converts the image at the given Uri into a byte array
-    private static byte[] getImageBytes(Context context, Uri imageUri) throws IOException {
+    public static byte[] getImageBytes(Context context, Uri imageUri) throws IOException {
         ContentResolver contentResolver = context.getContentResolver();
         InputStream inputStream = contentResolver.openInputStream(imageUri);
 
