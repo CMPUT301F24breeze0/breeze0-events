@@ -155,9 +155,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
 
             overallStorageController.addEvent(newEvent);
+            overallStorageController.addEventWithOrganizerCheck(newEvent, organizerId);
+
 
             Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
-
             finish(); // Close activity
         });
 
