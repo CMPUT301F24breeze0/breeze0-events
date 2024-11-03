@@ -21,6 +21,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.widget.ArrayAdapter;
 
 public class OrganizerFacilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -81,6 +86,30 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
             finish();
         });
 
+    }
+
+
+    private ArrayList<String> getFacilityListContent() {
+        ArrayList<String> facilityList = new ArrayList<>();
+        for (int i = 0; i < facilityListView.getAdapter().getCount(); i++) {
+            facilityList.add((String) facilityListView.getAdapter().getItem(i));
+        }
+        return facilityList;
+    }
+
+    private void saveFacilityList() {
+        ListView facilityListView = findViewById(R.id.organizer_facility_list);
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) facilityListView.getAdapter();
+
+        ArrayList<String> facilityList = new ArrayList<>();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            facilityList.add(adapter.getItem(i));
+        }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putStringSet("facilityList", new HashSet<>(facilityList));
+        editor.apply();
     }
 
 
