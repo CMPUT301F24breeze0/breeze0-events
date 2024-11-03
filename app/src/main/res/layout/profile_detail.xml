@@ -80,15 +80,13 @@
 
     <TextView
 
-    android:id="@+id/date"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:text="Date:"
-    android:textColor="#F2EFEF"
-    android:textSize="30sp"
-    tools:layout_editor_absoluteX="228dp"
-    tools:layout_editor_absoluteY="286dp"
+        android:id="@+id/device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Device"
+        android:textColor="#F2EFEF"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +107,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/date" />
+    app:layout_constraintTop_toBottomOf="@+id/device" />
 
     <Button
         android:id="@+id/back_in_profile_detail"
@@ -123,5 +121,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/device_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="#EDE9E9"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/device"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/device"
+        app:layout_constraintTop_toTopOf="@+id/device" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

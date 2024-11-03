@@ -68,7 +68,6 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
                                 String organizerInfo = "Organizer: " + organizer.getOrganizerId();
                                 organizerIdMap.put(organizerInfo,docId);
                                 organizerList.add(organizerInfo);
-
                                 organizerListAdapter.notifyDataSetChanged();
                             }
 
