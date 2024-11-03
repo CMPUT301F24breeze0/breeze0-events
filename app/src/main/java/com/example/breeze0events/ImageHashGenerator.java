@@ -28,7 +28,7 @@ public class ImageHashGenerator {
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
 
-        // 生成随机 IV 并将其与密文一起存储
+        // Generate a random IV and store it with the ciphertext
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
@@ -39,10 +39,10 @@ public class ImageHashGenerator {
         // Encrypt the byte array
         byte[] encryptedBytes = cipher.doFinal(imageBytes);
 
-        // 将 IV 和密文组合
+        // Combine the IV and ciphertext
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        outputStream.write(iv); // 先写 IV
-        outputStream.write(encryptedBytes); // 然后写加密内容
+        outputStream.write(iv); // Write IV first
+        outputStream.write(encryptedBytes); // Then write the encrypted content
 
         // Encode to Base64 string for easy storage or transfer
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
@@ -52,7 +52,7 @@ public class ImageHashGenerator {
     public static Bitmap decryptImage(String encryptedImage) throws Exception {
         byte[] encryptedData = Base64.decode(encryptedImage, Base64.DEFAULT);
 
-        // 从加密数据中提取 IV 和密文
+        // Extract IV and ciphertext from the encrypted data
         byte[] iv = new byte[16];
         System.arraycopy(encryptedData, 0, iv, 0, iv.length);
         byte[] encryptedBytes = new byte[encryptedData.length - iv.length];
