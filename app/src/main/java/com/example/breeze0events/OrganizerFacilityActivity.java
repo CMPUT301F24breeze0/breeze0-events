@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import android.content.SharedPreferences;
@@ -33,6 +34,7 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityList;
+    private String newFacilityId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,36 +49,10 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityList);
         facilityListView.setAdapter(facilityListAdapter);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection("FacilityDB");
+        db = FirebaseFirestore.getInstance();
+        overallStorageController = new OverallStorageController();
 
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        overallStorageController.getFacility(String.valueOf(docId), new FacilityCallback() {
-                            @Override
-                            public void onSuccess(Facility facility) {
 
-                                String facilityInfo = "Facility: " + facility.getLocation();
-                                facilityList.add(facilityInfo);
-
-                                facilityListAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onFailure(String errorMessage) {
-
-                            }
-                        });
-                    }
-                } else {
-                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
-                }
-            }
-        });
 
 
         // by clicking "Back" button:
@@ -85,6 +61,11 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        // by clicking "New" button
+        new_facility_button.setOnClickListener(v -> findSmallestAvailableId());
+
+        // by long clicking anything on the list, the organizer can choose to delete or edit the facility
 
     }
 
@@ -112,5 +93,61 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void loadFacilities() {
+        CollectionReference collectionRef = db.collection("FacilityDB");
+        collectionRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                facilityList.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String facilityInfo = "Facility: " + document.getString("location");
+                    facilityList.add(facilityInfo);
+                }
+                facilityListAdapter.notifyDataSetChanged();
+            } else {
+                Log.e("FirestoreError", "Error getting documents: ", task.getException());
+            }
+        });
+    }
 
+    private void findSmallestAvailableId() {
+        CollectionReference collectionRef = db.collection("FacilityDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<Integer> existingIds = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        try {
+                            int facilityId = Integer.parseInt(document.getId());
+                            existingIds.add(facilityId);
+                        } catch (NumberFormatException e) {
+                            Log.e("OrganizerFacilityActivity", "Invalid facilityId format: " + document.getId());
+                        }
+                    }
+
+                    // 找到 1 到 100 中最小的未占用 ID
+                    newFacilityId = findNextAvailableId(existingIds);
+                    Log.d("OrganizerFacilityActivity", "Calculated new facility ID: " + newFacilityId);
+
+                    // 将新 ID 传递给 NewFacilityActivity
+                    Intent intent = new Intent(OrganizerFacilityActivity.this, NewFacilityActivity.class);
+                    intent.putExtra("new_facility_id", newFacilityId);
+                    startActivity(intent);
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
+                    newFacilityId = "1"; // 默认 ID 为 1
+                }
+            }
+        });
+    }
+
+    private String findNextAvailableId(ArrayList<Integer> existingIds) {
+        for (int i = 1; i <= 100; i++) {
+            if (!existingIds.contains(i)) {
+                return String.valueOf(i);
+            }
+        }
+        return "1"; // 默认返回 1
+    }
 }

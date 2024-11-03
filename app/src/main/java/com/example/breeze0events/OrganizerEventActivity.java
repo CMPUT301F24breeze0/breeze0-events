@@ -2,7 +2,6 @@ package com.example.breeze0events;
 
 import static android.app.PendingIntent.getActivity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,32 +17,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.view.View;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView;
 
 
-public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
+public class OrganizerEventActivity extends AppCompatActivity implements SelectFacilityForEventActivity.FacilitySelectListener {
     private static final int PICK_IMAGE_REQUEST = 2;
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -101,7 +91,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            AddFacilityActivity dialog = new AddFacilityActivity();
+            SelectFacilityForEventActivity dialog = new SelectFacilityForEventActivity();
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
