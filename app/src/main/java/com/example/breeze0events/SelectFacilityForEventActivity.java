@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class AddFacilityActivity extends DialogFragment {
+public class SelectFacilityForEventActivity extends DialogFragment {
 
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
@@ -49,7 +49,7 @@ public class AddFacilityActivity extends DialogFragment {
         facilityIdList = new ArrayList<>();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_facility_activity, null);
+        View view = inflater.inflate(R.layout.select_facility_activity, null);
         builder.setView(view);
 
         // Initialize ListView and adapter

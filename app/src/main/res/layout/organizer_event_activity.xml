@@ -226,7 +226,7 @@
         >
 
         <TextView
-            android:id="@+id/facility_header"
+            android:id="@+id/edit_facility_activity_facility_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -244,7 +244,7 @@
             android:layout_marginTop="8dp"
             android:text="Not selected yet"
             android:textColor="@color/text_color"
-            app:layout_constraintStart_toEndOf="@+id/facility_header"
+            app:layout_constraintStart_toEndOf="@+id/edit_facility_activity_facility_header"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -256,7 +256,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/facility_header"
+            app:layout_constraintTop_toBottomOf="@+id/edit_facility_activity_facility_header"
             app:srcCompat="@drawable/empty_qr" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

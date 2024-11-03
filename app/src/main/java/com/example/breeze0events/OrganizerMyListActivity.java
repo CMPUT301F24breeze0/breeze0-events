@@ -278,7 +278,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
     }
 
-    // calculate the next available id
     private void findSmallestAvailableId() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
@@ -307,7 +306,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 }
             }
         });
-    }
+    }// calculate the next available id
+
 
     private String findNextAvailableId(ArrayList<Integer> existingIds) {
         for (int i = 1; i <= 100; i++) {
