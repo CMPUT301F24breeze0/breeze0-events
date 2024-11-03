@@ -119,17 +119,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             startActivity(intent);
         });
 
-
-        /*
-        new_event_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OrganizerEventActivity dialog = new OrganizerEventActivity();
-                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
-
-            }
-        });*/
-
         // by clicking "Refresh" button
         // refresh_button.setOnClickListener(v -> loadEventsFromFirebase());
 
@@ -167,26 +156,28 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                     if(eventList.size() != 0) {
                         Event item = eventList.get(pos);
                         String eventIdToDelete = item.getEventId();
+                        String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-                        // 从 Firebase 删除事件
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        CollectionReference collectionRef = db.collection("OverallDB");
+                        overallStorageController.deleteEvent(eventIdToDelete);
+                        overallStorageController.deleteEventWithOrganizerCheck(eventIdToDelete, organizerId);
 
-                        collectionRef.document(eventIdToDelete).delete().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // 成功删除后，从列表中移除事件并刷新适配器
-                                eventList_display.remove(pos);
-                                eventList.remove(pos);
-                                eventListAdapter.notifyDataSetChanged();
-                                Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.e("FirestoreError", "Error deleting document: ", task.getException());
-                                Toast.makeText(getApplicationContext(), "Failed to delete event", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        // update listview after delete
+                        eventList_display.remove(pos);
+                        eventList.remove(pos);
+                        eventListAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Nothing to delete", Toast.LENGTH_LONG).show();
                     }
+                });
+
+                // edit event
+                alert.setPositiveButton("Edit", (dialogInterface, j) -> {
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+                    intent.putExtra("header_text", "Edit Event");
+                    Event item = eventList.get(pos);
+                    // intent.putExtra("event_id", item.getId());
+                    startActivity(intent);
                 });
                 // edit event
                 alert.setPositiveButton("Edit", (dialogInterface, j) -> {

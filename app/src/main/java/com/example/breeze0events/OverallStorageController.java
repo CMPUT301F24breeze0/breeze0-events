@@ -117,6 +117,7 @@ public class OverallStorageController {
         });
     }
 
+    // add event id to corresponding organizer in organizer db
     public void addEventWithOrganizerCheck(Event event, String organizerId) {
         CollectionReference organizersRef = db.collection("OrganizerDB");
         organizersRef.get().addOnCompleteListener(task -> {
@@ -149,6 +150,46 @@ public class OverallStorageController {
                 Log.w("Firestore", "Error getting organizers: ", task.getException());
             }
         });
+    }
+
+    // delete event and event id from corresponding organizer in organizer db
+    public void deleteEventWithOrganizerCheck(String eventId, String organizerId) {
+        db.collection("OverallDB").document(eventId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Event successfully deleted from OverallDB!");
+
+                    CollectionReference organizersRef = db.collection("OrganizerDB");
+                    organizersRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            boolean organizerExists = false;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String device = document.getString("device");
+                                List<String> events = (List<String>) document.get("events");
+
+                                if (device != null && device.equals(organizerId)) {
+                                    organizerExists = true;
+
+                                    if (events != null && events.contains(eventId)) {
+                                        events.remove(eventId);  // remove enent id
+
+                                        document.getReference().update("events", events)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Event removed from Organizer's events list!"))
+                                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer's events list", e));
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!organizerExists) {
+                                Log.w("Firestore", "Organizer not found for device ID: " + organizerId);
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting organizers: ", task.getException());
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error deleting event from OverallDB", e));
     }
 
     // Add Organizer
