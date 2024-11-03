@@ -3,6 +3,7 @@ package com.example.breeze0events;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +39,7 @@ public class NewFacilityActivity extends AppCompatActivity {
             String facilityName = facilityInput.getText().toString().trim();
             if (!facilityName.isEmpty()) {
                 // String facilityId = facilityId;
-                String deviceInfo = Build.ID;
+                String deviceInfo = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                 Facility newFacility = new Facility(facilityId, facilityName, deviceInfo);
 
                 overallStorageController.addFacility(newFacility); // 添加设施到数据库
