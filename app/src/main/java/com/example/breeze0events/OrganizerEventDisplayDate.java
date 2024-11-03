@@ -31,6 +31,8 @@ public class OrganizerEventDisplayDate extends AppCompatActivity {
         date_list.add((String)getIntent().getSerializableExtra("start_date"));
         date_list.add("End Date:");
         date_list.add((String)getIntent().getSerializableExtra("end_date"));
+        date_list.add("Limited Number:");
+        date_list.add((String)getIntent().getSerializableExtra("limitedNumber"));
         dateListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, date_list);
         dateListView.setAdapter(dateListAdapter);
     }

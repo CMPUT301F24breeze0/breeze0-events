@@ -23,6 +23,7 @@
 |                | `end_date`                 | `string`                                    | Event end date                                                              |
 |                | `entrants`                 | `array<entrant_id:string>`                  | List of entrant IDs participating in the event                              |
 |                | `organizers`               | `array<organizer_id:string>`                | List of organizer IDs managing the event                                    |
+|                | `limited_number`           | `integer`                                   | Maximum number of entrants allowed for the event                            |
 | **FacilityDB** | `facility_id` (document_id)| `string`                                    | Unique ID for the facility                                                  |
 |                | `location`                 | `string`                                    | Location of the facility                                                    |
 |                | `device`                   | `string`                                    | Device information                                                          |

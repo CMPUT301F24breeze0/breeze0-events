@@ -18,7 +18,9 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import android.widget.Toast;
 
@@ -53,12 +55,10 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_main_activity);
-
-        loadEventsFromFirebase();
-
         Button map_button = findViewById(R.id.map_button);
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
+        // Button refresh_button = findViewById(R.id.refresh_button);
 
         overallStorageController = new OverallStorageController();
         eventListView = findViewById(R.id.organizer_event_list);
@@ -70,6 +70,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
         String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        loadEventsFromFirebase();
 
         overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
             @Override
@@ -117,6 +119,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             startActivity(intent);
         });
 
+
         /*
         new_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +129,10 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
             }
         });*/
+
+        // by clicking "Refresh" button
+        // refresh_button.setOnClickListener(v -> loadEventsFromFirebase());
+
 
         // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -156,16 +163,29 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 alert.setMessage("Do you want to delete or edit this event?");
                 alert.show();
                 // delete event
-                alert.setNeutralButton("Delete",(dialogInterface, j) ->{
-                    if(eventList.size() != 0){
+                alert.setNeutralButton("Delete", (dialogInterface, j) -> {
+                    if(eventList.size() != 0) {
                         Event item = eventList.get(pos);
-                        // boolean check_done = item.getStatus();
-                        eventListAdapter.remove(String.valueOf(item));
-                        eventList.remove(item);
-                        update();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Nothing to delete",Toast.LENGTH_LONG).show();
+                        String eventIdToDelete = item.getEventId();
+
+                        // 从 Firebase 删除事件
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference collectionRef = db.collection("OverallDB");
+
+                        collectionRef.document(eventIdToDelete).delete().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // 成功删除后，从列表中移除事件并刷新适配器
+                                eventList_display.remove(pos);
+                                eventList.remove(pos);
+                                eventListAdapter.notifyDataSetChanged();
+                                Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e("FirestoreError", "Error deleting document: ", task.getException());
+                                Toast.makeText(getApplicationContext(), "Failed to delete event", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nothing to delete", Toast.LENGTH_LONG).show();
                     }
                 });
                 // edit event
@@ -200,7 +220,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventList.add(newEvent);
         eventListAdapter.notifyDataSetChanged();
         Log.d("Event","Event to add: " + newEvent.toString());
-        loadEventsFromFirebase();
     }
 
     private void setEventList(Event event)  {
@@ -230,6 +249,11 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String docId = document.getId();
+                        String androidId=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        List<String> organizers=(List<String>) document.get("organizers");
+
+                        if(!Objects.equals(organizers.get(0), androidId))
+                            continue;
                         Map<String, Object> data = document.getData();
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
@@ -263,7 +287,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    // 获取所有 eventId 的列表
+                    // find all the list from eventId
                     ArrayList<Integer> existingIds = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         try {
@@ -293,4 +317,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         }
         return null;
     }
+
+
 }

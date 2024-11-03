@@ -38,7 +38,8 @@ public class OrganizerEventDisplayQRcode extends AppCompatActivity {
 
         // Generate the QR code and display it
         String qrHashCode = (String) getIntent().getSerializableExtra("qrcode");// Replace with your hash code
-        Bitmap qrCodeBitmap = generateQRCode(qrHashCode);
+        QRHashGenerator qrhashgenerator=new QRHashGenerator();
+        Bitmap qrCodeBitmap = qrhashgenerator.generateQRCode(qrHashCode);
 
         if (qrCodeBitmap != null) {
             qrCodeImageView.setImageBitmap(qrCodeBitmap);
@@ -48,22 +49,4 @@ public class OrganizerEventDisplayQRcode extends AppCompatActivity {
     }
 
     // Method to generate a QR code bitmap
-    private Bitmap generateQRCode(String qrHashCode) {
-        QRCodeWriter writer = new QRCodeWriter();
-        try {
-            BitMatrix bitMatrix = writer.encode(qrHashCode, BarcodeFormat.QR_CODE, 512, 512); // QR code size 512x512
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? android.graphics.Color.BLACK : android.graphics.Color.WHITE);
-                }
-            }
-            return bmp;
-        } catch (WriterException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
