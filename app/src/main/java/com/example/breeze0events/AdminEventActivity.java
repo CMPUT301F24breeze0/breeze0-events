@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,10 +27,24 @@ import java.util.ArrayList;
 public class AdminEventActivity extends AppCompatActivity {
     private ListView eventListView;
     private ArrayAdapter<String> eventListAdapter;
-    private ArrayList<String> eventList_display;
-    private ArrayList<Event> eventList;
+    private ArrayList<String> eventListDisplay = new ArrayList<>();;
+    private ArrayList<Event> eventList = new ArrayList<>();;
     public Event event;
     private OverallStorageController overallStorageController;
+    private final ActivityResultLauncher<Intent> eventsLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        eventListDisplay = data.getStringArrayListExtra("UPDATED_LIST");
+                        eventListAdapter.clear();
+                        if (eventListDisplay != null) {
+                            eventListAdapter.addAll(eventListDisplay);
+                        }
+                        eventListAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +53,9 @@ public class AdminEventActivity extends AppCompatActivity {
         Button return_button = findViewById(R.id.backButton);
 
         eventListView = findViewById(R.id.eventsList);
-        eventList_display = new ArrayList<>();
-        eventList = new ArrayList<>();
         overallStorageController = new OverallStorageController();
-        eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventList_display);
+
+        eventListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, eventListDisplay);
         eventListView.setAdapter(eventListAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -57,7 +72,7 @@ public class AdminEventActivity extends AppCompatActivity {
                             public void onSuccess(Event event) {
                                 String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                         + "\nEnd_date: " + event.getEndDate();
-                                eventList_display.add(info);
+                                eventListDisplay.add(info);
                                 eventList.add(event);
                                 eventListAdapter.notifyDataSetChanged();
                                 Log.d("AdminEventData", "Event data fetched successfully: ");
@@ -85,9 +100,12 @@ public class AdminEventActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (eventList != null && position >= 0 && position < eventList.size()) {
                     Event selectedEvent = eventList.get(position);
+
                     Intent intent = new Intent(AdminEventActivity.this, AdminSelectedEvents.class);
                     intent.putExtra("selectedID", selectedEvent.getEventId());
-                    startActivity(intent);
+                    intent.putStringArrayListExtra("eventListDisplay", eventListDisplay);
+                    eventsLauncher.launch(intent);
+
                 } else {
                     Log.e("ItemClickError", "Invalid position or eventList is null");
                 }
