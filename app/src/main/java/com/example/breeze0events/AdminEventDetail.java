@@ -76,6 +76,11 @@ public class AdminEventDetail extends AppCompatActivity {
                 if (eventList != null) {
                     eventList.removeIf(event -> event.getEventId().equals(id));
                 }
+
+
+                eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+
+
                 if (eventListDisplay  != null) {
                     eventListDisplay.clear();
                     for (Event event : eventList) {
@@ -84,6 +89,7 @@ public class AdminEventDetail extends AppCompatActivity {
                         eventListDisplay.add(info);
                     }
                 }
+
 
 
                 Intent resultIntent = new Intent();
