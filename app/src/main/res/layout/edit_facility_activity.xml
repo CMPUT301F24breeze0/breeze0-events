@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:text="TextView"
+        android:text="Edit Facility"
         android:textColor="@color/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,10 +27,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Edit_facility_activity_add_button"
+        android:id="@+id/edit_facility_activity_update_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="Update"
         android:textColor="@color/text_color"
         android:backgroundTint="@color/ui_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,28 +46,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_facility_activity_back_button">
 
-        <TextView
-            android:id="@+id/edit_facility_activity_facility_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="14dp"
-            android:text="Facility Name: "
-            android:textColor="@color/text_color"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <EditText
-            android:id="@+id/facility_bar"
+            android:id="@+id/facility_name_input"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:hint="Enter Facility Name Here"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_facility_activity_facility_header"
-            app:layout_constraintTop_toTopOf="parent"
-            android:hint="Enter Facility Name Here"/>
+            app:layout_constraintStart_toEndOf="@+id/edit_facility_activity_facility_name_header"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/facility_id_header"
+            android:id="@+id/edit_facility_activity_facility_id_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -78,7 +68,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/facility_id_text"
+            android:id="@+id/edit_facility_activity_facility_id_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -86,6 +76,17 @@
             android:text="ID"
             android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/facility_id_header" />
+            app:layout_constraintStart_toEndOf="@+id/edit_facility_activity_facility_id_header" />
+
+        <TextView
+            android:id="@+id/edit_facility_activity_facility_name_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:text="Facility:"
+            android:textColor="@color/text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

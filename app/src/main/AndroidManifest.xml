@@ -175,11 +175,13 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity
-            android:name=".NewFacilityActivity"
+            android:name=".AddFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-
-
+        <activity
+            android:name=".EditFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
     </application>
 
 </manifest>

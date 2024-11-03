@@ -24,12 +24,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.widget.ArrayAdapter;
 
 public class OrganizerFacilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -87,6 +85,10 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
                 // edit facility
                 alertDialogBuilder.setPositiveButton("Edit", (dialog, which) -> {
+                    Intent editIntent = new Intent(OrganizerFacilityActivity.this, EditFacilityActivity.class);
+                    editIntent.putExtra("facility_id", selectedFacilityId);  // Pass the facility ID
+                    editIntent.putExtra("facility_name", selectedFacilityName);  // Pass the facility name
+                    startActivity(editIntent);
                 });
 
                 // delete facility
@@ -194,7 +196,7 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
                     newFacilityId = findNextAvailableId(existingIds);
                     Log.d("OrganizerFacilityActivity", "Calculated new facility ID: " + newFacilityId);
 
-                    Intent intent = new Intent(OrganizerFacilityActivity.this, NewFacilityActivity.class);
+                    Intent intent = new Intent(OrganizerFacilityActivity.this, AddFacilityActivity.class);
                     intent.putExtra("new_facility_id", newFacilityId);
                     startActivity(intent);
                 } else {
