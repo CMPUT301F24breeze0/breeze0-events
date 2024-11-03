@@ -18,7 +18,9 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import android.widget.Toast;
 
@@ -247,6 +249,11 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String docId = document.getId();
+                        String androidId=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        List<String> organizers=(List<String>) document.get("organizers");
+
+                        if(!Objects.equals(organizers.get(0), androidId))
+                            continue;
                         Map<String, Object> data = document.getData();
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
@@ -280,7 +287,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    // 获取所有 eventId 的列表
+                    // find all the list from eventId
                     ArrayList<Integer> existingIds = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         try {
