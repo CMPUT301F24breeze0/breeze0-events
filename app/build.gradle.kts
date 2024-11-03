@@ -52,5 +52,9 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation ("com.google.zxing:core:3.3.3")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0") // for using in Android
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.mockito:mockito-core:4.3.1")
+    testImplementation ("org.mockito:mockito-inline:4.3.1")
+
 
 }
