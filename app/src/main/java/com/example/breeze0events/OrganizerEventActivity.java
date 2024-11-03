@@ -145,7 +145,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             String endDate = end_date.getText().toString().trim();
             String entrantsList = entrants.getText().toString().trim();
             String eventId = idTextView.getText().toString();
-
+            String limitedNumber = entrants.getText().toString();
             String qrCodePath = qrHashCode;
             String posterUri = ImageHashCode;
             String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // Device ID as organizer ID
@@ -161,7 +161,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
             // Use facility name instead of an ID
-            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, new ArrayList<>(), organizers);
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, limitedNumber,new ArrayList<>(), organizers);
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
 
             overallStorageController.addEvent(newEvent);
