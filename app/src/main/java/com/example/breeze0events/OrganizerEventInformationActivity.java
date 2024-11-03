@@ -72,6 +72,7 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
                 Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerEventDisplayDate.class);
                 intent.putExtra("start_date",selected_event.getStartDate());
                 intent.putExtra("end_date",selected_event.getEndDate());
+                intent.putExtra("limitedNumber",selected_event.getLimitedNumber());
                 startActivity(intent);
             }
         });
