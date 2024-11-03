@@ -76,14 +76,9 @@ public class AdminEventDetail extends AppCompatActivity {
                 if (eventList != null) {
                     eventList.removeIf(event -> event.getEventId().equals(id));
                 }
-                if (eventListDisplay  != null) {
-                    eventListDisplay.clear();
-                    for (Event event : eventList) {
-                        String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
-                                + "\nEnd_date: " + event.getEndDate();
-                        eventListDisplay.add(info);
-                    }
-                }
+
+                eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+
 
 
                 Intent resultIntent = new Intent();
