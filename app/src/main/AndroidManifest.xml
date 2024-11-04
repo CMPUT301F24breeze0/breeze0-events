@@ -182,6 +182,10 @@
             android:name=".EditFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".OrganizerEditEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
     </application>
 
 </manifest>

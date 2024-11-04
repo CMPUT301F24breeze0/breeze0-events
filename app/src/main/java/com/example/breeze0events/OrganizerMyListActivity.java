@@ -173,21 +173,11 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
                 // edit event
                 alert.setPositiveButton("Edit", (dialogInterface, j) -> {
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("header_text", "Edit Event");
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEditEventActivity.class);
                     Event item = eventList.get(pos);
-                    // intent.putExtra("event_id", item.getId());
+                    intent.putExtra("event_id", item.getEventId()); // Pass the event ID for editing
                     startActivity(intent);
                 });
-                // edit event
-                alert.setPositiveButton("Edit", (dialogInterface, j) -> {
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("header_text", "Edit Event");
-                    Event item = eventList.get(pos);
-                    // intent.putExtra("event_id", item.getId());
-                    startActivity(intent);
-                });
-                //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
                 // cancel button
                 alert.setNegativeButton("Cancel",(dialog, which) -> {
                     dialog.dismiss();
@@ -288,12 +278,11 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         }
                     }
 
-                    // 找到 1 到 100 中最小的未占用 ID
                     newEventId = findNextAvailableId(existingIds);
                     Log.d("OrganizerMyListActivity", "Calculated new event ID: " + newEventId);
                 } else {
                     Log.e("FirestoreError", "Error getting documents: ", task.getException());
-                    newEventId = "1"; // 如果数据库读取失败，默认 ID 为 1
+                    newEventId = "1";
                 }
             }
         });
