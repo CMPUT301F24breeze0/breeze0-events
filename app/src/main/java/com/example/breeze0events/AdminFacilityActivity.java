@@ -23,8 +23,8 @@ import java.util.ArrayList;
 public class AdminFacilityActivity extends AppCompatActivity {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
-    private ArrayList<String> facilityList_display;
-    private ArrayList<String> facilityList;
+    private ArrayList<String> facilityListDisplay = new ArrayList<>();;
+    private ArrayList<String> facilityList = new ArrayList<>();;
     private OverallStorageController overallStorageController;
 
     @Override
@@ -33,10 +33,9 @@ public class AdminFacilityActivity extends AppCompatActivity {
         setContentView(R.layout.admin_facility_page);
         Button return_button = findViewById(R.id.backButton);
 
+
         facilityListView = findViewById(R.id.facilityList);
-        facilityList_display = new ArrayList<>();
-        facilityList = new ArrayList<>();
-        facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityList_display);
+        facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityListDisplay);
         facilityListView.setAdapter(facilityListAdapter);
         overallStorageController = new OverallStorageController();
 
@@ -54,7 +53,7 @@ public class AdminFacilityActivity extends AppCompatActivity {
                             public void onSuccess(Facility facility) {
                                 String info = "Facility Location:\n" + facility.getLocation();
                                 facilityList.add(info);
-                                facilityList_display.add(info);
+                                facilityListDisplay.add(info);
                                 facilityListAdapter.notifyDataSetChanged();
                             }
 

@@ -92,20 +92,21 @@
 
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
-
+        <activity
+            android:name=".AdminFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
         <activity
             android:name=".AdminOrganizationProfileActivity"
             android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="DuplicateActivity" />
+            android:theme="@style/Theme.Breeze0events" />
 
 
 
         <activity
             android:name=".EntrantSearchingActivity"
             android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="DuplicateActivity" />
+            android:theme="@style/Theme.Breeze0events" />
         <activity
             android:name=".EntrantEventDetail"
             android:exported="true"
@@ -124,13 +125,11 @@
         <!-- OverallStorageController is not a UI activity, so it doesn't need to be exported or have a theme -->
         <activity
             android:name=".OverallStorageController"
-            android:exported="false"
-            tools:ignore="Instantiatable" />
+            android:exported="false" />
         <activity
             android:name=".AdminOrganizerProfile"
             android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="DuplicateActivity" />
+            android:theme="@style/Theme.Breeze0events" />
 
 
         <activity
