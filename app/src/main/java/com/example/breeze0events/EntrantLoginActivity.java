@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EntrantLoginActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -52,7 +53,7 @@ public class EntrantLoginActivity extends AppCompatActivity {
                 profileImageString = generateDefaultProfileImage(name);
             }
 
-            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new ArrayList<>(), new ArrayList<>());
+            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new HashMap<>(), new HashMap<>());
             new OverallStorageController().addEntrant(newEntrant);
 
             Intent intent = new Intent(EntrantLoginActivity.this, EntrantMylistActivity.class);

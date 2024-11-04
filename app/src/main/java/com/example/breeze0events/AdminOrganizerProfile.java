@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,12 +26,14 @@ public class AdminOrganizerProfile extends AppCompatActivity {
         position=getIntent().getIntExtra("SELECTED_POSITION",-1);
         organizerList=getIntent().getStringArrayListExtra("ORGANIZATION_LIST");
         EditText name=findViewById(R.id.editName);
+        TextView device=findViewById(R.id.device_content);
 
         overallStorageController.getOrganizer(String.valueOf(id), new OrganizerCallback() {
             @Override
             public void onSuccess(Organizer organizer) {
                 Log.d("AdminOrganizerProfile", "Organizer data fetched successfully: " + organizer.getOrganizerId());
                 name.setText(organizer.getOrganizerId());
+                device.setText(organizer.getDevice());
             }
 
             @Override
@@ -38,9 +41,14 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                 Log.e("AdminOrganizerProfile", "Failed to fetch organizer: " + errorMessage);
             }
         });
-
+        Button back_button=findViewById(R.id.back_in_profile_detail);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminOrganizerProfile.this,AdminOrganizationProfileActivity.class);
+            startActivity(intent1);
+        });
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
+            overallStorageController.deleteOrganizer(String.valueOf(id));
             organizerList.remove(position);
             Intent result=new Intent();
             result.putStringArrayListExtra("UPDATED_LIST",organizerList);

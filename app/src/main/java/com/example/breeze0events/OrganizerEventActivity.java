@@ -2,21 +2,24 @@ package com.example.breeze0events;
 
 import static android.app.PendingIntent.getActivity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.view.View;
-import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,17 +27,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.view.LayoutInflater;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
+public class OrganizerEventActivity extends AppCompatActivity implements SelectFacilityForEventActivity.FacilitySelectListener {
+    private static final int PICK_IMAGE_REQUEST = 2;
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     private ListView eventListView;
@@ -48,18 +48,13 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     private EditText event_facility_bar;
     private EditText no_of_attendees_bar;
     private OnFragmentInteractionListener listener;
-    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedPosterUri = null;
 
-    private String eventFacility;
+    private ImageView posterImageView;
+    private String eventFacility,qrHashCode,ImageHashCode;
+
     ArrayList<String> facilityList;
-
-    @Override
-    public void onFacilitySelected(String selectedFacility) {
-        Toast.makeText(this, "Selected Facility: " + selectedFacility, Toast.LENGTH_SHORT).show();
-    }
-
-
+    // ImageView posterImageView;
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
@@ -68,22 +63,23 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_event_activity);
 
-        Button back_button = findViewById(R.id.organizer_event_activity_back_button);
         String headerText = getIntent().getStringExtra("header_text");
         String newEventId = getIntent().getStringExtra("new_event_id");
-        TextView idTextView = findViewById(R.id.organizer_event_activity_id);
-        Button addButton = findViewById(R.id.organizer_event_activity_add_button);
-        Button backButton = findViewById(R.id.organizer_event_activity_back_button);
-        Button uploadPosterButton = findViewById(R.id.organizer_facility_event_poster_upload_button);
+        TextView idTextView = findViewById(R.id.organizer_edit_event_activity_id);
+        Button addButton = findViewById(R.id.organizer_edit_event_activity_add_button);
+        Button backButton = findViewById(R.id.organizer_edit_event_activity_back_button);
+        Button uploadPosterButton = findViewById(R.id.organizer_edit_event_activity_poster_upload_button);
         Button generateQRButton = findViewById(R.id.organizer_event_activity_generate_qr_button);
         EditText name = findViewById(R.id.event_name_bar);
         EditText start_date = findViewById(R.id.event_start_date_bar);
         EditText end_date = findViewById(R.id.event_end_date_bar);
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+        overallStorageController = new OverallStorageController();
+        posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
         // set header
-        TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
+        TextView headerTextView = findViewById(R.id.organizer_edit_event_activity_header);
         if (headerText != null) {
             headerTextView.setText(headerText);
         }
@@ -95,25 +91,54 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            ArrayList<String> facilityList = getFacilityListFromSharedPreferences();
-            AddFacilityActivity dialog = AddFacilityActivity.newInstance(facilityList);
+            SelectFacilityForEventActivity dialog = new SelectFacilityForEventActivity();
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
+        // by clicking "Upload Poster" button
+        uploadPosterButton.setOnClickListener(v->openGallery());
+
+        //by clicking "uploading QR" Button
+        // Request code for image picker
+
+
+        uploadPosterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to open the image gallery
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*"); // Filter only for images
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+
+
+        //by clicking "Generate QR Code" Button
+        generateQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eventId = idTextView.getText().toString();
+                qrHashCode = QRHashGenerator.generateHash(eventId);
+                Log.d("OrganizerEventActivity", "Generated QR HashCode: " + qrHashCode);
+
+                ImageView qrImageView = findViewById(R.id.selected_qr_image_view);
+                Bitmap qrBitmap = QRHashGenerator.generateQRCode(qrHashCode);
+                qrImageView.setImageBitmap(qrBitmap);
+            }
+        });
 
 
         // by clicking "Add" button
         addButton.setOnClickListener(v->{
-
-
             String eventName = name.getText().toString().trim();
             String startDate = start_date.getText().toString().trim();
             String endDate = end_date.getText().toString().trim();
             String entrantsList = entrants.getText().toString().trim();
             String eventId = idTextView.getText().toString();
-            String qrCodePath = "android.resource://" + getPackageName() + "/drawable/example_qr";
-            String posterUri = "android.resource://" + getPackageName() + "/drawable/default_poster";
-            String organizerId = android.os.Build.SERIAL; // device id as organizer id
+            String limitedNumber = entrants.getText().toString();
+            String qrCodePath = qrHashCode;
+            String posterUri = ImageHashCode;
+            String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // Device ID as organizer ID
 
             // Check if required fields are empty
             if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrantsList.isEmpty()) {
@@ -125,17 +150,35 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
-            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, newEntrants, organizers);
+            // Use facility name instead of an ID
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, limitedNumber,new ArrayList<>(), organizers);
+            Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
+
             overallStorageController.addEvent(newEvent);
+            overallStorageController.addEventWithOrganizerCheck(newEvent, organizerId);
 
 
             Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
-
             finish(); // Close activity
         });
 
         // by clicking "Back" button
-        back_button.setOnClickListener(v-> finish());
+        backButton.setOnClickListener(v-> finish());
+    }
+
+    private void openGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+
+    @Override
+    public void onFacilitySelected(String selectedFacilityName) {
+        eventFacility = selectedFacilityName;
+        Toast.makeText(this, "Selected Facility: " + selectedFacilityName, Toast.LENGTH_SHORT).show();
+        TextView selectedFacilityTextView = findViewById(R.id.selected_facility_text_view);
+        selectedFacilityTextView.setText(selectedFacilityName);
     }
 
     private ArrayList<String> getFacilityListFromSharedPreferences() {
@@ -145,74 +188,34 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
     }
 
 
-
-    /*
     @Override
-    public void onFacilitySelected(String selectedFacility) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            // Get the selected image Uri
+            selectedPosterUri = data.getData();
 
-        eventFacility = selectedFacility;
-        facilityButton.setText(eventFacility);
-    }
-    */
+            // Display a message or update UI
+            Toast.makeText(this, "Poster selected successfully", Toast.LENGTH_SHORT).show();
+            Log.d("OrganizerEventActivity", "Selected poster URI: " + selectedPosterUri.toString());
 
+            // Optional: If you have an ImageView to show the poster, set it here
+            // ImageView posterImageView = findViewById(R.id.poster_image_view);
+             posterImageView.setImageURI(selectedPosterUri);
+            try {
+                // Generate the encrypted Base64 hash code for the image
+                ImageHashCode = ImageHashGenerator.generateHashCode(this, selectedPosterUri);
+                Log.d("ImageHash", "Generated Hash Code: " + ImageHashCode);
 
-    /*
+            } catch (Exception e) {
+                // Catch any exception, including IOException and GeneralSecurityException
+                e.printStackTrace();
+                Log.e("ImageHash", "Error generating hash code: " + e.getMessage());
+            }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener){
-            listener = (OnFragmentInteractionListener) context;
         }
-        else{
-            throw new RuntimeException(context + "need to implement OnFragmentInteractionListener");
-        }
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@NonNull Bundle savedInstanceState){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.organizer_event_activity, null);
-        event_name_bar = view.findViewById(R.id.event_name_bar);
-        event_start_date_bar = view.findViewById(R.id.event_start_date_bar);
-        event_end_date_bar = view.findViewById(R.id.event_end_date_bar);
-        entrants_bar = view.findViewById(R.id.entrants_bar);
-        // event_facility_bar = view.findViewById(R.id.event_facility_bar);
-
-        final OrganizerMyListActivity current = (OrganizerMyListActivity) getActivity();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        return builder.setView(view).setTitle("Create New Event")
-                .setCancelable(true)
-                .setNegativeButton("Cancel",null)
-                .setNeutralButton("Generate QR",(dialoginterface,i)->{})
-                .setNeutralButton("Upload Poster",(dialoginterface,i)->{
-                    // openGallery();
-                })
-                .setPositiveButton("Save",(dialoginterface,i) ->{
-                    String name = event_name_bar.getText().toString();
-                    String facility = event_facility_bar.getText().toString();
-                    String start_date = event_start_date_bar.getText().toString();
-                    String end_date = event_end_date_bar.getText().toString();
-                    String entrants = entrants_bar.getText().toString();
-                    List<String> entrantsList = Arrays.asList(entrants.split(",\\s*")); // when entering multiple entrants, use ',' to split each other
-
-
-                    Event newEvent = new Event(null, name, null, null, facility,start_date, end_date, entrantsList, null);
-                    listener.onOkPressed(newEvent);
-
-                }).create();
-
-
-    }
-
-    private static final int PICK_IMAGE = 1;
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-*/
 }
 
 

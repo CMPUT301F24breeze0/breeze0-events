@@ -18,7 +18,9 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import android.widget.Toast;
 
@@ -47,15 +49,16 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     private ArrayList<Event> eventList;
     private int pos;
     public Event event;
+    private String newEventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_main_activity);
-
         Button map_button = findViewById(R.id.map_button);
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
+        // Button refresh_button = findViewById(R.id.refresh_button);
 
         overallStorageController = new OverallStorageController();
         eventListView = findViewById(R.id.organizer_event_list);
@@ -67,6 +70,8 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
         String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        loadEventsFromFirebase();
 
         overallStorageController.getOrganizer(androidId, new OrganizerCallback() {
             @Override
@@ -81,33 +86,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             }
         });
 
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
-                            @Override
-                            public void onSuccess(Event event) {
-                                String eventInfo = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
-                                        + "\nEnd_date: " + event.getEndDate();
-                                eventList_display.add(eventInfo);
-                                eventList.add(event);
-                                eventListAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onFailure(String errorMessage) {
-
-                            }
-                        });
-                    }
-                } else {
-                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
-                }
-            }
-        });
         // by clicking "Map" button:
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,48 +104,24 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
 
         // by clicking "New" button
+        findSmallestAvailableId();
         new_event_button.setOnClickListener(v->{
-            // notify user if there's not network connection
-            if(!isNetworkAvailable(OrganizerMyListActivity.this)){
+
+            if (!isNetworkAvailable(OrganizerMyListActivity.this)) {
                 Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("events");
-            databaseRef.orderByKey().limitToLast(1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
-                    Log.d("OrganizerMyListActivity","Task completed: " + task.isSuccessful());
-                    String newEventId;
-                    if (task.isSuccessful() && task.getResult() != null && task.getResult().hasChildren()) {
-                        String maxId = task.getResult().getChildren().iterator().next().getKey();
-                        int nextId = Math.min(Integer.parseInt(maxId) + 1, 100); // id should be 1-100
-                        newEventId = String.valueOf(nextId);
-                        Log.d("OrganizerMyListActivity", "New event ID: " + newEventId);
-                    } else {
-                        Log.e("OrganizerMyListActivity", "Failed to fetch max ID or no events found.");
-                        newEventId = "1";
-                    }
-
-                    // jump to organizer event activity and pass id info
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("new_event_id", newEventId);
-                    intent.putExtra("header_text", "Add New Event");
-                    Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
-                    startActivity(intent);
-                }
-
-            });
+            Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
+            intent.putExtra("new_event_id", newEventId);
+            intent.putExtra("header_text", "Add New Event");
+            Log.d("OrganizerMyListActivity", "Starting OrganizerEventActivity with new event ID: " + newEventId);
+            startActivity(intent);
         });
-        /*
-        new_event_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OrganizerEventActivity dialog = new OrganizerEventActivity();
-                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
 
-            }
-        });*/
+        // by clicking "Refresh" button
+        // refresh_button.setOnClickListener(v -> loadEventsFromFirebase());
+
 
         // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -198,27 +152,32 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 alert.setMessage("Do you want to delete or edit this event?");
                 alert.show();
                 // delete event
-                alert.setNeutralButton("Delete",(dialogInterface, j) ->{
-                    if(eventList.size() != 0){
+                alert.setNeutralButton("Delete", (dialogInterface, j) -> {
+                    if(eventList.size() != 0) {
                         Event item = eventList.get(pos);
-                        // boolean check_done = item.getStatus();
-                        eventListAdapter.remove(String.valueOf(item));
-                        eventList.remove(item);
-                        update();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Nothing to delete",Toast.LENGTH_LONG).show();
+                        String eventIdToDelete = item.getEventId();
+                        String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+                        overallStorageController.deleteEvent(eventIdToDelete);
+                        overallStorageController.deleteEventWithOrganizerCheck(eventIdToDelete, organizerId);
+
+                        // update listview after delete
+                        eventList_display.remove(pos);
+                        eventList.remove(pos);
+                        eventListAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nothing to delete", Toast.LENGTH_LONG).show();
                     }
                 });
+
                 // edit event
                 alert.setPositiveButton("Edit", (dialogInterface, j) -> {
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("header_text", "Edit Event");
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEditEventActivity.class);
                     Event item = eventList.get(pos);
-                    // intent.putExtra("event_id", item.getId());
+                    intent.putExtra("event_id", item.getEventId()); // Pass the event ID for editing
                     startActivity(intent);
                 });
-                //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
                 // cancel button
                 alert.setNegativeButton("Cancel",(dialog, which) -> {
                     dialog.dismiss();
@@ -253,6 +212,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListAdapter.notifyDataSetChanged();
     }
 
+    // there has to be a network connection when creating new event, this method will check if there's network connection
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -270,13 +230,18 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String docId = document.getId();
+                        String androidId=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        List<String> organizers=(List<String>) document.get("organizers");
+
+                        if(!Objects.equals(organizers.get(0), androidId))
+                            continue;
                         Map<String, Object> data = document.getData();
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
                             public void onSuccess(Event event) {
                                 String eventInfo = "Name: " + event.getName() +
-                                        "\nStart_date: " + event.getStartDate() +
-                                        "\nEnd_date: " + event.getEndDate();
+                                        "\nStart date: " + event.getStartDate() +
+                                        "\nEnd date: " + event.getEndDate();
                                 eventList_display.add(eventInfo);
                                 eventList.add(event);
                                 eventListAdapter.notifyDataSetChanged();
@@ -293,4 +258,45 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             }
         });
     }
+
+    private void findSmallestAvailableId() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // find all the list from eventId
+                    ArrayList<Integer> existingIds = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        try {
+                            int eventId = Integer.parseInt(document.getId());
+                            existingIds.add(eventId);
+                        } catch (NumberFormatException e) {
+                            Log.e("OrganizerMyListActivity", "Invalid eventId format: " + document.getId());
+                        }
+                    }
+
+                    newEventId = findNextAvailableId(existingIds);
+                    Log.d("OrganizerMyListActivity", "Calculated new event ID: " + newEventId);
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
+                    newEventId = "1";
+                }
+            }
+        });
+    }// calculate the next available id
+
+
+    private String findNextAvailableId(ArrayList<Integer> existingIds) {
+        for (int i = 1; i <= 100; i++) {
+            if (!existingIds.contains(i)) {
+                return String.valueOf(i);
+            }
+        }
+        return null;
+    }
+
+
 }

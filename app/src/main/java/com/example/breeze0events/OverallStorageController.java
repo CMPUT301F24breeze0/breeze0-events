@@ -1,10 +1,14 @@
 package com.example.breeze0events;
 
 import android.util.Log;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +30,18 @@ public class OverallStorageController {
                 String phoneNumber = documentSnapshot.getString("phoneNumber");
                 String profilePhoto = documentSnapshot.getString("profilePhoto");
                 String device = documentSnapshot.getString("device");
+                
+                // Retrieve events and status lists
+                Map<String, String> eventsName = (Map<String, String>)documentSnapshot.get("events");
+                Map<String, String> eventsStatus = (Map<String, String>)documentSnapshot.get("status");
 
-                List<String> events = (List<String>) documentSnapshot.get("events");
-                List<String> status = (List<String>) documentSnapshot.get("status");
+                if (eventsName == null) eventsName = new HashMap<>();
+                if (eventsStatus == null) eventsStatus = new HashMap<>();
 
-                if (events == null) events = new ArrayList<>();
-                if (status == null) status = new ArrayList<>();
+                // Create Entrant object
+                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device,  eventsName, eventsStatus);
 
-                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, events, status);
+                // Use the callback to pass the Entrant object
                 callback.onSuccess(entrant);
             } else {
                 Log.d(TAG, "Entrant not found!");
@@ -54,8 +62,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).set(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully added!"))
@@ -71,8 +79,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully updated!"))
@@ -107,6 +115,81 @@ public class OverallStorageController {
             Log.w(TAG, "Failed to read organizer data.", e);
             callback.onFailure(e.getMessage());
         });
+    }
+
+    // add event id to corresponding organizer in organizer db
+    public void addEventWithOrganizerCheck(Event event, String organizerId) {
+        CollectionReference organizersRef = db.collection("OrganizerDB");
+        organizersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean organizerExists = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String device = document.getString("device");
+                    List<String> events = (List<String>) document.get("events");
+
+                    if (device != null && device.equals(organizerId)) {
+                        organizerExists = true;
+                        if (events == null) {
+                            events = new ArrayList<>();
+                        }
+                        events.add(event.getEventId());
+
+                        document.getReference().update("events", events)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Organizer updated with new event!"))
+                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer", e));
+                        break;
+                    }
+                }
+
+                if (!organizerExists) {
+                    Organizer newOrganizer = new Organizer(organizerId, organizerId, new ArrayList<>(Arrays.asList(event.getEventId())));
+                    addOrganizer(newOrganizer);
+                    Log.d("Firestore", "New Organizer created!");
+                }
+            } else {
+                Log.w("Firestore", "Error getting organizers: ", task.getException());
+            }
+        });
+    }
+
+    // delete event and event id from corresponding organizer in organizer db
+    public void deleteEventWithOrganizerCheck(String eventId, String organizerId) {
+        db.collection("OverallDB").document(eventId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Event successfully deleted from OverallDB!");
+
+                    CollectionReference organizersRef = db.collection("OrganizerDB");
+                    organizersRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            boolean organizerExists = false;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String device = document.getString("device");
+                                List<String> events = (List<String>) document.get("events");
+
+                                if (device != null && device.equals(organizerId)) {
+                                    organizerExists = true;
+
+                                    if (events != null && events.contains(eventId)) {
+                                        events.remove(eventId);  // remove enent id
+
+                                        document.getReference().update("events", events)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Event removed from Organizer's events list!"))
+                                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer's events list", e));
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!organizerExists) {
+                                Log.w("Firestore", "Organizer not found for device ID: " + organizerId);
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting organizers: ", task.getException());
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error deleting event from OverallDB", e));
     }
 
     // Add Organizer
@@ -153,14 +236,14 @@ public class OverallStorageController {
                 String facility = documentSnapshot.getString("facility");
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
-
+                String limitedNumber =documentSnapshot.getString("limitedNumber");
                 List<String> entrants = (List<String>) documentSnapshot.get("entrants");
                 List<String> organizers = (List<String>) documentSnapshot.get("organizers");
 
                 if (entrants == null) entrants = new ArrayList<>();
                 if (organizers == null) organizers = new ArrayList<>();
 
-                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, entrants, organizers);
+                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
                 callback.onSuccess(event);
             } else {
                 Log.d(TAG, "Event not found!");
@@ -182,13 +265,15 @@ public class OverallStorageController {
         eventData.put("facility", event.getFacility());
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
+        Log.d(TAG, "Attempting to add event: " + eventData);
 
         db.collection("OverallDB").document(event.getEventId()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding event" + e.getMessage(), e));
     }
 
     // Update Event
@@ -201,6 +286,7 @@ public class OverallStorageController {
         eventData.put("facility", event.getFacility());
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
