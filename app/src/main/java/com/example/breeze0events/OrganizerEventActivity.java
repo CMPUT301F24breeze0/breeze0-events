@@ -65,10 +65,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
 
         String headerText = getIntent().getStringExtra("header_text");
         String newEventId = getIntent().getStringExtra("new_event_id");
-        TextView idTextView = findViewById(R.id.organizer_event_activity_id);
-        Button addButton = findViewById(R.id.organizer_event_activity_add_button);
-        Button backButton = findViewById(R.id.organizer_event_activity_back_button);
-        Button uploadPosterButton = findViewById(R.id.organizer_facility_event_poster_upload_button);
+        TextView idTextView = findViewById(R.id.organizer_edit_event_activity_id);
+        Button addButton = findViewById(R.id.organizer_edit_event_activity_add_button);
+        Button backButton = findViewById(R.id.organizer_edit_event_activity_back_button);
+        Button uploadPosterButton = findViewById(R.id.organizer_edit_event_activity_poster_upload_button);
         Button generateQRButton = findViewById(R.id.organizer_event_activity_generate_qr_button);
         EditText name = findViewById(R.id.event_name_bar);
         EditText start_date = findViewById(R.id.event_start_date_bar);
@@ -76,10 +76,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
         overallStorageController = new OverallStorageController();
-        posterImageView = findViewById(R.id.organizer_facility_event_poster_image);
+        posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
         // set header
-        TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
+        TextView headerTextView = findViewById(R.id.organizer_edit_event_activity_header);
         if (headerText != null) {
             headerTextView.setText(headerText);
         }
