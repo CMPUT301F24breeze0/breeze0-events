@@ -2,7 +2,6 @@ package com.example.breeze0events;
 
 import static android.app.PendingIntent.getActivity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,32 +17,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.view.View;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView;
 
 
-public class OrganizerEventActivity extends AppCompatActivity implements AddFacilityActivity.FacilitySelectListener {
+public class OrganizerEventActivity extends AppCompatActivity implements SelectFacilityForEventActivity.FacilitySelectListener {
     private static final int PICK_IMAGE_REQUEST = 2;
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -75,10 +65,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         String headerText = getIntent().getStringExtra("header_text");
         String newEventId = getIntent().getStringExtra("new_event_id");
-        TextView idTextView = findViewById(R.id.organizer_event_activity_id);
-        Button addButton = findViewById(R.id.organizer_event_activity_add_button);
-        Button backButton = findViewById(R.id.organizer_event_activity_back_button);
-        Button uploadPosterButton = findViewById(R.id.organizer_facility_event_poster_upload_button);
+        TextView idTextView = findViewById(R.id.organizer_edit_event_activity_id);
+        Button addButton = findViewById(R.id.organizer_edit_event_activity_add_button);
+        Button backButton = findViewById(R.id.organizer_edit_event_activity_back_button);
+        Button uploadPosterButton = findViewById(R.id.organizer_edit_event_activity_poster_upload_button);
         Button generateQRButton = findViewById(R.id.organizer_event_activity_generate_qr_button);
         EditText name = findViewById(R.id.event_name_bar);
         EditText start_date = findViewById(R.id.event_start_date_bar);
@@ -86,10 +76,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
         overallStorageController = new OverallStorageController();
-        posterImageView = findViewById(R.id.organizer_facility_event_poster_image);
+        posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
         // set header
-        TextView headerTextView = findViewById(R.id.organizer_event_activity_header);
+        TextView headerTextView = findViewById(R.id.organizer_edit_event_activity_header);
         if (headerText != null) {
             headerTextView.setText(headerText);
         }
@@ -101,7 +91,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
-            AddFacilityActivity dialog = new AddFacilityActivity();
+            SelectFacilityForEventActivity dialog = new SelectFacilityForEventActivity();
             dialog.show(getSupportFragmentManager(), "AddFacilityActivity");
         });
 
@@ -165,9 +155,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements AddFaci
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
 
             overallStorageController.addEvent(newEvent);
+            overallStorageController.addEventWithOrganizerCheck(newEvent, organizerId);
+
 
             Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
-
             finish(); // Close activity
         });
 
