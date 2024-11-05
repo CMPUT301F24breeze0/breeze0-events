@@ -30,11 +30,9 @@ public class AdminQRcode extends AppCompatActivity {
         });
 
         if (qrCodeData != null) {
-            // Generate the QR code bitmap using QRHashGenerator
             Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrCodeData);
 
             if (qrCodeBitmap != null) {
-                // Display the QR code in the ImageView
                 qrCodeImageView.setImageBitmap(qrCodeBitmap);
             } else {
                 Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
