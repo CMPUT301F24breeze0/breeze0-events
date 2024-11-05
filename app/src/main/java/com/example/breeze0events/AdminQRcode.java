@@ -23,9 +23,25 @@ public class AdminQRcode extends AppCompatActivity {
 
         backButton = findViewById(R.id.backButton);
         qrCodeImageView = findViewById(R.id.QRcode);
+        String qrCodeData = getIntent().getStringExtra("qrcode");
 
         backButton.setOnClickListener(v -> {
             finish();
         });
+
+        if (qrCodeData != null) {
+            // Generate the QR code bitmap using QRHashGenerator
+            Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrCodeData);
+
+            if (qrCodeBitmap != null) {
+                // Display the QR code in the ImageView
+                qrCodeImageView.setImageBitmap(qrCodeBitmap);
+            } else {
+                Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "No QR code data provided", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
