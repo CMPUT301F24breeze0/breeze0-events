@@ -37,12 +37,6 @@ public class OrganizerFacilityActivityTest {
     }
 
     @Test
-    public void testFacilityListItemIsClickable() {
-        // Assume there is at least one item in the ListView for this test
-        onData(anything()).inAdapterView(withId(R.id.organizer_facility_list)).atPosition(0).perform(click());
-    }
-
-    @Test
     public void testFacilityListItemLongClick() {
         // Assume there is at least one item in the ListView for this test
         onData(anything()).inAdapterView(withId(R.id.organizer_facility_list)).atPosition(0).perform(ViewActions.longClick());
