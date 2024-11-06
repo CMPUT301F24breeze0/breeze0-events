@@ -1,9 +1,11 @@
 package com.example.breeze0events;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ public class AdminEventDetail extends AppCompatActivity {
     private TextView maxEntrants;
     private TextView signUpDueDay;
     private TextView eventDescription;
+    private ImageView poster;
+    private String encryptedPosterImage;
     Event selected_event;
     private String eventID;
     private ArrayList<Event> eventList;
@@ -34,6 +38,7 @@ public class AdminEventDetail extends AppCompatActivity {
 
         Button return_button = findViewById(R.id.cancelButton);
         Button delete_button = findViewById(R.id.Deletebutton);
+        poster = findViewById(R.id.poster);
         eventTitle = findViewById(R.id.EventDetail);
         eventName = findViewById(R.id.EventName);
         eventDate = findViewById(R.id.EventDate);
@@ -41,14 +46,15 @@ public class AdminEventDetail extends AppCompatActivity {
         signUpDueDay = findViewById(R.id.duedate);
         eventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
+        encryptedPosterImage = getEncryptedImageFromStorage();
 
-        String id = (String)getIntent().getSerializableExtra("selectedID");
+        String id = (String) getIntent().getSerializableExtra("selectedID");
         eventListDisplay = getIntent().getStringArrayListExtra("eventListDisplay");
 
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             @Override
             public void onSuccess(Event event) {
-                selected_event=event;
+                selected_event = event;
                 eventTitle.setText("Event Detail");
                 eventName.setText("Event Name: " + selected_event.getName());
                 eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
@@ -58,16 +64,16 @@ public class AdminEventDetail extends AppCompatActivity {
 
                 Log.d("AdminEventDetail", "Admins data fetched successfully: ");
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 Log.e("AdminEventDetail", "Failed to fetch admins: " + errorMessage);
-
             }
         });
 
-        return_button.setOnClickListener(v -> {
-            finish();
-        });
+        if (encryptedPosterImage != null) {displayDecryptedPosterImage(encryptedPosterImage);}
+
+        return_button.setOnClickListener(v -> {finish();});
 
         delete_button.setOnClickListener(v -> {
             if (id != null && !id.isEmpty()) {
@@ -77,9 +83,7 @@ public class AdminEventDetail extends AppCompatActivity {
                     eventList.removeIf(event -> event.getEventId().equals(id));
                 }
 
-
                 eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
-
 
                 //if (eventListDisplay  != null) {
                     //eventListDisplay.clear();
@@ -87,8 +91,6 @@ public class AdminEventDetail extends AppCompatActivity {
                        // String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
                                 //+ "\nEnd_date: " + event.getEndDate();
                         //eventListDisplay.add(info);}}
-
-
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
@@ -100,7 +102,24 @@ public class AdminEventDetail extends AppCompatActivity {
                 Log.e("AdminEventDetail", "Invalid event ID");
             }
         });
-
-
     }
+
+    private String getEncryptedImageFromStorage() {
+        return getSharedPreferences("EventDetails", MODE_PRIVATE).getString("encryptedPosterImage", null);
+    }
+
+    private void displayDecryptedPosterImage(String encryptedImage) {
+        try {
+            Bitmap decryptedPosterImage = ImageHashGenerator.decryptImage(encryptedImage);
+            if (decryptedPosterImage != null) {
+                poster.setImageBitmap(decryptedPosterImage);
+            } else {
+                Toast.makeText(this, "Failed to decrypt image", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error decrypting image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

@@ -99,11 +99,12 @@
             android:id="@+id/posterText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
-            android:layout_marginBottom="16dp"
-            android:text="Poster"
+            android:layout_marginTop="140dp"
+            android:layout_marginBottom="20dp"
+            android:text="   Poster"
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="19sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.052"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,8 +112,13 @@
 
         <ImageView
             android:id="@+id/poster"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/circle_image"
+            android:clipToOutline="true"
+            android:contentDescription="Event Poster"
+            app:srcCompat="@drawable/default_poster"
 
             />
     </LinearLayout>
