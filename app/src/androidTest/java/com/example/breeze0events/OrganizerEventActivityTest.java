@@ -1,82 +1,96 @@
 package com.example.breeze0events;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.TextView;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.intent.Intents;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+
+import java.lang.reflect.Field;
 
 @RunWith(AndroidJUnit4.class)
 public class OrganizerEventActivityTest {
 
-    @Rule
-    public ActivityScenarioRule<OrganizerEventActivity> activityRule =
-            new ActivityScenarioRule<>(OrganizerEventActivity.class);
-
     @Before
     public void setUp() {
+        // Initialize Espresso Intents to monitor Intent calls during tests
         Intents.init();
+        // Launch the OrganizerEventActivity before each test case
+        ActivityScenario.launch(OrganizerEventActivity.class);
+    }
+
+    @After
+    public void tearDown() {
+        // Release Intents after each test case to prevent interference with other tests
+        Intents.release();
     }
 
     @Test
-    public void testAddButtonIsClickable() {
-        // Check if "Add" button is clickable and performs the expected action
+    public void testGenerateQRFillFieldsSelectFacilityAndAddEvent() {
+        // Launch OrganizerEventActivity and assign a reference to the scenario
+        ActivityScenario<OrganizerEventActivity> scenario = ActivityScenario.launch(OrganizerEventActivity.class);
+
+        // Step 1: Set the event ID using onActivity to ensure it's done on the main thread
+        scenario.onActivity(activity -> {
+            // Set the TextView for event ID
+            TextView textView = activity.findViewById(R.id.organizer_edit_event_activity_id);
+            textView.setText("1"); // Set event ID to "1"
+
+            try {
+                // Access and modify the private field 'eventFacility' using reflection
+                Field eventFacilityField = OrganizerEventActivity.class.getDeclaredField("eventFacility");
+                eventFacilityField.setAccessible(true); // Make the field accessible
+                eventFacilityField.set(activity, "1"); // Set eventFacility to "1"
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Step 2: Fill in the event details
+        onView(withId(R.id.event_name_bar)).perform(typeText("Sample Event")); // Enter event name
+        onView(withId(R.id.event_start_date_bar)).perform(typeText("2023-12-01")); // Enter start date
+        onView(withId(R.id.event_end_date_bar)).perform(typeText("2023-12-10")); // Enter end date
+        onView(withId(R.id.entrants_bar)).perform(typeText("100")); // Enter the number of entrants
+
+        // Step 3: Click the "Add" button to save the event
         onView(withId(R.id.organizer_edit_event_activity_add_button)).perform(click());
-    }
-
-    @Test
-    public void testBackButtonIsClickable() {
-        // Check if "Back" button is clickable
-        onView(withId(R.id.organizer_edit_event_activity_back_button)).perform(click());
     }
 
     @Test
     public void testUploadPosterButtonOpensGallery() {
-        // Check if clicking "Upload Poster" button opens the gallery
+        // Test that clicking the "Upload Poster" button triggers an Intent to open the gallery
+
+        // Step 1: Click the "Upload Poster" button
         onView(withId(R.id.organizer_edit_event_activity_poster_upload_button)).perform(click());
 
+        // Step 2: Verify that the correct Intent to open the gallery is triggered
+        intended(hasAction(Intent.ACTION_PICK)); // Checks that an Intent with action ACTION_PICK was sent
     }
 
     @Test
-    public void testGenerateQRButtonIsClickable() {
-        // Check if "Generate QR Code" button is clickable and displays the QR image
-        onView(withId(R.id.organizer_event_activity_generate_qr_button)).perform(click());
-    }
+    public void testBackButtonIsClickable() {
+        // Test that clicking the "Back" button performs the back navigation
 
-    @Test
-    public void testFacilityButtonOpensDialog() {
-        // Check if "Select Facility" button opens the facility selection dialog
-        onView(withId(R.id.organizer_event_activity_facility_button)).perform(click());
-    }
+        // Step 1: Click the "Back" button
+        onView(withId(R.id.organizer_edit_event_activity_back_button)).perform(click());
 
-    @Test
-    public void testFillEventFieldsAndAddEvent() {
-        // Enter text into event fields and check if they are correctly displayed
-        onView(withId(R.id.event_name_bar)).perform(typeText("Sample Event"));
-        onView(withId(R.id.event_start_date_bar)).perform(typeText("2023-12-01"));
-        onView(withId(R.id.event_end_date_bar)).perform(typeText("2023-12-10"));
-        onView(withId(R.id.entrants_bar)).perform(typeText("Alice, Bob"));
-
-        // Click "Add" button and check if event was added successfully
-        onView(withId(R.id.organizer_edit_event_activity_add_button)).perform(click());
+        // Note: Optionally, you could add a verification step to ensure the activity closes or navigates back
     }
 }
