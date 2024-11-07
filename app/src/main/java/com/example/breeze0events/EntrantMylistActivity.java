@@ -42,7 +42,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     private  List<Pair<String, String>> eventsList;
     private String deviceId;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

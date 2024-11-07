@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,8 +61,13 @@ public class EntrantEventDetail extends AppCompatActivity {
                         +"\nSign up Due Date: "+event.getEndDate()
                         +"\nEvent Organizers: "+event.getOrganizers();
                 event_information.setText(information);
-                event_poster.setImageBitmap(decodeBase64Image(event.getPosterPhoto()));
-                QRcode.setImageBitmap(decodeBase64Image(event.getQrCode()));
+                try {
+                    event_poster.setImageBitmap(ImageHashGenerator.decryptImage(event.getPosterPhoto()));
+                    QRcode.setImageBitmap(QRHashGenerator.generateQRCode(event.getQrCode()));
+                } catch (Exception e) {
+                }
+//                event_poster.setImageBitmap(decodeBase64Image(event.getPosterPhoto()));
+//                QRcode.setImageBitmap(decodeBase64Image(event.getQrCode()));
                 Mutex = 0;
             }
 
