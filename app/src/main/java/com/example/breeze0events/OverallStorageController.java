@@ -26,14 +26,18 @@ public class OverallStorageController {
                 String phoneNumber = documentSnapshot.getString("phoneNumber");
                 String profilePhoto = documentSnapshot.getString("profilePhoto");
                 String device = documentSnapshot.getString("device");
+                
+                // Retrieve events and status lists
+                Map<String, String> eventsName = (Map<String, String>)documentSnapshot.get("events");
+                Map<String, String> eventsStatus = (Map<String, String>)documentSnapshot.get("status");
 
-                List<String> events = (List<String>) documentSnapshot.get("events");
-                List<String> status = (List<String>) documentSnapshot.get("status");
+                if (eventsName == null) eventsName = new HashMap<>();
+                if (eventsStatus == null) eventsStatus = new HashMap<>();
 
-                if (events == null) events = new ArrayList<>();
-                if (status == null) status = new ArrayList<>();
+                // Create Entrant object
+                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device,  eventsName, eventsStatus);
 
-                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, events, status);
+                // Use the callback to pass the Entrant object
                 callback.onSuccess(entrant);
             } else {
                 Log.d(TAG, "Entrant not found!");
@@ -54,8 +58,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).set(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully added!"))
@@ -71,8 +75,8 @@ public class OverallStorageController {
         entrantData.put("phoneNumber", entrant.getPhoneNumber());
         entrantData.put("profilePhoto", entrant.getProfilePhoto());
         entrantData.put("device", entrant.getDevice());
-        entrantData.put("events", new ArrayList<>(entrant.getEvents()));
-        entrantData.put("status", new ArrayList<>(entrant.getStatus()));
+        entrantData.put("events", entrant.getEventsName());
+        entrantData.put("status", entrant.getEventsStatus());
 
         db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully updated!"))
@@ -153,14 +157,14 @@ public class OverallStorageController {
                 String facility = documentSnapshot.getString("facility");
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
-
+                String limitedNumber =documentSnapshot.getString("limitedNumber");
                 List<String> entrants = (List<String>) documentSnapshot.get("entrants");
                 List<String> organizers = (List<String>) documentSnapshot.get("organizers");
 
                 if (entrants == null) entrants = new ArrayList<>();
                 if (organizers == null) organizers = new ArrayList<>();
 
-                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, entrants, organizers);
+                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
                 callback.onSuccess(event);
             } else {
                 Log.d(TAG, "Event not found!");
@@ -182,12 +186,15 @@ public class OverallStorageController {
         eventData.put("facility", event.getFacility());
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
+        Log.d(TAG, "Attempting to add event: " + eventData);
+
         db.collection("OverallDB").document(event.getEventId()).set(eventData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding event" + e.getMessage(), e));
     }
 
     // Update Event
@@ -200,6 +207,7 @@ public class OverallStorageController {
         eventData.put("facility", event.getFacility());
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 

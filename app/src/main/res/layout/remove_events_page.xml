@@ -3,15 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/mainpagebackground1" />
+    android:layout_height="match_parent"
+    android:background="@color/ui_background">
 
 
     <TextView
@@ -23,18 +16,20 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/listView2"
+        app:layout_constraintBottom_toTopOf="@+id/eventsList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
     <ListView
-        android:id="@+id/listView2"
+        android:id="@+id/eventsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="50dp"
         android:layout_marginLeft="10dp"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="2dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="70dp"
