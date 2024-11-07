@@ -93,12 +93,12 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity
-
+            android:name=".AdminFacilityDetail"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity
 
-
+            android:name=".AdminQRcode"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity

@@ -66,7 +66,7 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                             overallStorageController.getEntrant(entrantList.get(j),new EntrantCallback(){
                                 @Override
                                 public void onSuccess(Entrant entrant){
-                                    entrant.getEvents().remove(finalEventid);
+                                    entrant.getEventsName().remove(finalEventid);
                                 }
                                 public void onFailure(String errorMessage) {
                                     Log.e("etrant", "Failed to fetch entrant: " + errorMessage);
