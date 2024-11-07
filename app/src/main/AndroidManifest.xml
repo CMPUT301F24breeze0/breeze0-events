@@ -93,12 +93,15 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity
-<<<<<<< HEAD
-=======
+
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
         <activity
->>>>>>> a145af8f26458208b5028a94355ed4c7b6d34316
+
+
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+        <activity
             android:name=".AdminOrganizationProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
