@@ -1,4 +1,5 @@
 package com.example.breeze0events;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +11,23 @@ public class Event {
     private String facility; // Facility where the event is held
     private String startDate; // Event start date
     private String endDate; // Event end date
+    private String limitedNumber; // Limit for the number of entrants
     private List<String> entrants; // List of entrant IDs participating in the event
     private List<String> organizers; // List of organizer IDs managing the event
 
+    public Event() {}
 
-    public Event(){}
-
-    public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, List<String> entrants, List<String> organizers) {
-        this.eventId = eventId != null ? eventId : "";;
-        this.name = name != null ? name : "";
-        this.qrCode = qrCode != null ? qrCode : "";
-        this.posterPhoto = posterPhoto != null ? posterPhoto : "";
-        this.facility = facility != null ? facility : "";
-        this.startDate = startDate != null ? startDate : "";
-        this.endDate = endDate != null ? endDate : "";
-        this.entrants = entrants != null ? entrants : new ArrayList<>();
-        this.organizers = organizers != null ? organizers : new ArrayList<>();
+    public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, String limitedNumber, List<String> entrants, List<String> organizers) {
+        this.eventId = eventId;
+        this.name = name;
+        this.qrCode = qrCode;
+        this.posterPhoto = posterPhoto;
+        this.facility = facility;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.limitedNumber = limitedNumber;
+        this.entrants = entrants;
+        this.organizers = organizers;
     }
 
     // Getters and setters
@@ -44,8 +46,6 @@ public class Event {
     public void setName(String name) {
         this.name = name;
     }
-
-
 
     public String getQrCode() {
         return qrCode;
@@ -87,12 +87,26 @@ public class Event {
         this.endDate = endDate;
     }
 
+    public String getLimitedNumber() {
+        return limitedNumber;
+    }
+
+    public void setLimitedNumber(String limitedNumber) {
+        this.limitedNumber = limitedNumber;
+    }
+
     public List<String> getEntrants() {
         return entrants;
     }
 
     public void setEntrants(List<String> entrants) {
         this.entrants = entrants;
+    }
+    public void addEntrants(String EntrantsId){
+        this.entrants.add(EntrantsId);
+    }
+    public void removeEntrant(String EntrantId){
+        this.entrants.remove(EntrantId);
     }
 
     public List<String> getOrganizers() {
@@ -113,6 +127,7 @@ public class Event {
                 ", facility='" + facility + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
+                ", limitedNumber='" + limitedNumber + '\'' +
                 ", entrants=" + entrants +
                 ", organizers=" + organizers +
                 '}';

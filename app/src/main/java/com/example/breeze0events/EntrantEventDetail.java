@@ -9,13 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
+
 import android.util.Base64;
+import android.widget.Toast;
 
 public class EntrantEventDetail extends AppCompatActivity {
     private TextView event_title;
@@ -27,6 +29,8 @@ public class EntrantEventDetail extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private String eventID;
     private String eventLocation;
+    private Event eventLocal;
+    private int Mutex=1;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class EntrantEventDetail extends AppCompatActivity {
             // FIXME: 2024/10/27 Add functionality to show Max number of entrants
             @Override
             public void onSuccess(Event event) {
+                eventLocal = event;
                 eventID = event.getEventId();
                 eventLocation = event.getFacility();
                 event_title.setText(event.getName());
@@ -56,8 +61,14 @@ public class EntrantEventDetail extends AppCompatActivity {
                         +"\nSign up Due Date: "+event.getEndDate()
                         +"\nEvent Organizers: "+event.getOrganizers();
                 event_information.setText(information);
-                event_poster.setImageBitmap(decodeBase64Image(event.getPosterPhoto()));
-                QRcode.setImageBitmap(decodeBase64Image(event.getQrCode()));
+                try {
+                    event_poster.setImageBitmap(ImageHashGenerator.decryptImage(event.getPosterPhoto()));
+                    QRcode.setImageBitmap(QRHashGenerator.generateQRCode(event.getQrCode()));
+                } catch (Exception e) {
+                }
+//                event_poster.setImageBitmap(decodeBase64Image(event.getPosterPhoto()));
+//                QRcode.setImageBitmap(decodeBase64Image(event.getQrCode()));
+                Mutex = 0;
             }
 
             @Override
@@ -75,22 +86,32 @@ public class EntrantEventDetail extends AppCompatActivity {
         event_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(Mutex != 0){
+                    Toast.makeText(EntrantEventDetail.this,"Loading data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                 overallStorageController.getEntrant(deviceId, new EntrantCallback() {
                     @Override
                     public void onSuccess(Entrant entrant) {
-                        entrant.addEvents(eventID);
-                        overallStorageController.updateEntrant(entrant);
-                    }
+                        if(entrant.checkEventId(eventID)){
+                            Toast.makeText(EntrantEventDetail.this,"You have joined this event", Toast.LENGTH_SHORT ).show();
+                        }else{
+                            entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
+                            overallStorageController.updateEntrant(entrant);
+                            Toast.makeText(EntrantEventDetail.this,"Join successfully", Toast.LENGTH_SHORT ).show();
+                            backToMyList();
+                        }
+                        eventLocal.addEntrants(deviceId);
+                        overallStorageController.updateEvent(eventLocal);
+                        Mutex = 1;
 
+                    }
                     @Override
                     public void onFailure(String errorMessage) {
-
+                        Toast.makeText(EntrantEventDetail.this,"Failed due to network or database failed", Toast.LENGTH_SHORT ).show();
                     }
                 });
-                Intent go_back = new Intent(EntrantEventDetail.this, EntrantMylistActivity.class);
-                go_back.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(go_back);
             }
         });
     }
@@ -99,5 +120,11 @@ public class EntrantEventDetail extends AppCompatActivity {
         // 解码 Base64 字符串为字节数组
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
+    }
+    private void backToMyList(){
+        Intent go_back = new Intent(EntrantEventDetail.this, EntrantMylistActivity.class);
+        go_back.putExtra("update", eventID);
+        go_back.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(go_back);
     }
 }

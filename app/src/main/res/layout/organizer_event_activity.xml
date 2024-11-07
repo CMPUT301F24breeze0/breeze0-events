@@ -8,7 +8,7 @@
 
 
     <Button
-        android:id="@+id/organizer_event_activity_back_button"
+        android:id="@+id/organizer_edit_event_activity_back_button"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Back"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/organizer_event_activity_add_button"
+        android:id="@+id/organizer_edit_event_activity_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
         android:backgroundTint="@color/ui_background"/>
 
     <TextView
-        android:id="@+id/organizer_event_activity_header"
+        android:id="@+id/organizer_edit_event_activity_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -39,18 +39,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/organizer_facility_event_poster_image"
+        android:id="@+id/organizer_edit_event_activity_poster_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/organizer_event_activity_back_button"
+        app:layout_constraintTop_toBottomOf="@+id/organizer_edit_event_activity_back_button"
         android:background="@drawable/circle_image"
         android:clipToOutline="true"
         app:srcCompat="@drawable/default_poster" />
 
     <Button
-        android:id="@+id/organizer_facility_event_poster_upload_button"
+        android:id="@+id/organizer_edit_event_activity_poster_upload_button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:text="Upload Poster"
@@ -58,7 +58,7 @@
         android:backgroundTint="@color/ui_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/organizer_facility_event_poster_image" />
+        app:layout_constraintTop_toBottomOf="@+id/organizer_edit_event_activity_poster_image" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/name_and_id_layout"
@@ -69,10 +69,10 @@
         android:background="@drawable/view_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/organizer_facility_event_poster_upload_button">
+        app:layout_constraintTop_toBottomOf="@id/organizer_edit_event_activity_poster_upload_button">
 
         <TextView
-            android:id="@+id/organizer_event_activity_event_name_title"
+            android:id="@+id/organizer_edit_event_activity_event_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -90,11 +90,11 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/organizer_event_activity_event_name_title"
+            app:layout_constraintStart_toEndOf="@+id/organizer_edit_event_activity_event_name_title"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/organizer_event_activity_id_title"
+            android:id="@+id/organizer_edit_event_activity_id_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -105,7 +105,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/organizer_event_activity_id"
+            android:id="@+id/organizer_edit_event_activity_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -113,7 +113,7 @@
             android:text="ID"
             android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/organizer_event_activity_id_title" />
+            app:layout_constraintStart_toEndOf="@id/organizer_edit_event_activity_id_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,7 +130,7 @@
         app:layout_constraintTop_toBottomOf="@id/name_and_id_layout">
 
         <TextView
-            android:id="@+id/organizer_event_activity_start_date_title"
+            android:id="@+id/organizer_edit_event_activity_start_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -148,12 +148,12 @@
             android:hint="yyyy-mm-dd"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/organizer_event_activity_start_date_title"
+            app:layout_constraintStart_toEndOf="@+id/organizer_edit_event_activity_start_date_title"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <TextView
-            android:id="@+id/organizer_event_activity_end_date_title"
+            android:id="@+id/organizer_edit_event_activity_end_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -170,7 +170,7 @@
             android:hint="yyyy-mm-dd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/organizer_event_activity_end_date_title" />
+            app:layout_constraintStart_toEndOf="@+id/organizer_edit_event_activity_end_date_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -187,7 +187,7 @@
         app:layout_constraintTop_toBottomOf="@id/date_layout">
 
         <TextView
-            android:id="@+id/organizer_event_activity_no_of_entrant_title"
+            android:id="@+id/organizer_edit_event_activity_no_of_entrant_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No. of Entrants:"
@@ -203,9 +203,61 @@
             android:layout_height="50dp"
             android:hint="Enter the Number of Entrants Here"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/organizer_event_activity_no_of_entrant_title"
+            app:layout_constraintStart_toEndOf="@id/organizer_edit_event_activity_no_of_entrant_title"
             app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/facility_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/view_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout"
+
+
+        >
+
+        <TextView
+            android:id="@+id/edit_facility_activity_facility_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Selected Facility: "
+            android:textColor="@color/text_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/selected_facility_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Not selected yet"
+            android:textColor="@color/text_color"
+            app:layout_constraintStart_toEndOf="@+id/edit_facility_activity_facility_header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/selected_qr_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_facility_activity_facility_header"
+            app:srcCompat="@drawable/empty_qr" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -213,24 +265,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/button_color"
         android:text="Select Facility"
         android:textColor="@color/text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/facility_layout" />
 
     <Button
         android:id="@+id/organizer_event_activity_generate_qr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/button_color"
         android:text="Generate QR Code"
         android:textColor="@color/text_color"
         app:layout_constraintStart_toEndOf="@+id/organizer_event_activity_facility_button"
-        app:layout_constraintTop_toBottomOf="@+id/no_of_entrant_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/facility_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
