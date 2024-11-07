@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="EntrantEventActivity">
+      <SelectionState runConfigName="testAddEntrant_Success()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
