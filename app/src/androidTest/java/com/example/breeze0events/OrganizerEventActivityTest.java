@@ -22,6 +22,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 
@@ -71,6 +72,19 @@ public class OrganizerEventActivityTest {
 
         // Step 3: Click the "Add" button to save the event
         onView(withId(R.id.organizer_edit_event_activity_add_button)).perform(click());
+        OverallStorageController controller = new OverallStorageController();
+        controller.getEvent("1", new EventCallback() {
+            @Override
+            public void onSuccess(Event event) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Trigger a failure in the test if event retrieval fails
+                fail("Failed to retrieve event: " + errorMessage);
+            }
+        });
     }
 
     @Test
