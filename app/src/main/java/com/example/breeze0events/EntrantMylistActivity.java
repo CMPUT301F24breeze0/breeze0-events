@@ -121,6 +121,18 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         overallStorageController.updateEntrant(myEntrant);
         eventsList.remove(id);
         updateUI();
+        overallStorageController.getEvent(eventId, new EventCallback() {
+            @Override
+            public void onSuccess(Event event) {
+                event.removeEntrant(deviceId);
+                overallStorageController.updateEvent(event);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+
+            }
+        });
     }
     @Override
     public String getEventNameById(String eventId) {

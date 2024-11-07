@@ -102,6 +102,8 @@ public class EntrantEventDetail extends AppCompatActivity {
                             Toast.makeText(EntrantEventDetail.this,"Join successfully", Toast.LENGTH_SHORT ).show();
                             backToMyList();
                         }
+                        eventLocal.addEntrants(deviceId);
+                        overallStorageController.updateEvent(eventLocal);
                         Mutex = 1;
 
                     }
