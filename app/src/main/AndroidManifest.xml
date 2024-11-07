@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.breeze0events"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -27,32 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".OrganizerEventInformationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="Instantiatable" />
-        <!-- OrganizerEventActivity -->
-        <activity
-            android:name=".OrganizerMyListActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-
-        <!-- OrganizerMapActivity -->
-        <activity
-            android:name=".OrganizerMapActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".OrganizerFacilityActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-
+        <!-- Entrant Activities -->
         <activity
             android:name=".EntrantEventActivity"
             android:exported="true"
@@ -76,38 +51,145 @@
         <activity
             android:name=".EntrantProfileActivity"
             android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".AdminOperateActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".AdminOrganizerProfile"
+            android:exported="true"
             android:theme="@style/Theme.Breeze0events"
             tools:ignore="Instantiatable" />
 
+        <activity
+            android:name=".AdminOrganizationProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"
+            tools:ignore="Instantiatable" />
+
+        <activity
+            android:name=".EntrantSearchingActivity"
+
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".AdminFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".AdminQRcode"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".AdminOrganizationProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+
+
+        <activity
+            android:name=".EntrantSearchingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".EntrantEventDetail"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <!-- Organizer Activities -->
+        <activity
+            android:name=".OrganizerEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerMyListActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerMapActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerFacilityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventInformationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+
+        <activity
+            android:name=".OrganizerEditEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventDisplayDate"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventDisplayOrganizers"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventDisplayEntrants"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventDisplayQRcode"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
+            android:name=".OrganizerEventDisplayFacility"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <!-- Admin Activities -->
         <activity
             android:name=".AdminOperateActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminProfileActivity"
+            android:name=".AdminOrganizerProfile"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"
             tools:ignore="Instantiatable" />
+
         <activity
-            android:name=".EntrantSearchingActivity"
+            android:name=".AdminOrganizationProfileActivity"
             android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".EntrantEventDetail"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".EntrantSearchingActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".EntrantEventDetail"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
+            android:theme="@style/Theme.Breeze0events"
+            tools:ignore="Instantiatable" />
 
         <activity
             android:name=".AdminEventActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"
+            tools:ignore="Instantiatable" />
+
+        <activity
+            android:name=".AdminEventDetail"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"
+            tools:ignore="Instantiatable" />
+
+        <activity
+            android:name=".AdminFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -117,44 +199,22 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminFacilityActivity"
+            android:name=".AdminSelectedEvents"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <!-- Additional Functional Activities -->
+        <activity
+            android:name=".AddFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminEventActivity"
+            android:name=".EditFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
-        <activity
-            android:name=".AdminLoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
 
-        <activity
-            android:name=".AdminFacilityActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventDisplayDate"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventDisplayOrganizers"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventDisplayEntrants"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventDisplayQRcode"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".OrganizerEventDisplayFacility"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
     </application>
 
 </manifest>

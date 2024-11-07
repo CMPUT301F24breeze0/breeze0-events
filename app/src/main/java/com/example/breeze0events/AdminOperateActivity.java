@@ -1,3 +1,4 @@
+
 package com.example.breeze0events;
 
 import android.content.Intent;
@@ -7,6 +8,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+
 public class AdminOperateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,6 +17,11 @@ public class AdminOperateActivity extends AppCompatActivity {
         setContentView(R.layout.admin_main_activity);
         Button organization_button=findViewById(R.id.organization);
         Button entrant_button=findViewById(R.id.entrant);
+        Button back_button=findViewById(R.id.back_in_main);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminOperateActivity.this,AdminLoginActivity.class);
+            startActivity(intent1);
+        });
         //by clicking organization profile button
         organization_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -23,5 +31,8 @@ public class AdminOperateActivity extends AppCompatActivity {
             }
         });
     }
-}
 
+
+
+
+}

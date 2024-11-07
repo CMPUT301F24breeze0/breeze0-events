@@ -2,11 +2,13 @@ package com.example.breeze0events;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,19 +18,19 @@ public class OverallStorageController {
     private static final String TAG = "OverallStorageController";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    // Fetch Entrant data from Firestore
+    // **Entrant Functions**
+
+    // Get Entrant
     public void getEntrant(String entrantId, final EntrantCallback callback) {
         DocumentReference docRef = db.collection("EntrantDB").document(entrantId);
-        // Retrieve entrant data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                // Retrieve and build Entrant object
                 String name = documentSnapshot.getString("name");
                 String email = documentSnapshot.getString("email");
                 String phoneNumber = documentSnapshot.getString("phoneNumber");
                 String profilePhoto = documentSnapshot.getString("profilePhoto");
                 String device = documentSnapshot.getString("device");
-
+                
                 // Retrieve events and status lists
                 Map<String, String> eventsName = (Map<String, String>)documentSnapshot.get("events");
                 Map<String, String> eventsStatus = (Map<String, String>)documentSnapshot.get("status");
@@ -51,9 +53,8 @@ public class OverallStorageController {
         });
     }
 
-    // Add an Entrant to Firestore
+    // Add Entrant
     public void addEntrant(Entrant entrant) {
-        // Creating a map for the Entrant data
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("entrantId", entrant.getEntrantId());
         entrantData.put("name", entrant.getName());
@@ -64,15 +65,13 @@ public class OverallStorageController {
         entrantData.put("events", entrant.getEventsName());
         entrantData.put("status", entrant.getEventsStatus());
 
-        // Add the entrant data to Firestore
         db.collection("EntrantDB").document(entrant.getEntrantId()).set(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully added!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding entrant", e));
     }
 
-    // Update an Entrant in Firestore
+    // Update Entrant
     public void updateEntrant(Entrant entrant) {
-        // Creating a map for the Entrant data
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("entrantId", entrant.getEntrantId());
         entrantData.put("name", entrant.getName());
@@ -83,35 +82,29 @@ public class OverallStorageController {
         entrantData.put("events", entrant.getEventsName());
         entrantData.put("status", entrant.getEventsStatus());
 
-        // Update the entrant data in Firestore
         db.collection("EntrantDB").document(entrant.getEntrantId()).update(entrantData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully updated!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating entrant", e));
     }
 
-    // Other parts of the OverallStorageController remain unchanged
-    // Fetch Organizer, Event, Facility, and Admin data
-    // Add Organizer, Event, Facility, and Admin to Firestore
-    // Update Organizer, Event, Facility, and Admin in Firestore
+    // Delete Entrant
+    public void deleteEntrant(String entrantId) {
+        db.collection("EntrantDB").document(entrantId).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully deleted!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting entrant", e));
+    }
 
-    // Fetch Organizer data from Firestore
+    // **Organizer Functions**
+
+    // Get Organizer
     public void getOrganizer(String organizerId, final OrganizerCallback callback) {
         DocumentReference docRef = db.collection("OrganizerDB").document(organizerId);
-
-        // Retrieve organizer data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String device = documentSnapshot.getString("device");
-
-                // Retrieve the list of events managed by the organizer
                 List<String> events = (List<String>) documentSnapshot.get("events");
+                if (events == null) events = new ArrayList<>();
 
-                // Check if events list is not null
-                if (events == null) {
-                    events = new ArrayList<>();
-                }
-
-                // Create Organizer object
                 Organizer organizer = new Organizer(organizerId, device, events);
                 callback.onSuccess(organizer);
             } else {
@@ -124,11 +117,117 @@ public class OverallStorageController {
         });
     }
 
-    // Fetch Event data from Firestore
+    // add event id to corresponding organizer in organizer db
+    public void addEventWithOrganizerCheck(Event event, String organizerId) {
+        CollectionReference organizersRef = db.collection("OrganizerDB");
+        organizersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean organizerExists = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String device = document.getString("device");
+                    List<String> events = (List<String>) document.get("events");
+
+                    if (device != null && device.equals(organizerId)) {
+                        organizerExists = true;
+                        if (events == null) {
+                            events = new ArrayList<>();
+                        }
+                        events.add(event.getEventId());
+
+                        document.getReference().update("events", events)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Organizer updated with new event!"))
+                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer", e));
+                        break;
+                    }
+                }
+
+                if (!organizerExists) {
+                    Organizer newOrganizer = new Organizer(organizerId, organizerId, new ArrayList<>(Arrays.asList(event.getEventId())));
+                    addOrganizer(newOrganizer);
+                    Log.d("Firestore", "New Organizer created!");
+                }
+            } else {
+                Log.w("Firestore", "Error getting organizers: ", task.getException());
+            }
+        });
+    }
+
+    // delete event and event id from corresponding organizer in organizer db
+    public void deleteEventWithOrganizerCheck(String eventId, String organizerId) {
+        db.collection("OverallDB").document(eventId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Event successfully deleted from OverallDB!");
+
+                    CollectionReference organizersRef = db.collection("OrganizerDB");
+                    organizersRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            boolean organizerExists = false;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String device = document.getString("device");
+                                List<String> events = (List<String>) document.get("events");
+
+                                if (device != null && device.equals(organizerId)) {
+                                    organizerExists = true;
+
+                                    if (events != null && events.contains(eventId)) {
+                                        events.remove(eventId);  // remove enent id
+
+                                        document.getReference().update("events", events)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Event removed from Organizer's events list!"))
+                                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer's events list", e));
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!organizerExists) {
+                                Log.w("Firestore", "Organizer not found for device ID: " + organizerId);
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting organizers: ", task.getException());
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error deleting event from OverallDB", e));
+    }
+
+    // Add Organizer
+    public void addOrganizer(Organizer organizer) {
+        Map<String, Object> organizerData = new HashMap<>();
+        organizerData.put("organizerId", organizer.getOrganizerId());
+        organizerData.put("device", organizer.getDevice());
+        organizerData.put("events", new ArrayList<>(organizer.getEvents()));
+
+        db.collection("OrganizerDB").document(organizer.getOrganizerId()).set(organizerData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Organizer successfully added!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding organizer", e));
+    }
+
+    // Update Organizer
+    public void updateOrganizer(Organizer organizer) {
+        Map<String, Object> organizerData = new HashMap<>();
+        organizerData.put("organizerId", organizer.getOrganizerId());
+        organizerData.put("device", organizer.getDevice());
+        organizerData.put("events", new ArrayList<>(organizer.getEvents()));
+
+        db.collection("OrganizerDB").document(organizer.getOrganizerId()).update(organizerData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Organizer successfully updated!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating organizer", e));
+    }
+
+    // Delete Organizer
+    public void deleteOrganizer(String organizerId) {
+        db.collection("OrganizerDB").document(organizerId).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Organizer successfully deleted!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting organizer", e));
+    }
+
+    // **Event Functions**
+
+    // Get Event
     public void getEvent(String eventId, final EventCallback callback) {
         DocumentReference docRef = db.collection("OverallDB").document(eventId);
-
-        // Retrieve event data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String name = documentSnapshot.getString("name");
@@ -137,21 +236,14 @@ public class OverallStorageController {
                 String facility = documentSnapshot.getString("facility");
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
-
-                // Retrieve entrants and organizers list
+                String limitedNumber =documentSnapshot.getString("limitedNumber");
                 List<String> entrants = (List<String>) documentSnapshot.get("entrants");
                 List<String> organizers = (List<String>) documentSnapshot.get("organizers");
 
-                // Check if entrants and organizers lists are not null
-                if (entrants == null) {
-                    entrants = new ArrayList<>();
-                }
-                if (organizers == null) {
-                    organizers = new ArrayList<>();
-                }
+                if (entrants == null) entrants = new ArrayList<>();
+                if (organizers == null) organizers = new ArrayList<>();
 
-                // Create Event object
-                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, entrants, organizers);
+                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
                 callback.onSuccess(event);
             } else {
                 Log.d(TAG, "Event not found!");
@@ -163,17 +255,63 @@ public class OverallStorageController {
         });
     }
 
-    // Fetch Facility data from Firestore
+    // Add Event
+    public void addEvent(Event event) {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventId", event.getEventId());
+        eventData.put("name", event.getName());
+        eventData.put("qrCode", event.getQrCode());
+        eventData.put("posterPhoto", event.getPosterPhoto());
+        eventData.put("facility", event.getFacility());
+        eventData.put("startDate", event.getStartDate());
+        eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("entrants", new ArrayList<>(event.getEntrants()));
+        eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
+
+        Log.d(TAG, "Attempting to add event: " + eventData);
+
+        db.collection("OverallDB").document(event.getEventId()).set(eventData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding event" + e.getMessage(), e));
+    }
+
+    // Update Event
+    public void updateEvent(Event event) {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventId", event.getEventId());
+        eventData.put("name", event.getName());
+        eventData.put("qrCode", event.getQrCode());
+        eventData.put("posterPhoto", event.getPosterPhoto());
+        eventData.put("facility", event.getFacility());
+        eventData.put("startDate", event.getStartDate());
+        eventData.put("endDate", event.getEndDate());
+        eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("entrants", new ArrayList<>(event.getEntrants()));
+        eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
+
+        db.collection("OverallDB").document(event.getEventId()).update(eventData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully updated!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating event", e));
+    }
+
+    // Delete Event
+    public void deleteEvent(String eventId) {
+        db.collection("OverallDB").document(eventId).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully deleted!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting event", e));
+    }
+
+    // **Facility Functions**
+
+    // Get Facility
     public void getFacility(String facilityId, final FacilityCallback callback) {
         DocumentReference docRef = db.collection("FacilityDB").document(facilityId);
-
-        // Retrieve facility data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String location = documentSnapshot.getString("location");
                 String device = documentSnapshot.getString("device");
 
-                // Create Facility object
                 Facility facility = new Facility(facilityId, location, device);
                 callback.onSuccess(facility);
             } else {
@@ -186,16 +324,46 @@ public class OverallStorageController {
         });
     }
 
-    // Fetch Admin data from Firestore
+    // Add Facility
+    public void addFacility(Facility facility) {
+        Map<String, Object> facilityData = new HashMap<>();
+        facilityData.put("facilityId", facility.getFacilityId());
+        facilityData.put("location", facility.getLocation());
+        facilityData.put("device", facility.getDevice());
+
+        db.collection("FacilityDB").document(facility.getFacilityId()).set(facilityData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Facility successfully added!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding facility", e));
+    }
+
+    // Update Facility
+    public void updateFacility(Facility facility) {
+        Map<String, Object> facilityData = new HashMap<>();
+        facilityData.put("facilityId", facility.getFacilityId());
+        facilityData.put("location", facility.getLocation());
+        facilityData.put("device", facility.getDevice());
+
+        db.collection("FacilityDB").document(facility.getFacilityId()).update(facilityData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Facility successfully updated!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating facility", e));
+    }
+
+    // Delete Facility
+    public void deleteFacility(String facilityId) {
+        db.collection("FacilityDB").document(facilityId).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Facility successfully deleted!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting facility", e));
+    }
+
+    // **Admin Functions**
+
+    // Get Admin
     public void getAdmin(String adminId, final AdminCallback callback) {
         DocumentReference docRef = db.collection("AdminDB").document(adminId);
-
-        // Retrieve admin data
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 String device = documentSnapshot.getString("device");
 
-                // Create Admin object
                 Admin admin = new Admin(adminId, device);
                 callback.onSuccess(admin);
             } else {
@@ -208,73 +376,32 @@ public class OverallStorageController {
         });
     }
 
-    // Add an Organizer to Firestore
-    public void addOrganizer(Organizer organizer) {
-        // Creating a map for the Organizer data
-        Map<String, Object> organizerData = new HashMap<>();
-        organizerData.put("organizerId", organizer.getOrganizerId());
-        organizerData.put("device", organizer.getDevice());
-
-        // Prepare event data: Convert List<String> to a List<Map<String, String>>
-        ArrayList<String> eventData = new ArrayList<>(organizer.getEvents());
-
-        // Add the event data to the organizer data
-        organizerData.put("events", eventData);
-
-        // Add the organizer data to Firestore
-        db.collection("OrganizerDB").document(organizer.getOrganizerId()).set(organizerData)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Organizer successfully added!"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding organizer", e));
-    }
-
-    // Add an Event to Firestore
-    public void addEvent(Event event) {
-        // Creating a map for the Event data
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", event.getEventId());
-        eventData.put("name", event.getName());
-        eventData.put("qrCode", event.getQrCode());
-        eventData.put("posterPhoto", event.getPosterPhoto());
-        eventData.put("facility", event.getFacility());
-        eventData.put("startDate", event.getStartDate());
-        eventData.put("endDate", event.getEndDate());
-
-        // Add entrant and organizer data
-        eventData.put("entrants", new ArrayList<>(event.getEntrants()));
-        eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
-
-        // Add the event data to Firestore
-        db.collection("OverallDB").document(event.getEventId()).set(eventData)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Event successfully added!"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding event", e));
-
-        Log.d("OverallStorageController","Attempting to add event: " + event.toString());
-    }
-
-    // Add a Facility to Firestore
-    public void addFacility(Facility facility) {
-        // Creating a map for the Facility data
-        Map<String, Object> facilityData = new HashMap<>();
-        facilityData.put("facilityId", facility.getFacilityId());
-        facilityData.put("location", facility.getLocation());
-        facilityData.put("device", facility.getDevice());
-
-        // Add the facility data to Firestore
-        db.collection("FacilityDB").document(facility.getFacilityId()).set(facilityData)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Facility successfully added!"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding facility", e));
-    }
-
-    // Add an Admin to Firestore
+    // Add Admin
     public void addAdmin(Admin admin) {
-        // Creating a map for the Admin data
         Map<String, Object> adminData = new HashMap<>();
         adminData.put("adminId", admin.getAdminId());
         adminData.put("device", admin.getDevice());
 
-        // Add the admin data to Firestore
         db.collection("AdminDB").document(admin.getAdminId()).set(adminData)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully added!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding admin", e));
+    }
+
+    // Update Admin
+    public void updateAdmin(Admin admin) {
+        Map<String, Object> adminData = new HashMap<>();
+        adminData.put("adminId", admin.getAdminId());
+        adminData.put("device", admin.getDevice());
+
+        db.collection("AdminDB").document(admin.getAdminId()).update(adminData)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully updated!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating admin", e));
+    }
+
+    // Delete Admin
+    public void deleteAdmin(String adminId) {
+        db.collection("AdminDB").document(adminId).delete()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully deleted!"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting admin", e));
     }
 }

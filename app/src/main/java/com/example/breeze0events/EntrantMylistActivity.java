@@ -98,6 +98,13 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
                 return false;
             }
         });
+
+        ProfileModify = findViewById(R.id.buttonProfile);
+        ProfileModify.setOnClickListener(v -> {
+            Intent intent = new Intent(EntrantMylistActivity.this, EntrantProfileActivity.class);
+            intent.putExtra("deviceId", deviceId); // Pass the deviceId to load the correct profile
+            startActivityForResult(intent, 100);
+        });
     }
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
@@ -144,5 +151,18 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
         intent.putExtra("eventID", eventId);
         startActivity(intent);
+    }
+
+    // Get updated profile data
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String updatedName = data.getStringExtra("updatedName");
+            String updatedProfileImageString = data.getStringExtra("updatedProfileImage");
+
+            entrantName.setText(updatedName);
+            profileImage.setImageBitmap(decodeBase64Image(updatedProfileImageString));
+        }
     }
 }
