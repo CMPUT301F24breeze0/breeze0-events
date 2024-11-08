@@ -11,11 +11,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+/**
+ * OrganizerEventDisplayDate is an activity for organizers to view event-related date information.
+ * This activity displays the start date, end date, and limited number of participants for an event
+ * passed to it through an intent.
+ */
 public class OrganizerEventDisplayDate extends AppCompatActivity {
    Button backButton;
    ListView dateListView;
    ArrayAdapter<String> dateListAdapter;
    ArrayList<String> date_list=new ArrayList<>();
+
+    /**
+     * Called when the activity is created. This initializes the UI components and sets up the data
+     * for displaying event details like start date, end date, and limited number of participants.
+     *
+     * @param savedInstanceState
+     * If the activity is being re-initialized after previously being shut down,
+     * this Bundle contains recent data; otherwise, it is null.
+     */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_display_list); // Set the layout file

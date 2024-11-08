@@ -23,6 +23,13 @@ public class AdminQRcode extends AppCompatActivity {
     Button backButton;
     ImageView qrCodeImageView;
 
+    /**
+     * Initializes the activity, setting up the QR code display and the back button functionality.
+     *
+     * @param savedInstanceState
+     * If the activity is being re-initialized after previously being shut down,
+     * this Bundle contains the data it most recently supplied.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
