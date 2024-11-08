@@ -93,13 +93,15 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     }
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
-        // 解码 Base64 字符串为字节数组
+        // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
     public void updateUI(){
         EntrantAdapter.notifyDataSetChanged();
     }
+
+    // Unjoin event
     @Override
     public void onUnjoin(String eventId, int id) {
         myEntrant.UnjoinEvent(eventId);
@@ -119,10 +121,14 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             }
         });
     }
+
+    // Get event name
     @Override
     public String getEventNameById(String eventId) {
         return myEntrant.getName(eventId);
     }
+
+    // Update event status
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -146,6 +152,8 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             });
         }
     }
+
+    // View event
     @Override
     public void onView(String eventId) {
         Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
@@ -153,7 +161,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         startActivity(intent);
     }
 
-    // Get updated profile data
+    // Get updated profile data on Mylist
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -165,6 +173,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             profileImage.setImageBitmap(decodeBase64Image(updatedProfileImageString));
         }
     }
+    // Update profile
     private void updateProfile(){
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
