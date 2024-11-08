@@ -3,6 +3,19 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-1895727101">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Copy_of_Medium_Phone_API_35" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1275736886">
           <value>
             <AndroidTestResultsTableState>
@@ -16,14 +29,13 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
-<<<<<<< Updated upstream
         <entry key="-886239340">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
+                  <entry key="Pixel_2_API_29" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -44,9 +56,6 @@
           </value>
         </entry>
         <entry key="-631566250">
-=======
-        <entry key="-994836641">
->>>>>>> Stashed changes
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -64,6 +73,7 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="Copy_of_Medium_Phone_API_35" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_35" value="120" />
                   <entry key="Tests" value="360" />
@@ -72,45 +82,47 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
-<<<<<<< Updated upstream
+        <entry key="-353676315">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_29" value="120" />
+                  <entry key="Pixel_2_API_35" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-310362086">
-=======
-        <entry key="-439453176">
->>>>>>> Stashed changes
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
+                  <entry key="Pixel_2_API_29" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
           </value>
         </entry>
-<<<<<<< Updated upstream
         <entry key="-32373362">
-=======
-        <entry key="-2226844">
->>>>>>> Stashed changes
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
+                  <entry key="Pixel_2_API_29" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
           </value>
         </entry>
-<<<<<<< Updated upstream
         <entry key="54128638">
-=======
-        <entry key="76347134">
->>>>>>> Stashed changes
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -123,10 +135,7 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
-<<<<<<< Updated upstream
         <entry key="399622292">
-=======
-        <entry key="132457377">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -139,27 +148,13 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
-        <entry key="348265842">
+        <entry key="968702656">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
-                  <entry key="Tests" value="360" />
-                </map>
-              </option>
-            </AndroidTestResultsTableState>
-          </value>
-        </entry>
-        <entry key="449506066">
->>>>>>> Stashed changes
-          <value>
-            <AndroidTestResultsTableState>
-              <option name="preferredColumnWidths">
-                <map>
-                  <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
+                  <entry key="Pixel_2_API_29" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -167,19 +162,6 @@
           </value>
         </entry>
         <entry key="1783289795">
-          <value>
-            <AndroidTestResultsTableState>
-              <option name="preferredColumnWidths">
-                <map>
-                  <entry key="Duration" value="90" />
-                  <entry key="Pixel_2_API_35" value="120" />
-                  <entry key="Tests" value="360" />
-                </map>
-              </option>
-            </AndroidTestResultsTableState>
-          </value>
-        </entry>
-        <entry key="2083395501">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">

@@ -56,7 +56,9 @@
             android:layout_height="82dp"
             android:layout_marginStart="48dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/view_background"
+            android:background="@drawable/view_background"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/entrant_event_join"
             app:layout_constraintStart_toStartOf="parent" />
 
