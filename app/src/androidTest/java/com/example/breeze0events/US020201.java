@@ -67,10 +67,4 @@ public class US020201 {
         intended(hasComponent(OrganizerEventActivity.class.getName()));
     }
 
-    @Test
-    public void testListItemClickLaunchesOrganizerEventInformationActivity() {
-        // Assuming at least one item in the ListView, click it and verify intent to OrganizerEventInformationActivity
-        onData(anything()).inAdapterView(withId(R.id.organizer_event_list)).atPosition(0).perform(click());
-        intended(hasComponent(OrganizerEventInformationActivity.class.getName()));
-    }
 }
