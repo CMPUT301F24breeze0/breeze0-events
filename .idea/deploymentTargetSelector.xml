@@ -13,19 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="OrganizerEditEventActivityTest">
+      <SelectionState runConfigName="OverallLoginPageTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testUploadPosterButtonClickable()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testSaveButtonClickable()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testBackButtonClickable()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testSelectFacilityButtonClickable()">
+      <SelectionState runConfigName="US_01_02_01test">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
