@@ -1,10 +1,14 @@
 package com.example.breeze0events;
 
 import android.util.Log;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +115,81 @@ public class OverallStorageController {
             Log.w(TAG, "Failed to read organizer data.", e);
             callback.onFailure(e.getMessage());
         });
+    }
+
+    // add event id to corresponding organizer in organizer db
+    public void addEventWithOrganizerCheck(Event event, String organizerId) {
+        CollectionReference organizersRef = db.collection("OrganizerDB");
+        organizersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean organizerExists = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String device = document.getString("device");
+                    List<String> events = (List<String>) document.get("events");
+
+                    if (device != null && device.equals(organizerId)) {
+                        organizerExists = true;
+                        if (events == null) {
+                            events = new ArrayList<>();
+                        }
+                        events.add(event.getEventId());
+
+                        document.getReference().update("events", events)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Organizer updated with new event!"))
+                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer", e));
+                        break;
+                    }
+                }
+
+                if (!organizerExists) {
+                    Organizer newOrganizer = new Organizer(organizerId, organizerId, new ArrayList<>(Arrays.asList(event.getEventId())));
+                    addOrganizer(newOrganizer);
+                    Log.d("Firestore", "New Organizer created!");
+                }
+            } else {
+                Log.w("Firestore", "Error getting organizers: ", task.getException());
+            }
+        });
+    }
+
+    // delete event and event id from corresponding organizer in organizer db
+    public void deleteEventWithOrganizerCheck(String eventId, String organizerId) {
+        db.collection("OverallDB").document(eventId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Event successfully deleted from OverallDB!");
+
+                    CollectionReference organizersRef = db.collection("OrganizerDB");
+                    organizersRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            boolean organizerExists = false;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String device = document.getString("device");
+                                List<String> events = (List<String>) document.get("events");
+
+                                if (device != null && device.equals(organizerId)) {
+                                    organizerExists = true;
+
+                                    if (events != null && events.contains(eventId)) {
+                                        events.remove(eventId);  // remove enent id
+
+                                        document.getReference().update("events", events)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("Firestore", "Event removed from Organizer's events list!"))
+                                                .addOnFailureListener(e -> Log.w("Firestore", "Error updating organizer's events list", e));
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (!organizerExists) {
+                                Log.w("Firestore", "Organizer not found for device ID: " + organizerId);
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting organizers: ", task.getException());
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error deleting event from OverallDB", e));
     }
 
     // Add Organizer
@@ -325,4 +404,36 @@ public class OverallStorageController {
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully deleted!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error deleting admin", e));
     }
+
+    public void findEventByQRCodeHash(String qrCodeHash, final EventCallback callback) {
+        db.collection("OverallDB").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String eventId = document.getString("eventId");
+                    if (eventId != null && QRHashGenerator.generateHash(eventId).equals(qrCodeHash)) {
+                        String name = document.getString("name");
+                        String qrCode = document.getString("qrCode");
+                        String posterPhoto = document.getString("posterPhoto");
+                        String facility = document.getString("facility");
+                        String startDate = document.getString("startDate");
+                        String endDate = document.getString("endDate");
+                        String limitedNumber = document.getString("limitedNumber");
+                        List<String> entrants = (List<String>) document.get("entrants");
+                        List<String> organizers = (List<String>) document.get("organizers");
+
+                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                        callback.onSuccess(event);
+                        return;
+                    }
+                }
+                callback.onFailure("No event found with the matching QR code.");
+            } else {
+                callback.onFailure("Error retrieving events from database.");
+            }
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, "Error finding event by QR code hash", e);
+            callback.onFailure("Failed to access the database.");
+        });
+    }
+
 }

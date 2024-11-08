@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -27,9 +28,12 @@ import java.util.ArrayList;
 public class AdminEventActivity extends AppCompatActivity {
     private ListView eventListView;
     private ArrayAdapter<String> eventListAdapter;
-    private ArrayList<String> eventListDisplay = new ArrayList<>();;
-    private ArrayList<Event> eventList = new ArrayList<>();;
+    private ArrayList<String> eventListDisplay = new ArrayList<>();
+    ;
+    private ArrayList<Event> eventList = new ArrayList<>();
+    ;
     public Event event;
+    private Button refreshButton;
     private OverallStorageController overallStorageController;
     private final ActivityResultLauncher<Intent> eventsLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -51,6 +55,8 @@ public class AdminEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remove_events_page);
         Button return_button = findViewById(R.id.backButton);
+        refreshButton = findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(v -> refreshEventList());
 
         eventListView = findViewById(R.id.eventsList);
         overallStorageController = new OverallStorageController();
@@ -111,5 +117,44 @@ public class AdminEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void refreshEventList() {
+        eventList.clear();
+        eventListDisplay.clear();
+        eventListAdapter.notifyDataSetChanged();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String id = document.getId();
+                        overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
+                            @Override
+                            public void onSuccess(Event event) {
+                                String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
+                                        + "\nEnd_date: " + event.getEndDate();
+                                eventListDisplay.add(info);
+                                eventList.add(event);
+                                eventListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                Log.e("AdminEventActivity", "Failed to fetch event data: " + errorMessage);
+                            }
+                        });
+                    }
+                    Toast.makeText(AdminEventActivity.this, "Event list refreshed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("FirestoreError", "Error to fetch DB: ", task.getException());
+                }
+            }
+        });
+
     }
 }

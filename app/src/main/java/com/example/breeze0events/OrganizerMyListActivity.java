@@ -119,17 +119,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
             startActivity(intent);
         });
 
-
-        /*
-        new_event_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OrganizerEventActivity dialog = new OrganizerEventActivity();
-                 dialog.show(getSupportFragmentManager(), "OrganizerEventActivity");
-
-            }
-        });*/
-
         // by clicking "Refresh" button
         // refresh_button.setOnClickListener(v -> loadEventsFromFirebase());
 
@@ -167,36 +156,28 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                     if(eventList.size() != 0) {
                         Event item = eventList.get(pos);
                         String eventIdToDelete = item.getEventId();
+                        String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-                        // 从 Firebase 删除事件
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        CollectionReference collectionRef = db.collection("OverallDB");
+                        overallStorageController.deleteEvent(eventIdToDelete);
+                        overallStorageController.deleteEventWithOrganizerCheck(eventIdToDelete, organizerId);
 
-                        collectionRef.document(eventIdToDelete).delete().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // 成功删除后，从列表中移除事件并刷新适配器
-                                eventList_display.remove(pos);
-                                eventList.remove(pos);
-                                eventListAdapter.notifyDataSetChanged();
-                                Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.e("FirestoreError", "Error deleting document: ", task.getException());
-                                Toast.makeText(getApplicationContext(), "Failed to delete event", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        // update listview after delete
+                        eventList_display.remove(pos);
+                        eventList.remove(pos);
+                        eventListAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Nothing to delete", Toast.LENGTH_LONG).show();
                     }
                 });
+
                 // edit event
                 alert.setPositiveButton("Edit", (dialogInterface, j) -> {
-                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEventActivity.class);
-                    intent.putExtra("header_text", "Edit Event");
+                    Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerEditEventActivity.class);
                     Event item = eventList.get(pos);
-                    // intent.putExtra("event_id", item.getId());
+                    intent.putExtra("event_id", item.getEventId()); // Pass the event ID for editing
                     startActivity(intent);
                 });
-                //alert.setPositiveButton("Edit",(dialogInterface, j) -> new OrganizerEventActivity().show(getSupportFragmentManager(),"Edit_Event"));
                 // cancel button
                 alert.setNegativeButton("Cancel",(dialog, which) -> {
                     dialog.dismiss();
@@ -278,7 +259,6 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
     }
 
-    // calculate the next available id
     private void findSmallestAvailableId() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
@@ -298,16 +278,16 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         }
                     }
 
-                    // 找到 1 到 100 中最小的未占用 ID
                     newEventId = findNextAvailableId(existingIds);
                     Log.d("OrganizerMyListActivity", "Calculated new event ID: " + newEventId);
                 } else {
                     Log.e("FirestoreError", "Error getting documents: ", task.getException());
-                    newEventId = "1"; // 如果数据库读取失败，默认 ID 为 1
+                    newEventId = "1";
                 }
             }
         });
-    }
+    }// calculate the next available id
+
 
     private String findNextAvailableId(ArrayList<Integer> existingIds) {
         for (int i = 1; i <= 100; i++) {
