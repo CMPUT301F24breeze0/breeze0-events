@@ -61,7 +61,7 @@ public class EntrantLoginActivity extends AppCompatActivity {
         });
 
         buttonReturn.setOnClickListener(v -> {
-            Intent intent = new Intent(EntrantLoginActivity.this, EntrantEventActivity.class);
+            Intent intent = new Intent(EntrantLoginActivity.this, EntrantPreLoginActivity.class);
             startActivity(intent);
         });
     }
