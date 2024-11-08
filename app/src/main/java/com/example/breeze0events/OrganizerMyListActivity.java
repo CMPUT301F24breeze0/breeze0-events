@@ -306,12 +306,9 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     }
 
     private void refreshEventList() {
-        // 清空列表以避免重复内容
         eventList.clear();
         eventList_display.clear();
         eventListAdapter.notifyDataSetChanged();
-
-        // 调用方法加载事件
         loadEventsFromFirebase();
     }
 }
