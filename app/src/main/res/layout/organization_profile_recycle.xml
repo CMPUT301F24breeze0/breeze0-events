@@ -11,7 +11,7 @@
 
 
     <ListView
-        android:id="@+id/entrant_list_view"
+        android:id="@+id/organizer_list_view"
         android:layout_width="384dp"
         android:layout_height="666dp"
         android:layout_marginBottom="8dp"
@@ -42,9 +42,11 @@
         android:backgroundTint="@color/button_color"
         android:text="Back"
         android:textColor="@color/text_color"
-        app:layout_constraintBottom_toTopOf="@+id/entrant_list_view"
+        app:layout_constraintBottom_toTopOf="@+id/organizer_list_view"
         app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
