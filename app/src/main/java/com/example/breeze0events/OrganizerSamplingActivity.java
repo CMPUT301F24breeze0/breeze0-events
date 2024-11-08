@@ -17,6 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class OrganizerSamplingActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
@@ -108,40 +109,41 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         joinedEntrants.clear();
         requestedCount = 0;
 
-        // 使用 eventId 来过滤 EntrantDB 中符合条件的数据
+        Log.d("OrganizerSampling", "eventId: " + eventId);
+
         db.collection("EntrantDB").whereArrayContains("events", eventId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("OrganizerSampling", "Database query successful");
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            List<String> events = (List<String>) document.get("events");
-                            List<String> statusList = (List<String>) document.get("status");
+                            Log.d("OrganizerSampling", "Processing document: " + document.getId());
 
-                            // 确保 events 和 status 列表存在且大小一致
-                            if (events != null && statusList != null && events.size() == statusList.size()) {
-                                for (int i = 0; i < events.size(); i++) {
-                                    if (events.get(i).equals(eventId)) {
-                                        String status = statusList.get(i);
-                                        Log.d("OrganizerSampling", "Found matching event with status: " + status);
+                            Map<String, String> eventsMap = (Map<String, String>) document.get("events");
+                            Map<String, String> statusMap = (Map<String, String>) document.get("status");
 
-                                        if ("Joined".equals(status)) {
-                                            String entrantName = document.getString("name");
-                                            entrantDisplayList.add(entrantName != null ? entrantName : "Unknown Entrant");
-                                            joinedEntrants.add(document);
-                                            Log.d("OrganizerSampling", "Added entrant: " + entrantName);
-                                        } else if ("Requested".equals(status)) {
-                                            requestedCount++;
-                                            Log.d("OrganizerSampling", "Incremented requested count, current count: " + requestedCount);
-                                        }
-                                    }
+                            Log.d("OrganizerSampling", "Document eventsMap: " + eventsMap);
+                            Log.d("OrganizerSampling", "Document statusMap: " + statusMap);
+
+                            if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && statusMap.containsKey(eventId)) {
+                                String status = statusMap.get(eventId);
+                                Log.d("OrganizerSampling", "Found matching event with status: " + status);
+
+                                if ("Selected".equals(status)) {
+                                    String entrantName = document.getString("name");
+                                    entrantDisplayList.add(entrantName != null ? entrantName : "Unknown Entrant");
+                                    Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
+                                } else if ("Joined".equals(status)) {
+                                    joinedEntrants.add(document);
+                                } else if ("Requested".equals(status)) {
+                                    requestedCount++;
+                                    Log.d("OrganizerSampling", "Incremented requested count, current count: " + requestedCount);
                                 }
                             } else {
                                 Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
                             }
                         }
 
-                        // 通知适配器更新显示列表
                         entrantAdapter.notifyDataSetChanged();
                         updateRemainingSlots();
                         Log.d("OrganizerSampling", "Total entrants displayed: " + entrantDisplayList.size());
@@ -164,24 +166,24 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             return;
         }
 
+        Log.d("OrganizerSampling", "Remaining slots before selection: " + remainingSlots);
+
         Collections.shuffle(joinedEntrants);
         List<DocumentSnapshot> selectedEntrants = joinedEntrants.subList(0, Math.min(remainingSlots, joinedEntrants.size()));
 
         for (DocumentSnapshot entrant : selectedEntrants) {
-            List<String> statusList = (List<String>) entrant.get("status");
-            List<String> eventsList = (List<String>) entrant.get("events");
+            Map<String, String> statusMap = (Map<String, String>) entrant.get("status");
+            Map<String, String> eventsMap = (Map<String, String>) entrant.get("events");
 
-            for (int i = 0; i < eventsList.size(); i++) {
-                if (eventsList.get(i).equals(eventId) && "Joined".equals(statusList.get(i))) {
-                    statusList.set(i, "Requested");
-                }
+            if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
+                statusMap.put(eventId, "Selected");
+                db.collection("EntrantDB").document(entrant.getId()).update("status", statusMap)
+                        .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status updated to Selected for entrant: " + entrant.getId()))
+                        .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
             }
-
-            db.collection("EntrantDB").document(entrant.getId()).update("status", statusList)
-                    .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status updated to Requested"))
-                    .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
         }
 
+        // 重新加载数据以更新 ListView
         loadEntrantsWithJoinedStatus();
     }
 }
