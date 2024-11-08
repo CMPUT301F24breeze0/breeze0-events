@@ -161,6 +161,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1001386036">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Copy_of_Medium_Phone_API_35" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="temp1" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1783289795">
           <value>
             <AndroidTestResultsTableState>

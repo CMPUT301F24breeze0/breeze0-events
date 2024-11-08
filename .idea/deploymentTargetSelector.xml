@@ -16,7 +16,7 @@
       <SelectionState runConfigName="OverallLoginPageTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="US_01_02_01test">
+      <SelectionState runConfigName="US010201">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
