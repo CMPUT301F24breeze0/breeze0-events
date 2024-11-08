@@ -12,10 +12,24 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+/**
+ * Activity class for displaying a QR code of certain event to the administrator.
+ * The activity retrieves QR code data from the intent, generates a QR code bitmap from the data,
+ * and displays it in an ImageView.
+ */
+
 public class AdminQRcode extends AppCompatActivity {
     Button backButton;
     ImageView qrCodeImageView;
 
+    /**
+     * Initializes the activity, setting up the QR code display and the back button functionality.
+     *
+     * @param savedInstanceState
+     * If the activity is being re-initialized after previously being shut down,
+     * this Bundle contains the data it most recently supplied.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

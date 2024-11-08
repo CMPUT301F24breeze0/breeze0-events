@@ -40,6 +40,10 @@ import com.google.firebase.database.Query;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * Activity for organizing events within an event management application.
+ * This activity provides functionalities to display, create, delete, and edit events.
+ */
 public class OrganizerMyListActivity extends AppCompatActivity implements OrganizerEventActivity.OnFragmentInteractionListener{
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -51,6 +55,10 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
     public Event event;
     private String newEventId;
 
+    /**
+     * Initializes the UI components and loads the events from Firebase.
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,7 +206,10 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
 
     }
 
-
+    /**
+     * Called when the OK button is pressed in the new event creation dialog.
+     * @param newEvent The newly created Event object.
+     */
     public void onOkPressed(Event newEvent) {
         overallStorageController.addEvent(newEvent); // add to db
         String eventInfo = "Name: " + newEvent.getName() +
@@ -210,15 +221,27 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         Log.d("Event","Event to add: " + newEvent.toString());
     }
 
+    /**
+     * Sets the selected event for display and updates the UI.
+     * @param event The selected Event object.
+     */
     private void setEventList(Event event)  {
         this.event = event;
         update();
     }
 
+    /**
+     * Updates the UI by notifying the adapter of data changes.
+     */
     public void update() {
         eventListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Checks if there is an active network connection.
+     * @param context The context of the current activity.
+     * @return True if network is available, false otherwise.
+     */
     // there has to be a network connection when creating new event, this method will check if there's network connection
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -226,6 +249,9 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Loads events from Firebase Firestore and displays them in the event list.
+     */
     // load from firebase
     private void loadEventsFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

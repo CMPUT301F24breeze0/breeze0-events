@@ -13,6 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+/**
+ * Activity class to display detailed info about a specific event for organizers.Organizers
+ * can view info like event name, facility, organizers, entrants, and the QR code,
+ * and navigate to further detail views.
+ */
 public class OrganizerEventInformationActivity extends AppCompatActivity {
 
     Button backButton,organizerButton,entrantButton,nameButton,facilityButton,qrCodeButton,samplingButton;
@@ -20,6 +25,12 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
     OverallStorageController overallStorageController;
     String facilityName;
     ImageView posterPhoto;
+
+    /**
+     * Initializes the activity, retrieves the event details using the event ID from the intent,
+     * and sets up UI components.
+     * @param savedInstanceState If the activity is reinitialized, contains saved data.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

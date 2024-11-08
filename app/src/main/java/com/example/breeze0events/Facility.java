@@ -1,5 +1,11 @@
 package com.example.breeze0events;
 import java.util.List;
+
+
+/**
+ * This is a class that defines a Facility.
+ */
+
 public class Facility {
     private String facilityId; // Unique ID for the facility
     private String location; // Location of the facility

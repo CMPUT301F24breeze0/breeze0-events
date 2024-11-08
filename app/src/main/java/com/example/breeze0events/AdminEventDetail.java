@@ -41,8 +41,9 @@ public class AdminEventDetail extends AppCompatActivity {
      * retrieves the selected event's details, such as name, date, maxEntrants, signUpDueDay,
      * and description. Sets up the delete functionality for the event.
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
-     *                           this Bundle contains the most recent data; otherwise, it is null.
+     * @param savedInstanceState
+     * If the activity is being re-initialized after previously being shut down,
+     * this Bundle contains the most recent data; otherwise, it is null.
      */
 
     @Override
