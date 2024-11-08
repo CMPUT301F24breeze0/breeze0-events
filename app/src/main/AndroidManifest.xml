@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -50,33 +53,18 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+            android:name=".EntrantQRScanActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
             android:name=".EntrantProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
-            android:name=".AdminOperateActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".AdminOrganizerProfile"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="Instantiatable" />
-
-        <activity
-            android:name=".AdminOrganizationProfileActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events"
-            tools:ignore="Instantiatable" />
-
-        <activity
             android:name=".EntrantSearchingActivity"
 
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-        <activity
-            android:name=".AdminFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -85,17 +73,6 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
-        <activity
-            android:name=".AdminOrganizationProfileActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-
-
-
-        <activity
-            android:name=".EntrantSearchingActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
 
         <activity
             android:name=".EntrantEventDetail"
@@ -119,7 +96,9 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+
             android:name=".OrganizerFacilityActivity"
+
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -218,6 +197,13 @@
             android:name=".OrganizerSamplingActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity android:name=".AdminEntrantProfileActivity" 
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
+        <activity android:name=".AdminentrantProfile"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
+
 
 
     </application>

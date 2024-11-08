@@ -10,9 +10,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdminOrganizerProfile extends AppCompatActivity {
     private ArrayList<String> organizerList;
+    private List<String> eventList;
    private Organizer organizer;
    private String id;
    private int position;
@@ -20,7 +22,8 @@ public class AdminOrganizerProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         organizerList=new ArrayList<>();
-        setContentView(R.layout.profile_detail);
+        eventList=new ArrayList<>();
+        setContentView(R.layout.organization_profile_detail);
         overallStorageController = new OverallStorageController();
         id=getIntent().getStringExtra("SELECTED_ID");
         position=getIntent().getIntExtra("SELECTED_POSITION",-1);
@@ -32,6 +35,7 @@ public class AdminOrganizerProfile extends AppCompatActivity {
             @Override
             public void onSuccess(Organizer organizer) {
                 Log.d("AdminOrganizerProfile", "Organizer data fetched successfully: " + organizer.getOrganizerId());
+                eventList=organizer.getEvents();
                 name.setText(organizer.getOrganizerId());
                 device.setText(organizer.getDevice());
             }
@@ -49,6 +53,34 @@ public class AdminOrganizerProfile extends AppCompatActivity {
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
             overallStorageController.deleteOrganizer(String.valueOf(id));
+            String eventid;
+            for(int i=0; i<eventList.size();i++){
+                eventid=eventList.get(i);
+                String finalEventid = eventid;
+                overallStorageController.getEvent(String.valueOf(eventid),new EventCallback(){
+                    @Override
+                    public void onSuccess(Event event){
+                        List<String> entrantList= new ArrayList<>();
+                        entrantList=event.getEntrants();
+                        for(int j=0;j<entrantList.size();j++){
+                            overallStorageController.getEntrant(entrantList.get(j),new EntrantCallback(){
+                                @Override
+                                public void onSuccess(Entrant entrant){
+                                    entrant.getEventsName().remove(finalEventid);
+                                }
+                                public void onFailure(String errorMessage) {
+                                    Log.e("etrant", "Failed to fetch entrant: " + errorMessage);
+                                }
+                            });
+                        }
+                    }
+                    public void onFailure(String errorMessage) {
+                        Log.e("event", "Failed to fetch event: ");
+                    }
+                });
+
+                overallStorageController.deleteEvent(eventid);
+            }
             organizerList.remove(position);
             Intent result=new Intent();
             result.putStringArrayListExtra("UPDATED_LIST",organizerList);

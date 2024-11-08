@@ -404,4 +404,36 @@ public class OverallStorageController {
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Admin successfully deleted!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error deleting admin", e));
     }
+
+    public void findEventByQRCodeHash(String qrCodeHash, final EventCallback callback) {
+        db.collection("OverallDB").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String eventId = document.getString("eventId");
+                    if (eventId != null && QRHashGenerator.generateHash(eventId).equals(qrCodeHash)) {
+                        String name = document.getString("name");
+                        String qrCode = document.getString("qrCode");
+                        String posterPhoto = document.getString("posterPhoto");
+                        String facility = document.getString("facility");
+                        String startDate = document.getString("startDate");
+                        String endDate = document.getString("endDate");
+                        String limitedNumber = document.getString("limitedNumber");
+                        List<String> entrants = (List<String>) document.get("entrants");
+                        List<String> organizers = (List<String>) document.get("organizers");
+
+                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                        callback.onSuccess(event);
+                        return;
+                    }
+                }
+                callback.onFailure("No event found with the matching QR code.");
+            } else {
+                callback.onFailure("Error retrieving events from database.");
+            }
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, "Error finding event by QR code hash", e);
+            callback.onFailure("Failed to access the database.");
+        });
+    }
+
 }

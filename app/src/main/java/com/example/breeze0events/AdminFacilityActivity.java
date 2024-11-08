@@ -20,6 +20,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
+
+
+/**
+ * The AdminFacilityActivity provides a user interface for administrators to view a list of facilities.
+ * It retrieves facility data from Firestore and displays the facilities' locations in a ListView.
+ */
+
 public class AdminFacilityActivity extends AppCompatActivity {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
