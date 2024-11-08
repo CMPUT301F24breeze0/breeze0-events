@@ -49,6 +49,11 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+            android:name=".EntrantQRScanActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+
+        <activity
             android:name=".EntrantProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />

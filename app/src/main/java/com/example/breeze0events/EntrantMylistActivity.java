@@ -78,6 +78,12 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             }
         });
 
+        QR_Scan = findViewById(R.id.buttonQRScan);
+        QR_Scan.setOnClickListener(v -> {
+            Intent intent = new Intent(EntrantMylistActivity.this, EntrantQRScanActivity.class);
+            startActivity(intent);
+        });
+
         ProfileModify = findViewById(R.id.buttonProfile);
         ProfileModify.setOnClickListener(v -> {
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantProfileActivity.class);
