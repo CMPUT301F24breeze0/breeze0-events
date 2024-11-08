@@ -25,6 +25,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is for show the list of oragnizer
+ */
 public class AdminOrganizationProfileActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     public FirebaseFirestore db;
@@ -44,6 +47,11 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+
+    /**
+     * this method is for gain the organizer from database and show it
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organization_profile_recycle);
@@ -58,6 +66,10 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
+            /**
+             * this method and gain change the organizer information
+             * @param task
+             */
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -90,6 +102,13 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
         });
         organizerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+            /**
+             * this method is for transform data to next page
+             * @param parent
+             * @param view
+             * @param position
+             * @param id
+             */
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String organizerInfo = organizerList.get(position);
                 String organizerId=organizerIdMap.get(organizerInfo);
