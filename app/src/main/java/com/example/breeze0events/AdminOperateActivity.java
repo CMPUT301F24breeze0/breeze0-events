@@ -22,6 +22,13 @@ public class AdminOperateActivity extends AppCompatActivity {
             Intent intent1=new Intent(AdminOperateActivity.this,AdminLoginActivity.class);
             startActivity(intent1);
         });
+        entrant_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(AdminOperateActivity.this,AdminEntrantProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         //by clicking organization profile button
         organization_button.setOnClickListener(new View.OnClickListener() {
             @Override

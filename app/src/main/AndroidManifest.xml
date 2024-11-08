@@ -97,7 +97,9 @@
             android:theme="@style/Theme.Breeze0events" />
 
         <activity
+
             android:name=".OrganizerFacilityActivity"
+
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
 
@@ -192,6 +194,8 @@
             android:name=".EditFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity android:name=".AdminEntrantProfileActivity" />
+        <activity android:name=".AdminentrantProfile" />
 
 
     </application>
