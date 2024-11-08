@@ -133,7 +133,7 @@ public class EntrantEventDetail extends AppCompatActivity {
     }
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
-        // 解码 Base64 字符串为字节数组
+        // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
@@ -156,7 +156,7 @@ public class EntrantEventDetail extends AppCompatActivity {
 //    }
     private void saveImageToStorage(EntrantEventDetail context, Bitmap bitmap) {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image_" + System.currentTimeMillis() + ".jpg");
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image.jpg");
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/MyAppImages");
 
