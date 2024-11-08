@@ -2,6 +2,11 @@ package com.example.breeze0events;
 
 import java.util.List;
 
+
+/**
+ * This is a class that defines a Organizer.
+ */
+
 public class Organizer {
     private String organizerId;
     private String device;

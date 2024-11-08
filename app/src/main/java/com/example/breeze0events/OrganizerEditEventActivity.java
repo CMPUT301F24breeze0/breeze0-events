@@ -19,6 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * The OrganizerEditEventActivity class allows organizers to edit event details,
+ * such as the name, date, facility, poster, and entrants limit. This class provides
+ * functionality to load existing event data, modify it, and save updates to the database.
+ */
 public class OrganizerEditEventActivity extends AppCompatActivity implements SelectFacilityForEventActivity.FacilitySelectListener {
 
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -33,6 +39,12 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
     private Uri selectedPosterUri;
     private Event currentEvent;
 
+    /**
+     * Called when the activity is first created. Initializes UI components, sets up
+     * button click listeners, and loads event data if an event ID is provided.
+     *
+     * @param savedInstanceState The saved instance state bundle, if available.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +78,11 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         selectFacilityButton.setOnClickListener(v -> openFacilitySelectionDialog());
     }
 
+    /**
+     * Loads event data from the database based on the given event ID.
+     *
+     * @param eventId The ID of the event to be loaded.
+     */
     private void loadEventData(String eventId) {
         overallStorageController.getEvent(eventId, new EventCallback() {
             @Override
@@ -93,6 +110,10 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         });
     }
 
+    /**
+     * Saves the updated event details to the database. If any required fields are empty,
+     * a toast message will prompt the user to fill them in before saving.
+     */
     private void saveEvent() {
         String eventName = eventNameEditText.getText().toString().trim();
         String startDate = startDateEditText.getText().toString().trim();
@@ -113,17 +134,28 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         finish();
     }
 
+    /**
+     * Opens the device's gallery for the user to select an image as the event poster.
+     */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * Opens a dialog to allow the user to select a facility for the event.
+     */
     private void openFacilitySelectionDialog() {
         SelectFacilityForEventActivity dialog = new SelectFacilityForEventActivity();
         dialog.show(getSupportFragmentManager(), "SelectFacilityDialog");
     }
 
+    /**
+     * Callback method that receives the selected facility name from the dialog.
+     *
+     * @param selectedFacilityName The name of the selected facility.
+     */
     @Override
     public void onFacilitySelected(String selectedFacilityName) {
         eventFacility = selectedFacilityName;
@@ -131,6 +163,13 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         Toast.makeText(this, "Facility selected: " + selectedFacilityName, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Handles the result from the gallery intent and updates the event's poster image.
+     *
+     * @param requestCode The request code originally supplied to startActivityForResult().
+     * @param resultCode  The result code returned by the child activity.
+     * @param data        An Intent that carries the result data.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -15,11 +15,23 @@ import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * Activity class to display a QR code for a specific organizer event.
+ * The QR code is generated based on a hash code passed as an intent extra.
+ */
 public class OrganizerEventDisplayQRcode extends AppCompatActivity {
 
     Button backButton;
     ImageView qrCodeImageView;
 
+    /**
+     * Called when the activity is first created. Sets up the layout, back button functionality,
+     * and generates the QR code based on the passed-in hash code.
+     *
+     * @param savedInstanceState
+     * If the activity is being re-initialized after previously being shut down,
+     * this Bundle contains the data it most recently supplied.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

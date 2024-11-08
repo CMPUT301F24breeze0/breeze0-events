@@ -9,9 +9,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * EntrantPreLoginActivity provides options for users to either sign up or log in
+ * as entrants in the application. It checks for an existing entrant account based on device ID,
+ * guiding users to the appropriate login or sign-up activity.
+ */
 public class EntrantPreLoginActivity extends AppCompatActivity {
     private Button buttonFirstTimeUse, buttonAlreadyHaveAccount, buttonReturn;
 
+    /**
+     * Initializes the activity and sets up button click listeners for first-time use, login, and return.
+     *
+     * @param savedInstanceState The saved instance state containing previous data (if any).
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

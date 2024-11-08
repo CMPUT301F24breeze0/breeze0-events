@@ -25,6 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * EntrantProfileActivity manages the user's profile, allowing them to view and update
+ * their personal information including their profile picture, name, email, and phone number.
+ */
 public class EntrantProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private EditText editTextName, editTextEmail, editTextPhone;
@@ -35,6 +40,12 @@ public class EntrantProfileActivity extends AppCompatActivity {
     private String deviceId;
     private Entrant localEntrant;
 
+    /**
+     * Initializes the activity, sets up the UI components, and loads the user's existing profile data.
+     *
+     * @param savedInstanceState
+     * The saved instance state containing previous data (if any).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +72,10 @@ public class EntrantProfileActivity extends AppCompatActivity {
         buttonReturn.setOnClickListener(v -> finish());
     }
 
-    // Load Entrant data from Firestore
+    /**
+     * Loads the entrant's data from the FireStore database and populates it into the UI components.
+     */
+    // Load Entrant data from FireStore
     private void loadEntrantData() {
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
@@ -81,7 +95,9 @@ public class EntrantProfileActivity extends AppCompatActivity {
         });
     }
 
-    // Open image selector for profile image
+    /**
+     * Open image selector for profile image
+     */
     private void openImageSelector() {
         new AlertDialog.Builder(EntrantProfileActivity.this)
                 .setTitle("Upload/Remove profile picture")
@@ -97,7 +113,14 @@ public class EntrantProfileActivity extends AppCompatActivity {
                 .show();
     }
 
-    // Handle result from image picker
+    /**
+     * Handles the result from the image picker, compressing and converting the selected image
+     * to a Base64 string for storage.
+     *
+     * @param requestCode The request code of the activity result.
+     * @param resultCode  The result code of the activity result.
+     * @param data        The intent data returned by the image picker.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -120,7 +143,9 @@ public class EntrantProfileActivity extends AppCompatActivity {
             }
         }
     }
-
+    /**
+     * Update Entrant profile in FireStore
+     */
     // Update Entrant profile in Firestore
     private void updateProfile() {
         String name = editTextName.getText().toString().trim();
@@ -142,6 +167,12 @@ public class EntrantProfileActivity extends AppCompatActivity {
         startActivity(resultIntent);
     }
 
+    /**
+     * Converts a Bitmap to a Base64 encoded string.
+     *
+     * @param bitmap The bitmap to convert.
+     * @return The Base64 encoded string.
+     */
     private String convertBitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -149,10 +180,24 @@ public class EntrantProfileActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
+    /**
+     * Decodes a Base64 encoded image string into a Bitmap.
+     *
+     * @param base64ImageString The Base64 encoded image string.
+     * @return The decoded Bitmap.
+     */
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
+
+    /**
+     * Generates a default profile image with a background circle and the first letter
+     * of the user's name, in case a custom image is not uploaded.
+     *
+     * @param name The name of the entrant.
+     * @return The Base64 encoded default profile image.
+     */
     private String generateDefaultProfileImage(String name) {
         // Get the first letter of the name
         String firstLetter = name.isEmpty() ? "A" : String.valueOf(name.charAt(0)).toUpperCase();
@@ -174,4 +219,6 @@ public class EntrantProfileActivity extends AppCompatActivity {
         profileImage.setImageBitmap(bitmap);
         return convertBitmapToBase64(bitmap);
     }
+
+
 }
