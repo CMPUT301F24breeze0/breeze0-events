@@ -59,7 +59,7 @@ dependencies {
     testImplementation ("junit:junit:4.13.2")
     testImplementation ("org.mockito:mockito-core:4.3.1")
     testImplementation ("org.mockito:mockito-inline:4.3.1")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.3") // For AndroidJUnit4
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0") // For Espresso (optional, useful for UI tests)
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5") // For AndroidJUnit4
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1") // For Espresso (optional, useful for UI tests)
     
 }
