@@ -1,20 +1,20 @@
 package com.example.breeze0events;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
-import static org.hamcrest.CoreMatchers.anything;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,10 +26,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 @RunWith(AndroidJUnit4.class)
-public class US010101 {
+public class US010701 {
 
     @Rule
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
@@ -52,11 +50,11 @@ public class US010101 {
     @After
     public void tearDown() {
         release();
-        storageController.deleteEntrant(deviceId);
+        storageController.deleteEntrant(deviceId); // Clean up entrant data after test
     }
 
     @Test
-    public void testNewUserSignupAndJoinEvent() throws InterruptedException {
+    public void testDeviceIdentificationLogin() throws InterruptedException {
         // Step 1: New User Signup
         onView(withId(R.id.buttonFirstTimeUse)).perform(click());
 
@@ -72,47 +70,24 @@ public class US010101 {
 
         // Verify EntrantMylistActivity is launched after signup
         Thread.sleep(1000);
-        intended(hasComponent(EntrantMylistActivity.class.getName()));
 
-        // Step 2: Search for an Event
-        onView(withId(R.id.buttonEventSearch)).perform(click());
+        // Step 2: Restart the app
+        activityRule.finishActivity();
+        activityRule.launchActivity(new Intent());
 
-        // Verify EntrantSearchingActivity is launched
-        Thread.sleep(1000);
-        intended(hasComponent(EntrantSearchingActivity.class.getName()));
+        // Step 3: Click on "Already Have an Account"
+        onView(withId(R.id.buttonAlreadyHaveAccount)).perform(click());
 
-        // Click on the first event in the event_search_view ListView
-        onData(anything()).inAdapterView(withId(R.id.event_search_view)).atPosition(0).perform(click());
-
-        // Verify EntrantEventDetail is launched
-        Thread.sleep(1000);
-        intended(hasComponent(EntrantEventDetail.class.getName()));
-
-        // Step 3: Join the Event
-        onView(withId(R.id.entrant_event_join)).perform(click());
-
-        final String eventId = "1"; // replace with actual event ID for testing
+        // Step 4: Wait for and confirm the alert dialog
         Thread.sleep(2000);
+        onView(withText("Continue")).perform(click());
 
-        storageController.getEvent(eventId, new EventCallback() {
-            @Override
-            public void onSuccess(Event event) {
-                List<String> entrants = event.getEntrants();
-                if (entrants.contains(deviceId)) {
-                    Log.d("Test", "Entrant successfully joined the event");
-                    // Remove entrant to clean up
-                    entrants.remove(deviceId);
-                    event.setEntrants(entrants);
-                    storageController.updateEvent(event);
-                } else {
-                    throw new AssertionError("Entrant not found in event entrants list");
-                }
-            }
+        // Step 5: Disable previous intent verifications
+        release();
+        init(); // Re-initialize intents for final check
 
-            @Override
-            public void onFailure(String errorMessage) {
-                throw new AssertionError("Failed to retrieve event: " + errorMessage);
-            }
-        });
+        // Step 6: Verify final navigation to EntrantMylistActivity
+        Thread.sleep(1000);
+        onView(withId(R.id.entrantName)).check(matches(isDisplayed()));
     }
 }

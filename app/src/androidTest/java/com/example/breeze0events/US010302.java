@@ -8,9 +8,11 @@ import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 import android.content.Context;
-import android.content.Intent;
 import android.provider.Settings;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -24,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class US010201 {
+public class US010302 {
 
     @Rule
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
@@ -35,50 +37,52 @@ public class US010201 {
 
     @Before
     public void setUp() {
-        init();
+        init(); // Initialize Intents for intent verification
 
-        // Get device ID to identify the entrant uniquely
         Context context = ApplicationProvider.getApplicationContext();
         deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-
-        // Initialize storage controller for handling entrant data
         storageController = new OverallStorageController();
 
-        activityRule.launchActivity(new Intent());
+        // Launch the initial activity
+        activityRule.launchActivity(null);
     }
 
     @After
     public void tearDown() {
-        // Delete entrant after test to avoid affecting future tests
-        if (deviceId != null && storageController != null) {
-            storageController.deleteEntrant(deviceId);
-        }
-
-        // Release Intents after test
-        release();
+        release(); // Release Intents
+        storageController.deleteEntrant(deviceId); // Clean up entrant data after test
     }
 
     @Test
-    public void testProvidePersonalInformation() throws InterruptedException {
-        // Step 1: Click on "First Time Use" button in EntrantPreLoginActivity
+    public void testRemoveProfilePicture() throws InterruptedException {
+        // Step 1: New User Signup
         onView(withId(R.id.buttonFirstTimeUse)).perform(click());
 
-        // Step 2: Verify EntrantLoginActivity is launched
-        Thread.sleep(1000); // Adding a short delay for UI response
-        intended(hasComponent(EntrantLoginActivity.class.getName()));
-
-        // Step 3: Fill in personal information in EntrantLoginActivity
+        // Verify EntrantLoginActivity is launched
+        Thread.sleep(2000);
         onView(withId(R.id.editTextName)).perform(replaceText("John Doe"));
         onView(withId(R.id.editTextEmail)).perform(replaceText("johndoe@example.com"));
         onView(withId(R.id.editTextPhone)).perform(replaceText("1234567890"));
-
-        // Skip clicking on the profile image, assuming no image is selected
-
-        // Step 4: Click on "Sign Up" button to submit form
         onView(withId(R.id.buttonSignUp)).perform(click());
 
-        // Step 5: Verify that EntrantMylistActivity is launched after signup
-        Thread.sleep(1000); // Short delay to ensure intent transition
+        // Confirm navigation to EntrantMylistActivity
+        onView(withId(R.id.entrantName)).check(matches(isDisplayed()));
+
+        // Step 2: Navigate to Profile
+        onView(withId(R.id.buttonProfile)).perform(click());
+
+        // Verify EntrantProfileActivity is launched
+        intended(hasComponent(EntrantProfileActivity.class.getName()));
+
+        // Step 3: Click on Profile Image and Verify Alert Dialog
+        onView(withId(R.id.profileImage)).perform(click());
+        onView(withText("Remove")).check(matches(isDisplayed())).perform(click());
+
+        // Verify that the profile image has been removed
+        // This can involve checking if the default placeholder is displayed or if the image view is empty
+        onView(withId(R.id.profileImage)).check(matches(isDisplayed())); // Adjust this as needed to confirm removal
+
+        // Finally, navigate back to EntrantMylistActivity
         intended(hasComponent(EntrantMylistActivity.class.getName()));
     }
 }

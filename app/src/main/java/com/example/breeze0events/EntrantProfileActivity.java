@@ -174,4 +174,6 @@ public class EntrantProfileActivity extends AppCompatActivity {
         profileImage.setImageBitmap(bitmap);
         return convertBitmapToBase64(bitmap);
     }
+
+
 }

@@ -2,8 +2,9 @@ package com.example.breeze0events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class Event {
+public class Event implements Serializable{
     private String eventId; // Event ID (previously organizerId)
     private String name; // Name of the event
     private String qrCode; // QR code for the event

@@ -1,16 +1,15 @@
 package com.example.breeze0events;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
-import static org.hamcrest.CoreMatchers.anything;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -26,10 +25,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(AndroidJUnit4.class)
-public class US010101 {
+public class US010202 {
 
     @Rule
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
@@ -51,12 +51,13 @@ public class US010101 {
 
     @After
     public void tearDown() {
+        // Release Intents after test and delete the entrant
         release();
         storageController.deleteEntrant(deviceId);
     }
 
     @Test
-    public void testNewUserSignupAndJoinEvent() throws InterruptedException {
+    public void testUpdateProfileInformation() throws InterruptedException {
         // Step 1: New User Signup
         onView(withId(R.id.buttonFirstTimeUse)).perform(click());
 
@@ -74,45 +75,52 @@ public class US010101 {
         Thread.sleep(1000);
         intended(hasComponent(EntrantMylistActivity.class.getName()));
 
-        // Step 2: Search for an Event
-        onView(withId(R.id.buttonEventSearch)).perform(click());
+        // Step 2: Navigate to Profile Update
+        onView(withId(R.id.buttonProfile)).perform(click());
 
-        // Verify EntrantSearchingActivity is launched
+        // Verify EntrantProfileActivity is launched
         Thread.sleep(1000);
-        intended(hasComponent(EntrantSearchingActivity.class.getName()));
+        intended(hasComponent(EntrantProfileActivity.class.getName()));
 
-        // Click on the first event in the event_search_view ListView
-        onData(anything()).inAdapterView(withId(R.id.event_search_view)).atPosition(0).perform(click());
+        // Step 3: Update Profile Information
+        onView(withId(R.id.editTextName)).perform(replaceText("Jane Doe"));
+        onView(withId(R.id.editTextEmail)).perform(replaceText("janedoe@example.com"));
+        onView(withId(R.id.editTextPhone)).perform(replaceText("0987654321"));
+        onView(withId(R.id.buttonUpdateProfile)).perform(click());
 
-        // Verify EntrantEventDetail is launched
-        Thread.sleep(1000);
-        intended(hasComponent(EntrantEventDetail.class.getName()));
-
-        // Step 3: Join the Event
-        onView(withId(R.id.entrant_event_join)).perform(click());
-
-        final String eventId = "1"; // replace with actual event ID for testing
+        // Step 4: Confirm return to EntrantMylistActivity
         Thread.sleep(2000);
+        onView(withId(R.id.entrantName)).check(matches(withText("Jane Doe")));
 
-        storageController.getEvent(eventId, new EventCallback() {
+        // Step 5: Verify the backend has the updated information
+        verifyProfileInBackend("Jane Doe", "janedoe@example.com", "0987654321");
+    }
+
+    private void verifyProfileInBackend(String expectedName, String expectedEmail, String expectedPhone) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        storageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
-            public void onSuccess(Event event) {
-                List<String> entrants = event.getEntrants();
-                if (entrants.contains(deviceId)) {
-                    Log.d("Test", "Entrant successfully joined the event");
-                    // Remove entrant to clean up
-                    entrants.remove(deviceId);
-                    event.setEntrants(entrants);
-                    storageController.updateEvent(event);
+            public void onSuccess(Entrant entrant) {
+                if (expectedName.equals(entrant.getName()) &&
+                        expectedEmail.equals(entrant.getEmail()) &&
+                        expectedPhone.equals(entrant.getPhoneNumber())) {
+                    Log.d("Test", "Profile information updated successfully.");
                 } else {
-                    throw new AssertionError("Entrant not found in event entrants list");
+                    throw new AssertionError("Profile information did not update correctly.");
                 }
+                latch.countDown();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                throw new AssertionError("Failed to retrieve event: " + errorMessage);
+                throw new AssertionError("Failed to retrieve entrant profile: " + errorMessage);
             }
         });
+
+        // Wait for the latch to complete before proceeding
+        if (!latch.await(10, TimeUnit.SECONDS)) {
+            throw new AssertionError("Backend verification timed out.");
+        }
     }
 }

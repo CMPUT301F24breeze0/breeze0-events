@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="My Facility"
+
         android:textColor="@color/text_color"
-        app:layout_constraintEnd_toStartOf="@+id/new_facility_button"
-        app:layout_constraintStart_toEndOf="@+id/organizer_facility_activity_back_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -32,11 +33,13 @@
         android:id="@+id/new_facility_button"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/button_color"
         android:text="New"
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/ui_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/organizer_facility_list"
@@ -44,12 +47,22 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/view_background"
         android:divider="@color/listview_divider_color"
         android:dividerHeight="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/new_facility_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/organizer_facility_activity_back_button" />
+
+    <Button
+        android:id="@+id/organizer_facility_activity_refresh_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
