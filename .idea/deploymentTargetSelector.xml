@@ -13,7 +13,6 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-<<<<<<< Updated upstream
       <SelectionState runConfigName="OrganizerEditEventActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -27,12 +26,18 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="testSelectFacilityButtonClickable()">
-=======
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
       <SelectionState runConfigName="OrganizerEventInformationActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="testFacilityButtonOpensFacilityActivity()">
->>>>>>> Stashed changes
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="OverallLoginPageTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="US_01_02_01test">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
