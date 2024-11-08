@@ -16,6 +16,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * The AdminEventDetail activity provides an interface for administrators to view detailed information
+ * about a specific event. It allows the administrator to view event details, display an event poster,
+ * and delete the event if necessary.
+ */
 public class AdminEventDetail extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private TextView eventTitle;
@@ -30,6 +35,15 @@ public class AdminEventDetail extends AppCompatActivity {
     private String eventID;
     private ArrayList<Event> eventList;
     private ArrayList<String> eventListDisplay;
+
+    /**
+     * Called when the activity is first created. This method initializes the UI elements,
+     * retrieves the selected event's details, such as name, date, maxEntrants, signUpDueDay,
+     * and description. Sets up the delete functionality for the event.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the most recent data; otherwise, it is null.
+     */
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +72,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 eventTitle.setText("Event Detail");
                 eventName.setText("Event Name: " + selected_event.getName());
                 eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
-                maxEntrants.setText("Max number of entrants: " + event.getEntrants().size());
+                maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
 
@@ -77,36 +91,81 @@ public class AdminEventDetail extends AppCompatActivity {
 
         delete_button.setOnClickListener(v -> {
             if (id != null && !id.isEmpty()) {
-                overallStorageController.deleteEvent(id);
-                Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
-                if (eventList != null) {
-                    eventList.removeIf(event -> event.getEventId().equals(id));
-                }
-
-                eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
-
-                //if (eventListDisplay  != null) {
-                    //eventListDisplay.clear();
-                    //for (Event event : eventList) {
-                       // String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
-                                //+ "\nEnd_date: " + event.getEndDate();
-                        //eventListDisplay.add(info);}}
-
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
-                setResult(RESULT_OK, resultIntent);
-
-                Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
-                finish();
+                deleteEvent(id);
             } else {
                 Log.e("AdminEventDetail", "Invalid event ID");
             }
         });
+
+        //old version of delete function, new version just easy for javadoc comments
+//        delete_button.setOnClickListener(v -> {
+//            if (id != null && !id.isEmpty()) {
+//                overallStorageController.deleteEvent(id);
+//                Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
+//                if (eventList != null) {
+//                    eventList.removeIf(event -> event.getEventId().equals(id));
+//                }
+//
+//                eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+//
+//                //if (eventListDisplay  != null) {
+//                    //eventListDisplay.clear();
+//                    //for (Event event : eventList) {
+//                       // String info = "Name: " + event.getName() + "\nStart_date: " + event.getStartDate()
+//                                //+ "\nEnd_date: " + event.getEndDate();
+//                        //eventListDisplay.add(info);}}
+//
+//                Intent resultIntent = new Intent();
+//                resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
+//                setResult(RESULT_OK, resultIntent);
+//
+//                Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+//                finish();
+//            } else {
+//                Log.e("AdminEventDetail", "Invalid event ID");
+//            }
+//        });
     }
+    /**
+     * Deletes the specified event and updates the event list display. Sends the updated event list
+     * back to the previous activity.
+     *
+     * @param id The ID of the event to be deleted.
+     */
+    private void deleteEvent(String id) {
+        overallStorageController.deleteEvent(id);
+        Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
+
+        if (eventList != null) {
+            eventList.removeIf(event -> event.getEventId().equals(id));
+        }
+
+        eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
+        setResult(RESULT_OK, resultIntent);
+
+        Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    /**
+     * Retrieves the encrypted image data from shared preferences.
+     *
+     * @return A string representing the encrypted image data.
+     */
 
     private String getEncryptedImageFromStorage() {
         return getSharedPreferences("EventDetails", MODE_PRIVATE).getString("encryptedPosterImage", null);
     }
+
+
+    /**
+     * Displays a decrypted event poster image on the ImageView.
+     *
+     * @param encryptedImage The encrypted image string to decrypt and display.
+     */
 
     private void displayDecryptedPosterImage(String encryptedImage) {
         try {
