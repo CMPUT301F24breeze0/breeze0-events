@@ -91,7 +91,8 @@ public class US010101 {
         // Step 3: Join the Event
         onView(withId(R.id.entrant_event_join)).perform(click());
 
-        final String eventId = "7"; // replace with actual event ID for testing
+        final String eventId = "1"; // replace with actual event ID for testing
+        Thread.sleep(2000);
 
         storageController.getEvent(eventId, new EventCallback() {
             @Override

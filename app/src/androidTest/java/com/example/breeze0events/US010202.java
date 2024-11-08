@@ -25,6 +25,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 @RunWith(AndroidJUnit4.class)
 public class US010202 {
 
@@ -48,6 +51,7 @@ public class US010202 {
 
     @After
     public void tearDown() {
+        // Release Intents after test and delete the entrant
         release();
         storageController.deleteEntrant(deviceId);
     }
@@ -82,23 +86,30 @@ public class US010202 {
         onView(withId(R.id.editTextName)).perform(replaceText("Jane Doe"));
         onView(withId(R.id.editTextEmail)).perform(replaceText("janedoe@example.com"));
         onView(withId(R.id.editTextPhone)).perform(replaceText("0987654321"));
-        onView(withId(R.id.buttonUpdateProfile)).perform(click());  // Assuming there's a save button
+        onView(withId(R.id.buttonUpdateProfile)).perform(click());
 
-        // Step 4: Confirm return to EntrantMylistActivity without specifying exact intent count
-        Thread.sleep(1000);
+        // Step 4: Confirm return to EntrantMylistActivity
+        Thread.sleep(2000);
         onView(withId(R.id.entrantName)).check(matches(withText("Jane Doe")));
 
         // Step 5: Verify the backend has the updated information
+        verifyProfileInBackend("Jane Doe", "janedoe@example.com", "0987654321");
+    }
+
+    private void verifyProfileInBackend(String expectedName, String expectedEmail, String expectedPhone) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+
         storageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
-                if ("Jane Doe".equals(entrant.getName()) &&
-                        "janedoe@example.com".equals(entrant.getEmail()) &&
-                        "0987654321".equals(entrant.getPhoneNumber())) {
+                if (expectedName.equals(entrant.getName()) &&
+                        expectedEmail.equals(entrant.getEmail()) &&
+                        expectedPhone.equals(entrant.getPhoneNumber())) {
                     Log.d("Test", "Profile information updated successfully.");
                 } else {
                     throw new AssertionError("Profile information did not update correctly.");
                 }
+                latch.countDown();
             }
 
             @Override
@@ -106,6 +117,10 @@ public class US010202 {
                 throw new AssertionError("Failed to retrieve entrant profile: " + errorMessage);
             }
         });
-    }
 
+        // Wait for the latch to complete before proceeding
+        if (!latch.await(10, TimeUnit.SECONDS)) {
+            throw new AssertionError("Backend verification timed out.");
+        }
+    }
 }

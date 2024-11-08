@@ -5,12 +5,14 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -84,9 +86,9 @@ public class US010601 {
         onView(withId(R.id.buttonEventSearch)).perform(click());
 
         Thread.sleep(2000);
-        onData(anything()).inAdapterView(withId(R.id.event_search_view)).atPosition(2).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.event_search_view)).atPosition(0).perform(click());
 
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         // Long-click on QR code to download it
         onView(withId(R.id.Entrent_event_QRcode)).perform(longClick());
@@ -119,7 +121,11 @@ public class US010601 {
 
         intending(hasAction(Intent.ACTION_PICK)).respondWith(result);
 
+        Thread.sleep(10000);
+
+        //Manually select the image from named "downloaded_image.jpg" just downloaded
+
         // Confirm navigation to EntrantEventDetail if QR code processed successfully
-        intended(hasComponent(EntrantEventDetail.class.getName()));
+        onView(withId(R.id.entrant_event_join)).check(matches(isDisplayed()));
     }
 }

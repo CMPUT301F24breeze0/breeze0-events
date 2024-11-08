@@ -78,6 +78,9 @@ public class US010301 {
         onView(withId(R.id.profileImage)).perform(click());
         onView(withText("Upload")).check(matches(isDisplayed())).perform(click());
 
+        // Manually select an image from the gallery if needed
+
+        Thread.sleep(2000);
         // Finally, navigate back to EntrantMylistActivity
         intended(hasComponent(EntrantMylistActivity.class.getName()));
     }

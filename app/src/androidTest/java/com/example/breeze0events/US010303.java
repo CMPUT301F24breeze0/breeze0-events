@@ -80,6 +80,7 @@ public class US010303 {
         // Here, we might need to verify the exact placeholder or image generated based on the name "Jane Doe"
 
         // Additional verification checking visually for John is letter "J"
+        // Manually check the generated profile image for "John"
 
         Thread.sleep(2000);
         onView(withId(R.id.buttonReturn)).perform(click());

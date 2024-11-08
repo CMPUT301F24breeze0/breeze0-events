@@ -133,7 +133,7 @@ public class EntrantEventDetail extends AppCompatActivity {
     }
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
-        // 解码 Base64 字符串为字节数组
+        // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }

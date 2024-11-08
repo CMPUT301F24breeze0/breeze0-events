@@ -9,8 +9,11 @@ import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -27,14 +30,30 @@ public class US010201 {
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
             new ActivityTestRule<>(EntrantPreLoginActivity.class, true, false);
 
+    private String deviceId;
+    private OverallStorageController storageController;
+
     @Before
     public void setUp() {
         init();
+
+        // Get device ID to identify the entrant uniquely
+        Context context = ApplicationProvider.getApplicationContext();
+        deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // Initialize storage controller for handling entrant data
+        storageController = new OverallStorageController();
+
         activityRule.launchActivity(new Intent());
     }
 
     @After
     public void tearDown() {
+        // Delete entrant after test to avoid affecting future tests
+        if (deviceId != null && storageController != null) {
+            storageController.deleteEntrant(deviceId);
+        }
+
         // Release Intents after test
         release();
     }
