@@ -12,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * AdminOrganizerProfile class provides a detailed view of a specific organizer profile within
+ * the Breeze0Events application. This class allows the admin to view organizer information,
+ * edit certain details, and delete the organizer and their associated events from the database.
+ */
 public class AdminOrganizerProfile extends AppCompatActivity {
     private ArrayList<String> organizerList;
     private List<String> eventList;

@@ -25,12 +25,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is for showing the all entrant from databse to the list view
+ */
 public class AdminEntrantProfileActivity extends AppCompatActivity  {
-    /**
-     * This class is for showing the all entrant from databse to the list view
-     *
-     */
-
 
         private OverallStorageController overallStorageController;
         private FirebaseFirestore db;
