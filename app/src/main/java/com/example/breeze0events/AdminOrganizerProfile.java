@@ -15,9 +15,9 @@ import java.util.List;
 public class AdminOrganizerProfile extends AppCompatActivity {
     private ArrayList<String> organizerList;
     private List<String> eventList;
-   private Organizer organizer;
-   private String id;
-   private int position;
+    private Organizer organizer;
+    private String id;
+    private int position;
     private OverallStorageController overallStorageController;
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -47,16 +47,15 @@ public class AdminOrganizerProfile extends AppCompatActivity {
         });
         Button back_button=findViewById(R.id.back_in_profile_detail);
         back_button.setOnClickListener(v->{
-            Intent intent1=new Intent(AdminOrganizerProfile.this,AdminOrganizationProfileActivity.class);
-            startActivity(intent1);
+            finish();
         });
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
-            overallStorageController.deleteOrganizer(String.valueOf(id));
             String eventid;
             for(int i=0; i<eventList.size();i++){
                 eventid=eventList.get(i);
                 String finalEventid = eventid;
+                System.out.println(eventid);
                 overallStorageController.getEvent(String.valueOf(eventid),new EventCallback(){
                     @Override
                     public void onSuccess(Event event){
@@ -69,19 +68,19 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                                     entrant.getEventsName().remove(finalEventid);
                                 }
                                 public void onFailure(String errorMessage) {
-                                    Log.e("etrant", "Failed to fetch entrant: " + errorMessage);
+                                    Log.e("organizer", "Failed to fetch organizer: " + errorMessage);
                                 }
                             });
                         }
+                        overallStorageController.deleteEvent(finalEventid);
                     }
                     public void onFailure(String errorMessage) {
                         Log.e("event", "Failed to fetch event: ");
                     }
                 });
-
-                overallStorageController.deleteEvent(eventid);
             }
             organizerList.remove(position);
+            overallStorageController.deleteOrganizer(String.valueOf(id));
             Intent result=new Intent();
             result.putStringArrayListExtra("UPDATED_LIST",organizerList);
             setResult(RESULT_OK,result);

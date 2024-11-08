@@ -13,13 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+/**
+ * Activity class to display detailed info about a specific event for organizers.Organizers
+ * can view info like event name, facility, organizers, entrants, and the QR code,
+ * and navigate to further detail views.
+ */
 public class OrganizerEventInformationActivity extends AppCompatActivity {
 
-    Button backButton,organizerButton,entrantButton,nameButton,facilityButton,qrCodeButton;
+    Button backButton,organizerButton,entrantButton,nameButton,facilityButton,qrCodeButton,samplingButton;
     Event selected_event;
     OverallStorageController overallStorageController;
     String facilityName;
     ImageView posterPhoto;
+
+    /**
+     * Initializes the activity, retrieves the event details using the event ID from the intent,
+     * and sets up UI components.
+     * @param savedInstanceState If the activity is reinitialized, contains saved data.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +47,7 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
         facilityButton=findViewById(R.id.facility_text);
         qrCodeButton=findViewById(R.id.qr_code_text);
         posterPhoto=findViewById(R.id.qr_code_image);
+        samplingButton=findViewById(R.id.sampling_text);
         // Set click listener for back button
         backButton.setOnClickListener(v -> {
             // Return to OrganizerMyListActivity and destroy current activity
@@ -119,6 +131,15 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerEventDisplayQRcode.class);
                 intent.putExtra("qrcode", selected_event.getQrCode());
+                startActivity(intent);
+            }
+        });
+        samplingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerSamplingActivity.class);
+                intent.putExtra("eventId", selected_event.getEventId());  // 传递 eventId
+                intent.putExtra("selected_event", selected_event);        // 传递整个 Event 对象
                 startActivity(intent);
             }
         });

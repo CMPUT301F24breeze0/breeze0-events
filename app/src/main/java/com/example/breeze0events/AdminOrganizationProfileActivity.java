@@ -48,7 +48,7 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organization_profile_recycle);
         overallStorageController = new OverallStorageController();
-        organizerListView = findViewById(R.id.entrant_list_view);
+        organizerListView = findViewById(R.id.organizer_list_view);
         organizerList = new ArrayList<>();
         organizerListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, organizerList);
         organizerListView.setAdapter(organizerListAdapter);
@@ -86,8 +86,7 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
 
         Button back_button=findViewById(R.id.back_in_organizer_list);
         back_button.setOnClickListener(v->{
-            Intent intent1=new Intent(AdminOrganizationProfileActivity.this,AdminOperateActivity.class);
-            startActivity(intent1);
+            finish();
         });
         organizerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -29,6 +29,10 @@ import java.util.HashSet;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+/**
+ * Activity for managing facilities in the organizer's view.
+ * Allows organizers to view, add, edit, and delete facilities in the database.
+ */
 public class OrganizerFacilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -45,6 +49,7 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         Button back_button = findViewById(R.id.organizer_facility_activity_back_button);
         Button new_facility_button = findViewById(R.id.new_facility_button);
+        Button refresh_button = findViewById(R.id.organizer_facility_activity_refresh_button);
 
         overallStorageController = new OverallStorageController();
         facilityListView = findViewById(R.id.organizer_facility_list);
@@ -67,6 +72,14 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         // by clicking "New" button
         new_facility_button.setOnClickListener(v -> findSmallestAvailableId());
+
+        // by clicking "Refresh" button
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFacilities();
+            }
+        });
 
         // by long clicking anything on the list, the organizer can choose to delete or edit the facility
         facilityListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -156,6 +169,9 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Retrieves facility list data from FireStore and updates the ListView.
+     */
     private void loadFacilities() {
         CollectionReference collectionRef = db.collection("FacilityDB");
         collectionRef.get().addOnCompleteListener(task -> {
@@ -176,6 +192,9 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Finds the smallest available facility ID and opens the AddFacilityActivity.
+     */
     private void findSmallestAvailableId() {
         CollectionReference collectionRef = db.collection("FacilityDB");
 
@@ -207,6 +226,11 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Finds the next available ID that is not used by any existing facility.
+     * @param existingIds List of IDs currently used by facilities.
+     * @return The next available ID as a string.
+     */
     private String findNextAvailableId(ArrayList<Integer> existingIds) {
         for (int i = 1; i <= 100; i++) {
             if (!existingIds.contains(i)) {
