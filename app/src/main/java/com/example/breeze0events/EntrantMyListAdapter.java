@@ -12,20 +12,43 @@ import android.widget.Toast;
 
 import java.util.List;
 
+/**
+ * EntrantMyListAdapter is a custom adapter for displaying a list of events that an entrant has joined.
+ * It provides functionality for viewing details or unjoining an event through dialog options.
+ */
 public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
     private OnUnjoinListener unjoinListener;
     private EventNameProvider eventNameProvider;
     private ViewListener viewListener;
+
+    /**
+     * Interface to handle unjoin actions.
+     */
     public interface OnUnjoinListener {
         void onUnjoin(String eventId, int id);
     }
+
+    /**
+     * Interface to retrieve the name of an event based on its ID.
+     */
     public interface EventNameProvider {
         String getEventNameById(String eventId);
     }
+
+    /**
+     * Interface to handle view actions.
+     */
     public interface ViewListener {
         void onView(String eventId);
     }
 
+    /**
+     * Constructs a new EntrantMyListAdapter.
+     *
+     * @param context the current context
+     * @param events  the list of events represented by pairs of event IDs and statuses
+     * @throws RuntimeException if the context does not implement the required interfaces
+     */
     public EntrantMyListAdapter(Context context, List<Pair<String, String>> events) {
         super(context, 0, events);
         if (context instanceof EntrantMyListAdapter.OnUnjoinListener){
@@ -45,6 +68,16 @@ public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
         }
     }
 
+    /**
+     * Provides a view for each event in the list. Displays the event name and status, and includes
+     * a button for viewing or unjoining the event.
+     *
+     * @param position    the position of the item within the adapter's data set
+     * @param convertView the old view to reuse, if possible
+     * @param parent      the parent view that this view will eventually be attached to
+     * @return
+     * the view for the specified position in the adapter
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Reuse the view if possible

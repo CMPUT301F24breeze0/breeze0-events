@@ -1,5 +1,10 @@
 package com.example.breeze0events;
 import java.util.List;
+
+/**
+ * This is a class that defines the Admin.
+ */
+
 public class Admin {
     private String adminId; // Unique ID for the admin
     private String device; // Device information

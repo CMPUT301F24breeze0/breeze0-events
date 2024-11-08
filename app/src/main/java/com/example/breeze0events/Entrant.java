@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is a class that defines a Entrant.
+ */
+
 public class Entrant {
     private String entrantId;
     private String name;

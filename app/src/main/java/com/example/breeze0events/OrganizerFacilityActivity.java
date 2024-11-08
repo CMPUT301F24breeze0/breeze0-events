@@ -29,6 +29,10 @@ import java.util.HashSet;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+/**
+ * Activity for managing facilities in the organizer's view.
+ * Allows organizers to view, add, edit, and delete facilities in the database.
+ */
 public class OrganizerFacilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
@@ -165,6 +169,9 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Retrieves facility list data from FireStore and updates the ListView.
+     */
     private void loadFacilities() {
         CollectionReference collectionRef = db.collection("FacilityDB");
         collectionRef.get().addOnCompleteListener(task -> {
@@ -185,6 +192,9 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Finds the smallest available facility ID and opens the AddFacilityActivity.
+     */
     private void findSmallestAvailableId() {
         CollectionReference collectionRef = db.collection("FacilityDB");
 
@@ -216,6 +226,11 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Finds the next available ID that is not used by any existing facility.
+     * @param existingIds List of IDs currently used by facilities.
+     * @return The next available ID as a string.
+     */
     private String findNextAvailableId(ArrayList<Integer> existingIds) {
         for (int i = 1; i <= 100; i++) {
             if (!existingIds.contains(i)) {

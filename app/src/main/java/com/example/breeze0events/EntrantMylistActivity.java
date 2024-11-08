@@ -26,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * EntrantMylistActivity represents the main page for the Entrant containing the wishlist,
+ * profile of Entrant
+ */
 // This is the main page of the Entrant containing the wishlist, profile of Entrant
 public class EntrantMylistActivity extends AppCompatActivity implements EntrantMyListAdapter.OnUnjoinListener, EntrantMyListAdapter.EventNameProvider, EntrantMyListAdapter.ViewListener{
     private ImageView profileImage;
@@ -43,6 +47,11 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     private  List<Pair<String, String>> eventsList;
     private String deviceId;
 
+    /**
+     * Initializes the activity, sets up UI components, and loads the entrant's profile and event list.
+     *
+     * @param savedInstanceState the saved state of the activity
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,16 +100,32 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             startActivityForResult(intent, 100);
         });
     }
+
+    /**
+     * Decodes a Base64-encoded image string to a Bitmap.
+     *
+     * @param base64ImageString the Base64 string representing the image
+     * @return the decoded Bitmap
+     */
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
         // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
+    /**
+     * Updates the UI of the entrant's event list.
+     */
     public void updateUI(){
         EntrantAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Handles the "Unjoin" action, removing the entrant from an event and updating the database.
+     *
+     * @param eventId the ID of the event to unjoin
+     * @param id      the position of the event in the list
+     */
     // Unjoin event
     @Override
     public void onUnjoin(String eventId, int id) {
@@ -122,12 +147,25 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         });
     }
 
+    /**
+     * Gets the name of an event based on its ID.
+     *
+     * @param eventId the ID of the event
+     * @return the name of the event
+     */
     // Get event name
     @Override
     public String getEventNameById(String eventId) {
         return myEntrant.getName(eventId);
     }
 
+    /**
+     * Refreshes the list of events when a new intent is received. This is used for updating
+     * event statuses.
+     *
+     * @param intent
+     * the new intent containing the event update information
+     */
     // Update event status
     @Override
     protected void onNewIntent(Intent intent) {
@@ -153,6 +191,11 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         }
     }
 
+    /**
+     * Opens the details of an event when selected by the entrant.
+     *
+     * @param eventId the ID of the event to view
+     */
     // View event
     @Override
     public void onView(String eventId) {
@@ -161,6 +204,14 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         startActivity(intent);
     }
 
+    /**
+     * Handles the result from profile modification, updating the profile image and name if
+     * they were changed.
+     *
+     * @param requestCode the request code
+     * @param resultCode  the result code indicating success or failure
+     * @param data        the intent data containing updated profile information
+     */
     // Get updated profile data on Mylist
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -173,6 +224,10 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             profileImage.setImageBitmap(decodeBase64Image(updatedProfileImageString));
         }
     }
+
+    /**
+     * Updates the entrant's profile data, including the profile image, name, and list of joined events.
+     */
     // Update profile
     private void updateProfile(){
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
