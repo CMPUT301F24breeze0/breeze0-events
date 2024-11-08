@@ -92,7 +92,7 @@ public class US010102 {
         // Step 3: Join the Event
         onView(withId(R.id.entrant_event_join)).perform(click());
 
-        final String eventId = "1"; // replace with actual event ID for testing
+        final String eventId = "3"; // replace with actual event ID for testing
 
         // Step 4: Verify Join and Trigger Unjoin
         storageController.getEvent(eventId, new EventCallback() {
