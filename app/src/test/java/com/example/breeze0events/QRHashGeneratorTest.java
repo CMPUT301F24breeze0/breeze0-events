@@ -11,7 +11,7 @@ public class QRHashGeneratorTest {
     public void testGenerateHash_validInput() {
         // Arrange
         String input = "testInput";
-        String expectedHash = "f5d1278e8109edd94e1e4197e04873b9ac88b548cdaf7d33b0f41f8ef9cda51a"; // 预期的 SHA-256 哈希
+        String expectedHash = "f5d1278e8109edd94e1e4197e04873b9ac88b548cdaf7d33b0f41f8ef9cda51a";
 
         // Act
         String generatedHash = QRHashGenerator.generateHash(input);
@@ -25,7 +25,7 @@ public class QRHashGeneratorTest {
     public void testGenerateHash_emptyInput() {
         // Arrange
         String input = "";
-        String expectedHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"; // 空字符串的 SHA-256 哈希值
+        String expectedHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
         // Act
         String generatedHash = QRHashGenerator.generateHash(input);
