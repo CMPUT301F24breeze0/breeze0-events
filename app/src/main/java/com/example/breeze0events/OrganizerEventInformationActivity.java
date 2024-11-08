@@ -127,6 +127,8 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerSamplingActivity.class);
+                intent.putExtra("eventId", selected_event.getEventId());  // 传递 eventId
+                intent.putExtra("selected_event", selected_event);        // 传递整个 Event 对象
                 startActivity(intent);
             }
         });
