@@ -45,6 +45,7 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         Button back_button = findViewById(R.id.organizer_facility_activity_back_button);
         Button new_facility_button = findViewById(R.id.new_facility_button);
+        Button refresh_button = findViewById(R.id.organizer_facility_activity_refresh_button);
 
         overallStorageController = new OverallStorageController();
         facilityListView = findViewById(R.id.organizer_facility_list);
@@ -67,6 +68,14 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         // by clicking "New" button
         new_facility_button.setOnClickListener(v -> findSmallestAvailableId());
+
+        // by clicking "Refresh" button
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFacilities();
+            }
+        });
 
         // by long clicking anything on the list, the organizer can choose to delete or edit the facility
         facilityListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

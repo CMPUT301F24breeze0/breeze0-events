@@ -78,8 +78,6 @@
         android:backgroundTint="@color/ui_background"
         android:text="Refresh"
         android:textColor="@color/text_color"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

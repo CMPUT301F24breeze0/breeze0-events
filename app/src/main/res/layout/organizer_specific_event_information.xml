@@ -56,7 +56,7 @@
         android:id="@+id/qr_code_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="QR Code"
@@ -65,14 +65,14 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qr_code_image" />
+        app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
 
     <!-- Facility Button -->
     <Button
         android:id="@+id/facility_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="Facility"
@@ -81,14 +81,14 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qr_code_text" />
+        app:layout_constraintTop_toBottomOf="@+id/qr_code_text" />
 
     <!-- Entrants Button -->
     <Button
         android:id="@+id/entrants_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="Entrants"
@@ -97,14 +97,14 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/facility_text" />
+        app:layout_constraintTop_toBottomOf="@+id/facility_text" />
 
     <!-- Organizers Button -->
     <Button
         android:id="@+id/organizers_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="Organizers"
@@ -113,6 +113,23 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/entrants_text" />
+        app:layout_constraintTop_toBottomOf="@+id/entrants_text" />
+
+    <!-- Sampling Button -->
+    <Button
+        android:id="@+id/sampling_text"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/button_color"
+        android:gravity="center"
+        android:text="Sampling"
+        android:textColor="@color/text_color"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizers_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
