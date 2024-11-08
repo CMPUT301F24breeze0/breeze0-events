@@ -11,12 +11,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+
+/**
+ * The AdminSelectedEvents class displays the details of a selected event, allowing the admin
+ * to view additional event information, navigate to more detailed views, or view the QR code
+ * associated with the selected event.
+ */
+
 public class AdminSelectedEvents extends AppCompatActivity {
     TextView EventName;
     Button backButton,DetailButton,QRCodeButton,imageButton;
     Event selected_event;
     OverallStorageController overallStorageController;
     String facilityName;
+
+    /**
+     * Initializes the activity, sets up UI components, and retrieves the selected event details from
+     * the intent. Allows the admin to view event details, navigate to event detail view, or view the QR code.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     *
+     */
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
