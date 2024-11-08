@@ -183,6 +183,8 @@
             android:name=".OrganizerEventDisplayFacility"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity android:name=".AdminEntrantProfileActivity" />
+        <activity android:name=".AdminentrantProfile" />
 
 
     </application>

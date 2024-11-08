@@ -23,7 +23,7 @@ public class AdminOrganizerProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         organizerList=new ArrayList<>();
         eventList=new ArrayList<>();
-        setContentView(R.layout.profile_detail);
+        setContentView(R.layout.organization_profile_detail);
         overallStorageController = new OverallStorageController();
         id=getIntent().getStringExtra("SELECTED_ID");
         position=getIntent().getIntExtra("SELECTED_POSITION",-1);

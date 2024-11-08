@@ -27,10 +27,10 @@ import java.util.HashMap;
 
 public class AdminOrganizationProfileActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
-    private FirebaseFirestore db;
-    private HashMap<String, String> organizerIdMap;
+    public FirebaseFirestore db;
+    public HashMap<String, String> organizerIdMap;
     private ArrayAdapter<String> organizerListAdapter;
-    private ArrayList<String> organizerList;
+    public ArrayList<String> organizerList;
     private ListView organizerListView;
     private final ActivityResultLauncher<Intent> profileDetailLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -48,13 +48,14 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organization_profile_recycle);
         overallStorageController = new OverallStorageController();
-        organizerListView = findViewById(R.id.organizerListVie);
+        organizerListView = findViewById(R.id.entrant_list_view);
         organizerList = new ArrayList<>();
         organizerListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, organizerList);
         organizerListView.setAdapter(organizerListAdapter);
         FirebaseFirestore db =FirebaseFirestore.getInstance();
         CollectionReference collectionRef=db.collection("OrganizerDB");
         organizerIdMap = new HashMap<>();
+
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -82,7 +83,8 @@ public class AdminOrganizationProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        Button back_button=findViewById(R.id.back_in_organ_list);
+
+        Button back_button=findViewById(R.id.back_in_organizer_list);
         back_button.setOnClickListener(v->{
             Intent intent1=new Intent(AdminOrganizationProfileActivity.this,AdminOperateActivity.class);
             startActivity(intent1);
