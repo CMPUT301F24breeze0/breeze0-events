@@ -11,8 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.content.Intent;
 
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -23,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class US_01_02_01test {
+public class US010201 {
 
     @Rule
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
