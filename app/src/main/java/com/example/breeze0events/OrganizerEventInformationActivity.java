@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class OrganizerEventInformationActivity extends AppCompatActivity {
 
-    Button backButton,organizerButton,entrantButton,nameButton,facilityButton,qrCodeButton;
+    Button backButton,organizerButton,entrantButton,nameButton,facilityButton,qrCodeButton,samplingButton;
     Event selected_event;
     OverallStorageController overallStorageController;
     String facilityName;
@@ -36,6 +36,7 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
         facilityButton=findViewById(R.id.facility_text);
         qrCodeButton=findViewById(R.id.qr_code_text);
         posterPhoto=findViewById(R.id.qr_code_image);
+        samplingButton=findViewById(R.id.sampling_text);
         // Set click listener for back button
         backButton.setOnClickListener(v -> {
             // Return to OrganizerMyListActivity and destroy current activity
@@ -119,6 +120,13 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerEventDisplayQRcode.class);
                 intent.putExtra("qrcode", selected_event.getQrCode());
+                startActivity(intent);
+            }
+        });
+        samplingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerSamplingActivity.class);
                 startActivity(intent);
             }
         });
