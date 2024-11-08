@@ -9,6 +9,7 @@ import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.CoreMatchers.anything;
 
@@ -29,7 +30,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class US010101 {
+public class US010102 {
 
     @Rule
     public ActivityTestRule<EntrantPreLoginActivity> activityRule =
@@ -56,7 +57,7 @@ public class US010101 {
     }
 
     @Test
-    public void testNewUserSignupAndJoinEvent() throws InterruptedException {
+    public void testNewUserSignupJoinAndUnjoinEvent() throws InterruptedException {
         // Step 1: New User Signup
         onView(withId(R.id.buttonFirstTimeUse)).perform(click());
 
@@ -91,20 +92,41 @@ public class US010101 {
         // Step 3: Join the Event
         onView(withId(R.id.entrant_event_join)).perform(click());
 
-        final String eventId = "7"; // replace with actual event ID for testing
+        final String eventId = "1"; // replace with actual event ID for testing
 
+        // Step 4: Verify Join and Trigger Unjoin
         storageController.getEvent(eventId, new EventCallback() {
             @Override
             public void onSuccess(Event event) {
                 List<String> entrants = event.getEntrants();
                 if (entrants.contains(deviceId)) {
                     Log.d("Test", "Entrant successfully joined the event");
-                    // Remove entrant to clean up
-                    entrants.remove(deviceId);
-                    event.setEntrants(entrants);
-                    storageController.updateEvent(event);
+
+                    // Step 5: Attempt to Join Again to Trigger Unjoin Alert
+                    onView(withId(R.id.entrant_event_join)).perform(click());
+
+                    // Confirm "Yes" on Unjoin Alert
+                    onView(withText("Yes")).perform(click());
+
+                    // Step 6: Verify Entrant is removed from Event Entrants List
+                    storageController.getEvent(eventId, new EventCallback() {
+                        @Override
+                        public void onSuccess(Event updatedEvent) {
+                            List<String> updatedEntrants = updatedEvent.getEntrants();
+                            if (!updatedEntrants.contains(deviceId)) {
+                                Log.d("Test", "Entrant successfully unjoined the event");
+                            } else {
+                                throw new AssertionError("Entrant was not removed from event entrants list");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            throw new AssertionError("Failed to retrieve updated event: " + errorMessage);
+                        }
+                    });
                 } else {
-                    throw new AssertionError("Entrant not found in event entrants list");
+                    throw new AssertionError("Entrant was not added to event entrants list");
                 }
             }
 

@@ -156,7 +156,7 @@ public class EntrantEventDetail extends AppCompatActivity {
 //    }
     private void saveImageToStorage(EntrantEventDetail context, Bitmap bitmap) {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image_" + System.currentTimeMillis() + ".jpg");
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image.jpg");
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/MyAppImages");
 
