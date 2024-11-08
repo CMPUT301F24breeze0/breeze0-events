@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class OrganizerMyListActivityTest {
+public class US020201 {
 
     @Rule
     public ActivityTestRule<OrganizerMyListActivity> activityRule = new ActivityTestRule<>(OrganizerMyListActivity.class);

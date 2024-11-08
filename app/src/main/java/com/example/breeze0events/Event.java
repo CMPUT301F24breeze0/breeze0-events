@@ -102,6 +102,12 @@ public class Event {
     public void setEntrants(List<String> entrants) {
         this.entrants = entrants;
     }
+    public void addEntrants(String EntrantsId){
+        this.entrants.add(EntrantsId);
+    }
+    public void removeEntrant(String EntrantId){
+        this.entrants.remove(EntrantId);
+    }
 
     public List<String> getOrganizers() {
         return organizers;
