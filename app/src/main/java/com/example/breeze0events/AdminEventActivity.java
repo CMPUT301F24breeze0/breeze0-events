@@ -25,6 +25,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 
+
+/**
+ * The AdminEventActivity class displays a list of events fetched from Firebase.
+ * It allows the admin to refresh the event list, select an event to view details, and
+ * handles communication with the AdminSelectedEvents activity, send data of event info.
+ */
+
 public class AdminEventActivity extends AppCompatActivity {
     private ListView eventListView;
     private ArrayAdapter<String> eventListAdapter;
@@ -49,6 +56,14 @@ public class AdminEventActivity extends AppCompatActivity {
                     }
                 }
             });
+
+    /**
+     * Initializes the activity, sets up the UI elements, loads the initial events from Firebase,
+     * sets up click listeners for the refresh and return buttons as well as the ListView items.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     *
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +133,12 @@ public class AdminEventActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    /**
+     * Refreshes the event list by clearing current data and fetching updated data from Firebase.
+     * Displays a toast message upon completion.
+     */
 
     private void refreshEventList() {
         eventList.clear();
