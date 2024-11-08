@@ -23,6 +23,14 @@ import java.io.OutputStream;
 import android.util.Base64;
 import android.widget.Toast;
 
+
+/**
+ * The EntrantEventDetail class provides a detailed view of an event for an entrant,
+ * displaying info such as event title, description, poster, location and QR code.
+ * Entrants can join the event, save the event's QR code as an image.
+ * This class able to retrieve and update event and entrant data from FireStore.
+ */
+
 public class EntrantEventDetail extends AppCompatActivity {
     private TextView event_title;
     private TextView event_information;
@@ -35,6 +43,14 @@ public class EntrantEventDetail extends AppCompatActivity {
     private String eventLocation;
     private Event eventLocal;
     private int Mutex=1;
+
+    /**
+     * Called when the activity is created. Sets up the UI components, fetches event data,
+     * and initializes listeners for interaction with UI elements.
+     *
+     * @param savedInstanceState The saved instance state bundle
+     */
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,12 +147,26 @@ public class EntrantEventDetail extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Decodes a Base64-encoded string to a Bitmap.
+     *
+     * @param base64ImageString the Base64-encoded image string
+     * @return the decoded Bitmap image
+     */
+
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
         // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
+
+    /**
+     * Returns to the user's event list.
+     * Called after successfully joining an event.
+     */
+
     private void backToMyList(){
         Intent go_back = new Intent(EntrantEventDetail.this, EntrantMylistActivity.class);
         go_back.putExtra("update", eventID);
@@ -154,6 +184,14 @@ public class EntrantEventDetail extends AppCompatActivity {
 //
 //        MediaScannerConnection.scanFile(EntrantEventDetail.this, new String[] { file.getAbsolutePath() }, null, null);
 //    }
+
+    /**
+     * Saves a Bitmap image to external storage in a specified directory.
+     *
+     * @param context the activity context
+     * @param bitmap the image to save
+     */
+
     private void saveImageToStorage(EntrantEventDetail context, Bitmap bitmap) {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image.jpg");
