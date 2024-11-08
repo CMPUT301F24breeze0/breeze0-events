@@ -17,12 +17,13 @@
       <SelectionState runConfigName="OrganizerEditEventActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testUploadPosterButtonClickable()">
+      <SelectionState runConfigName="US020102">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testSaveButtonClickable()">
+      <SelectionState runConfigName="US020101">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+
       <SelectionState runConfigName="testBackButtonClickable()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
