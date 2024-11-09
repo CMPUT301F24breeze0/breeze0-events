@@ -8,6 +8,12 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * AdminOperateActivity class serves as the main hub for administrative operations within the
+ * Breeze0Events application. This activity provides navigation options for the admin to manage
+ * organizations and entrants, as well as a logout option.
+ */
+
 
 /**
  * this class is for  do the main browse profile activity which choose which type of profile you want to view like organizer and entrant

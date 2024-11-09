@@ -6,6 +6,11 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+/**
+ * AdminLoginActivity class provides the initial interface for administrators in the Breeze0Events
+ * application. This activity presents the main administrative options for managing profiles, events,
+ * and facilities, allowing navigation to other parts of the admin interface.
+ */
 
 public class AdminLoginActivity extends AppCompatActivity {
     @Override
