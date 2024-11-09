@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * This class is for browse the profile and delete the profile
+ *
+ */
+
 public class AdminentrantProfile extends AppCompatActivity {
-    /**
-     * This class is for browse the profile and delete the profile
-     */
     private ArrayList<String> entrantList;
     private ArrayList<String> eventList;
     private Map.Entry<String,String> eventidMap;

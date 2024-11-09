@@ -24,11 +24,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 /**
- * This class is for show the list of oragnizer
+ * AdminOrganizationProfileActivity class manages the UI and backend functionality for the
+ * admin view of organizational profiles in the Breeze0Events application. This class displays
+ * a list of organizers and allows the admin to view and edit specific organizer profiles.
  */
-public class AdminOrganizationProfileActivity extends AppCompatActivity {
+ public class AdminOrganizationProfileActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     public FirebaseFirestore db;
     public HashMap<String, String> organizerIdMap;
