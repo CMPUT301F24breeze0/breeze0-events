@@ -57,6 +57,9 @@ public class AdminEventActivity extends AppCompatActivity {
                 }
             });
 
+
+
+    @Override
     /**
      * Initializes the activity, sets up the UI elements, loads the initial events from Firebase,
      * sets up click listeners for the refresh and return buttons as well as the ListView items.
@@ -64,9 +67,8 @@ public class AdminEventActivity extends AppCompatActivity {
      * @param savedInstanceState The saved instance state of the activity.
      *
      */
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remove_events_page);
         Button return_button = findViewById(R.id.backButton);
