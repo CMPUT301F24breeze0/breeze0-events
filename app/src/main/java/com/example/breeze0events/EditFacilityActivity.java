@@ -7,6 +7,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * EditFacilityActivity class provides the functionality for editing facility information
+ * . This activity allows admins to view and update the name of a specific facility.
+ */
+
 public class EditFacilityActivity extends AppCompatActivity {
     private EditText facilityNameInput;
     private String facilityId;

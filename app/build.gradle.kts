@@ -35,6 +35,7 @@ android {
     }
 }
 dependencies {
+//    implementation(files("/C:/Users/Qingyun/AppData/Local/Android/Sdk/platforms/android-34/android.jar"))
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
