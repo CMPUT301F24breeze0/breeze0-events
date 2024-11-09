@@ -85,7 +85,9 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Event event) {
                 selectedEvent = event;
+
                 // limitedNumber = Integer.parseInt(event.getLimitedNumber());
+
                 try {
                     limitedNumber = Integer.parseInt(selectedEvent.getLimitedNumber());
                 } catch (NumberFormatException e) {
@@ -181,6 +183,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
             }
         }
+
 
 
         loadEntrantsWithJoinedStatus();

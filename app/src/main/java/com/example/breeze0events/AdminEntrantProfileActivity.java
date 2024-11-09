@@ -25,8 +25,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is for showing the all entrant from databse to the list view
+ */
 public class AdminEntrantProfileActivity extends AppCompatActivity  {
-
 
         private OverallStorageController overallStorageController;
         private FirebaseFirestore db;
@@ -60,12 +62,15 @@ public class AdminEntrantProfileActivity extends AppCompatActivity  {
             collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    /**
+                     * it is for getting the all entrant from database and display in the listview
+                     * @param  task it is the all entrant in the database
+                     */
                     if (task.isSuccessful()) {
                         Log.d("FirestoreDebug", "Query successful, documents fetched: " + task.getResult().size());
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("FirestoreDebug", "Document ID: " + document.getId());
                             String docId = document.getId();
-                            System.out.println(docId);
                             overallStorageController.getEntrant(String.valueOf(docId), new EntrantCallback() {
                                 @Override
                                 public void onSuccess(Entrant entrant) {
@@ -96,6 +101,13 @@ public class AdminEntrantProfileActivity extends AppCompatActivity  {
             entrantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    /**
+                     * it is for transform the the selected entrant's imformation to next page so we can access and make change to entrant information
+                     * @param parent it is the parent of view
+                     * @param view it is the current view
+                     * @param position it is the position i selected
+                     * @param id the row ID of the item that was clicked
+                     */
                     String entrantInfo = entrantList.get(position);
                     String entrantId=entrantIdMap.get(entrantInfo);
                     Intent intent = new Intent(AdminEntrantProfileActivity.this, AdminentrantProfile.class);

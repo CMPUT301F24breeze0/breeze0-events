@@ -170,7 +170,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setIntent(intent);  // 更新当前的 Intent
+        setIntent(intent);
         String update_event_id = intent.getStringExtra("update");
         if (Objects.equals(update_event_id, "SetImage")){
             updateProfile();
