@@ -56,7 +56,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         entrantDisplayList = new ArrayList<>();
         joinedEntrants = new ArrayList<>();
 
-        entrantAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entrantDisplayList);
+        entrantAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayList);
         entrantListView.setAdapter(entrantAdapter);
 
         // Assume eventId is passed via intent
@@ -64,7 +64,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         // Load data
         loadEventDetails(eventId);
-        loadEntrantsWithJoinedStatus();
+       // loadEntrantsWithJoinedStatus();
 
         Button pickApplicantButton = findViewById(R.id.organizer_sampling_activity_pick_new_applicant_button);
         Button backButton = findViewById(R.id.organizer_sampling_activity_back_button);
@@ -85,12 +85,14 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Event event) {
                 selectedEvent = event;
-                // limitedNumber = Integer.parseInt(event.getLimitedNumber()); // limitedNumber
+
+                // limitedNumber = Integer.parseInt(event.getLimitedNumber());
+
                 try {
                     limitedNumber = Integer.parseInt(selectedEvent.getLimitedNumber());
                 } catch (NumberFormatException e) {
                     Log.e("OrganizerSampling", "Invalid limitedNumber format: " + selectedEvent.getLimitedNumber());
-                    limitedNumber = 0; // 设置默认值，避免后续代码出错
+                    limitedNumber = 0;
                 }
                 loadEntrantsWithJoinedStatus();
             }
@@ -111,7 +113,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         Log.d("OrganizerSampling", "eventId: " + eventId);
 
-        db.collection("EntrantDB").whereArrayContains("events", eventId).get()
+        db.collection("EntrantDB").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("OrganizerSampling", "Database query successful");
@@ -170,7 +172,6 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         Collections.shuffle(joinedEntrants);
         List<DocumentSnapshot> selectedEntrants = joinedEntrants.subList(0, Math.min(remainingSlots, joinedEntrants.size()));
-
         for (DocumentSnapshot entrant : selectedEntrants) {
             Map<String, String> statusMap = (Map<String, String>) entrant.get("status");
             Map<String, String> eventsMap = (Map<String, String>) entrant.get("events");
@@ -182,6 +183,8 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
             }
         }
+
+
 
         loadEntrantsWithJoinedStatus();
     }
