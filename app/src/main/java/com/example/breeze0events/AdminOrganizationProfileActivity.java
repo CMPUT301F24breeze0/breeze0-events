@@ -48,6 +48,11 @@ import java.util.HashMap;
                     }
                 }
             });
+
+    /**
+     * this method is for gain the organizer from database and show it
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organization_profile_recycle);
@@ -62,6 +67,10 @@ import java.util.HashMap;
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
+            /**
+             * this method and gain change the organizer information
+             * @param task
+             */
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -94,6 +103,13 @@ import java.util.HashMap;
         });
         organizerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+            /**
+             * this method is for transform data to next page
+             * @param parent
+             * @param view
+             * @param position
+             * @param id
+             */
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String organizerInfo = organizerList.get(position);
                 String organizerId=organizerIdMap.get(organizerInfo);

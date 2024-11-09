@@ -15,9 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 
-
+/**
+ * this class is for  do the main browse profile activity which choose which type of profile you want to view like organizer and entrant
+ */
 public class AdminOperateActivity extends AppCompatActivity {
     @Override
+    /**
+     * it is to click the button which can go to the type of profile you want to view
+     * @param sacedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_main_activity);

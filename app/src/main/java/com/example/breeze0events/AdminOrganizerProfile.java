@@ -63,6 +63,10 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                 System.out.println(eventid);
                 overallStorageController.getEvent(String.valueOf(eventid),new EventCallback(){
                     @Override
+                    /**
+                     * to make change for the event
+                     * @param event the event you want to find
+                     */
                     public void onSuccess(Event event){
                         List<String> entrantList= new ArrayList<>();
                         entrantList=event.getEntrants();
@@ -79,6 +83,10 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                         }
                         overallStorageController.deleteEvent(finalEventid);
                     }
+                    /**
+                     * to show something if it can not find the event with the eventid
+                     * @param errorMessage the message displayed when it can not find the event
+                     */
                     public void onFailure(String errorMessage) {
                         Log.e("event", "Failed to fetch event: ");
                     }

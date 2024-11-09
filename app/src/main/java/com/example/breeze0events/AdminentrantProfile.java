@@ -26,6 +26,11 @@ public class AdminentrantProfile extends AppCompatActivity {
     private int position;
     private OverallStorageController overallStorageController;
     protected void onCreate(Bundle savedInstanceState){
+        /**
+         * In this function i gain the selected entrant's information from last page and display and
+         * detail page, also there is a delete button which can click to delete the entrant
+         * @param savedInstanceState
+         */
         super.onCreate(savedInstanceState);
         entrantList=new ArrayList<>();
         eventList=new ArrayList<>();

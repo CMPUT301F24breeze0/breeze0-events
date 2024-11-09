@@ -64,7 +64,7 @@ public class AdminEntrantProfileActivity extends AppCompatActivity  {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     /**
                      * it is for getting the all entrant from database and display in the listview
-                     * @param Task<QuerySnapshot> task
+                     * @param  task it is the all entrant in the database
                      */
                     if (task.isSuccessful()) {
                         Log.d("FirestoreDebug", "Query successful, documents fetched: " + task.getResult().size());
