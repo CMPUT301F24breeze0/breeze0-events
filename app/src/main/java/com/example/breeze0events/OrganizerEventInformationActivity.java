@@ -138,7 +138,9 @@ public class OrganizerEventInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrganizerEventInformationActivity.this, OrganizerSamplingActivity.class);
+
                 intent.putExtra("eventId", selected_event.getEventId());
+
                 intent.putExtra("selected_event", selected_event);
                 startActivity(intent);
             }
