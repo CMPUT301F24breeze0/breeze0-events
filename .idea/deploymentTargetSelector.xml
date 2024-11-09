@@ -13,19 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="US010301">
+      <SelectionState runConfigName="testPickNewApplicants()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="US010302">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="US010303">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="US010601">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="US010602">
+      <SelectionState runConfigName="testPickNewApplicantsButtonClick()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
