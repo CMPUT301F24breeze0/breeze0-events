@@ -23,8 +23,8 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private FirebaseFirestore db;
     private ListView entrantListView;
-    private ArrayAdapter<String> entrantAdapter;
-    private ArrayList<String> entrantDisplayList;
+    ArrayAdapter<String> entrantAdapter;
+    ArrayList<String> entrantDisplayList;
     ArrayList<DocumentSnapshot> joinedEntrants;
     private TextView remainingSlotsTextView;
     int limitedNumber; // Maximum number of entrants allowed
