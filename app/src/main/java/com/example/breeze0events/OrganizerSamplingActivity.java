@@ -85,7 +85,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Event event) {
                 selectedEvent = event;
-                // limitedNumber = Integer.parseInt(event.getLimitedNumber()); // 确保 limitedNumber 是整数类型
+                // limitedNumber = Integer.parseInt(event.getLimitedNumber()); // limitedNumber
                 try {
                     limitedNumber = Integer.parseInt(selectedEvent.getLimitedNumber());
                 } catch (NumberFormatException e) {
@@ -183,7 +183,6 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             }
         }
 
-        // 重新加载数据以更新 ListView
         loadEntrantsWithJoinedStatus();
     }
 }
