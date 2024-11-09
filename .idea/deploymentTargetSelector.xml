@@ -13,11 +13,6 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-<<<<<<< Updated upstream
-      <SelectionState runConfigName="US010101">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-=======
       <SelectionState runConfigName="US010602">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -30,7 +25,6 @@
       <SelectionState runConfigName="OverallLoginPageTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
->>>>>>> Stashed changes
     </selectionStates>
   </component>
 </project>

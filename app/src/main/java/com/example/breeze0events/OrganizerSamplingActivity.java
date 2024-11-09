@@ -25,10 +25,10 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     private ListView entrantListView;
     private ArrayAdapter<String> entrantAdapter;
     private ArrayList<String> entrantDisplayList;
-    private ArrayList<DocumentSnapshot> joinedEntrants;
+    ArrayList<DocumentSnapshot> joinedEntrants;
     private TextView remainingSlotsTextView;
-    private int limitedNumber; // Maximum number of entrants allowed
-    private int requestedCount; // Number of entrants already requested
+    int limitedNumber; // Maximum number of entrants allowed
+    int requestedCount; // Number of entrants already requested
     private String eventId; // The ID of the current event
     private Event selectedEvent;
 
@@ -161,7 +161,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         remainingSlotsTextView.setText("Remaining slots: " + remainingSlots);
     }
 
-    private void pickNewApplicants() {
+    void pickNewApplicants() {
         int remainingSlots = limitedNumber - requestedCount;
         if (remainingSlots <= 0) {
             Toast.makeText(this, "No remaining slots available", Toast.LENGTH_SHORT).show();
