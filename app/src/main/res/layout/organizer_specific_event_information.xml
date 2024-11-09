@@ -56,7 +56,7 @@
         android:id="@+id/qr_code_text"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/button_color"
         android:gravity="center"
         android:text="QR Code"
@@ -65,7 +65,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
+        app:layout_constraintTop_toBottomOf="@+id/event_name" />
 
     <!-- Facility Button -->
     <Button
