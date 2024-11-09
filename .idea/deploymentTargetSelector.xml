@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="US010602">
+      <SelectionState runConfigName="US020601">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="US010101">
@@ -22,7 +22,7 @@
       <SelectionState runConfigName="US010102">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="OverallLoginPageTest">
+      <SelectionState runConfigName="US030101">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
