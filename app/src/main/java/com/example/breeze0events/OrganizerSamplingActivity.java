@@ -22,13 +22,13 @@ import java.util.Map;
 public class OrganizerSamplingActivity extends AppCompatActivity {
     private OverallStorageController overallStorageController;
     private FirebaseFirestore db;
-    private ListView entrantListView;
-    ArrayAdapter<String> entrantAdapter;
-    ArrayList<String> entrantDisplayList;
+    private ListView entrantListViewRequested,entrantListViewAccepted,entrantListViewRejected;
+    ArrayAdapter<String> entrantAdapterRequested,entrantAdapterAccepted,entrantAdapterRejected;
+    ArrayList<String> entrantDisplayRequested,entrantDisplayAccepted,entrantDisplayRejected;
     ArrayList<DocumentSnapshot> joinedEntrants;
     private TextView remainingSlotsTextView;
     int limitedNumber; // Maximum number of entrants allowed
-    int requestedCount; // Number of entrants already requested
+    int requestedCount,acceptedCount; // Number of entrants already requested
     private String eventId; // The ID of the current event
     private Event selectedEvent;
 
@@ -51,13 +51,23 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         overallStorageController = new OverallStorageController();
         db = FirebaseFirestore.getInstance();
-        entrantListView = findViewById(R.id.organizer_sampling_activity_wait_list);
+        entrantListViewRequested = findViewById(R.id.organizer_sampling_activity_requested);
+        entrantListViewAccepted = findViewById(R.id.organizer_sampling_activity_accepted);
+        entrantListViewRejected = findViewById(R.id.organizer_sampling_activity_rejected);
         remainingSlotsTextView = findViewById(R.id.display_entrant_number_text);
-        entrantDisplayList = new ArrayList<>();
+        entrantDisplayRequested = new ArrayList<>();
+        entrantDisplayAccepted = new ArrayList<>();
+        entrantDisplayRejected = new ArrayList<>();
         joinedEntrants = new ArrayList<>();
 
-        entrantAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayList);
-        entrantListView.setAdapter(entrantAdapter);
+        entrantAdapterRequested = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayRequested);
+        entrantListViewRequested.setAdapter(entrantAdapterRequested);
+
+        entrantAdapterAccepted = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayAccepted);
+        entrantListViewAccepted.setAdapter(entrantAdapterAccepted);
+
+        entrantAdapterRejected = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayRejected);
+        entrantListViewRejected.setAdapter(entrantAdapterRejected);
 
         // Assume eventId is passed via intent
        //  eventId = getIntent().getStringExtra("eventId");
@@ -107,9 +117,12 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     }
 
     private void loadEntrantsWithJoinedStatus() {
-        entrantDisplayList.clear();
+        entrantDisplayRequested.clear();
+        entrantDisplayAccepted.clear();
+        entrantDisplayRejected.clear();
         joinedEntrants.clear();
         requestedCount = 0;
+        acceptedCount = 0;
 
         Log.d("OrganizerSampling", "eventId: " + eventId);
 
@@ -131,24 +144,36 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 String status = statusMap.get(eventId);
                                 Log.d("OrganizerSampling", "Found matching event with status: " + status);
 
-                                if ("Selected".equals(status)) {
+                                if ("Requested".equals(status)) {
                                     String entrantName = document.getString("name");
-                                    entrantDisplayList.add(entrantName != null ? entrantName : "Unknown Entrant");
+                                    entrantDisplayRequested.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
-                                } else if ("Joined".equals(status)) {
-                                    joinedEntrants.add(document);
-                                } else if ("Requested".equals(status)) {
                                     requestedCount++;
                                     Log.d("OrganizerSampling", "Incremented requested count, current count: " + requestedCount);
+                                } else if ("Joined".equals(status)) {
+                                    joinedEntrants.add(document);
+                                } else if ("Accepted".equals(status)){
+                                    String entrantName = document.getString("name");
+                                    entrantDisplayAccepted.add(entrantName != null ? entrantName : "Unknown Entrant");
+                                    Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
+                                    acceptedCount++;
+                                    Log.d("OrganizerSampling", "Incremented requested count, current count: " + acceptedCount);
+                                }  else if ("Rejected".equals(status)){
+                                    String entrantName = document.getString("name");
+                                    entrantDisplayRejected.add(entrantName != null ? entrantName : "Unknown Entrant");
+                                    Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                 }
                             } else {
                                 Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
                             }
                         }
 
-                        entrantAdapter.notifyDataSetChanged();
+                        entrantAdapterRequested.notifyDataSetChanged();
+                        entrantAdapterRejected.notifyDataSetChanged();
+                        entrantAdapterAccepted.notifyDataSetChanged();
+
                         updateRemainingSlots();
-                        Log.d("OrganizerSampling", "Total entrants displayed: " + entrantDisplayList.size());
+                        Log.d("OrganizerSampling", "Total entrants displayed: " + entrantDisplayRequested.size());
                     } else {
                         Log.e("OrganizerSampling", "Failed to load entrants", task.getException());
                         Toast.makeText(OrganizerSamplingActivity.this, "Failed to load entrants", Toast.LENGTH_SHORT).show();
@@ -157,12 +182,12 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     }
 
     private void updateRemainingSlots() {
-        int remainingSlots = limitedNumber - requestedCount;
+        int remainingSlots = limitedNumber - requestedCount - acceptedCount;
         remainingSlotsTextView.setText("Remaining slots: " + remainingSlots);
     }
 
     void pickNewApplicants() {
-        int remainingSlots = limitedNumber - requestedCount;
+        int remainingSlots = limitedNumber - requestedCount - acceptedCount ;
         if (remainingSlots <= 0) {
             Toast.makeText(this, "No remaining slots available", Toast.LENGTH_SHORT).show();
             return;
@@ -177,7 +202,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             Map<String, String> eventsMap = (Map<String, String>) entrant.get("events");
 
             if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
-                statusMap.put(eventId, "Selected");
+                statusMap.put(eventId, "Requested");
                 db.collection("EntrantDB").document(entrant.getId()).update("status", statusMap)
                         .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status updated to Selected for entrant: " + entrant.getId()))
                         .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));

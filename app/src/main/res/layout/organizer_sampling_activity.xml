@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/orgaizer_sampling_activity_header_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginBottom="3dp"
+        android:text="Requested"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/organizer_sampling_activity_requested"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/organizer_sampling_activity_back_button"
         android:layout_width="wrap_content"
@@ -15,44 +27,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- First ListView with fixed height -->
+
     <TextView
         android:id="@+id/orgaizer_sampling_activity_header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Current Applicants"
+        android:text="Accepted"
         android:textColor="@color/text_color"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/organizer_sampling_activity_accepted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizer_sampling_activity_requested" />
+
+    <TextView
+        android:id="@+id/orgaizer_sampling_activity_header_text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rejected"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizer_sampling_activity_accepted" />
+
+    <ListView
+        android:id="@+id/organizer_sampling_activity_requested"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/view_background"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Second ListView with fixed height -->
     <ListView
-        android:id="@+id/organizer_sampling_activity_wait_list"
+        android:id="@+id/organizer_sampling_activity_accepted"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/view_background"
         android:divider="@color/listview_divider_color"
         android:dividerHeight="2dp"
-        app:layout_constraintBottom_toTopOf="@id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/organizer_sampling_activity_back_button" />
+        app:layout_constraintTop_toBottomOf="@id/organizer_sampling_activity_requested" />
+
+    <!-- Third ListView with fixed height -->
+    <ListView
+        android:id="@+id/organizer_sampling_activity_rejected"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/view_background"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/organizer_sampling_activity_accepted" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/view_background"
-        app:layout_constraintBottom_toTopOf="@+id/organizer_sampling_activity_pick_new_applicant_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/organizer_sampling_activity_rejected">
 
         <TextView
             android:id="@+id/display_entrant_number_text"
@@ -72,21 +126,24 @@
         android:id="@+id/organizer_sampling_activity_pick_new_applicant_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/button_color"
         android:text="Pick New Applicant"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <Button
         android:id="@+id/organizer_sampling_activity_refresh_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/ui_background"
         android:text="Refresh"
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/ui_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
