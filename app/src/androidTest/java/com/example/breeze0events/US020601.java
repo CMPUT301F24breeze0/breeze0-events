@@ -39,25 +39,25 @@ public class US020601 {
 
         // Manually populate entrantDisplayList with sample data
         activity.runOnUiThread(() -> {
-            activity.entrantDisplayList.add("John Doe");
-            activity.entrantDisplayList.add("Jane Smith");
-            activity.entrantDisplayList.add("Alex Johnson");
+            activity.entrantDisplayRequested.add("John Doe");
+            activity.entrantDisplayRequested.add("Jane Smith");
+            activity.entrantDisplayRequested.add("Alex Johnson");
 
             // Notify the adapter that data has changed
-            activity.entrantAdapter.notifyDataSetChanged();
+            activity.entrantAdapterRequested.notifyDataSetChanged();
         });
     }
 
     @Test
     public void testEntrantDisplayListShowsItems() {
         // Verify that each name is displayed in the ListView
-        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_wait_list))
+        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_requested))
                 .check(ViewAssertions.matches(ViewMatchers.hasDescendant(withText("John Doe"))));
 
-        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_wait_list))
+        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_requested))
                 .check(ViewAssertions.matches(ViewMatchers.hasDescendant(withText("Jane Smith"))));
 
-        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_wait_list))
+        Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_requested))
                 .check(ViewAssertions.matches(ViewMatchers.hasDescendant(withText("Alex Johnson"))));
     }
 }
