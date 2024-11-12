@@ -172,7 +172,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         Event item = eventList.get(pos);
                         String eventIdToDelete = item.getEventId();
                         String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-
+                        deleteEntrant(eventIdToDelete);
                         overallStorageController.deleteEvent(eventIdToDelete);
                         overallStorageController.deleteEventWithOrganizerCheck(eventIdToDelete, organizerId);
 
@@ -337,4 +337,36 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         eventListAdapter.notifyDataSetChanged();
         loadEventsFromFirebase();
     }
+
+    private void deleteEntrant(String eventId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("EntrantDB").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String entrantId;
+                overallStorageController=new OverallStorageController();
+                Log.d("DeleteEntrant", "Database query successful");
+                for (QueryDocumentSnapshot document : task.getResult()){
+                    entrantId=document.getId();
+                    overallStorageController.getEntrant(entrantId, new EntrantCallback() {
+                        @Override
+                        public void onSuccess(Entrant entrant) {
+                            entrant.UnjoinEvent(eventId);
+                            overallStorageController.updateEntrant(entrant);
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Log.d("DeleteEntrant", "Database query failed");
+                        }
+                    });
+                }
+            } else {
+                Log.e("DeleteEntrant", "Failed to query EntrantDB: " + task.getException().getMessage());
+            }
+        });
+    }
 }
+
+
+
+
