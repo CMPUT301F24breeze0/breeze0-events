@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "Part3_halfway" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "Part3_halfway" ]
 
 jobs:
   build:
@@ -22,10 +22,20 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
     - name: Build with Gradle
       run: ./gradlew build
     - name: Run Unit Test
       run: ./gradlew test
+
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        api-level: 30         
+        target: default
+        arch: x86_64       
+        profile: default
+        emulator-build: system-images;android-30;google_apis;x86_64
 
     # run emulator for UI Test
     - name: Start emulator
