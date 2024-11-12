@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
+
+/**
+ * This is a class that defines a Event.
+ */
+
 public class Event implements Serializable{
     private String eventId; // Event ID (previously organizerId)
     private String name; // Name of the event

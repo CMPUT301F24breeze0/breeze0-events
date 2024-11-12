@@ -11,10 +11,22 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+/**
+ * Activity for adding a new facility to the system.
+ * This activity allows users to enter a facility name and store it
+ * with a unique facility ID and device information.
+ */
+
 public class AddFacilityActivity extends AppCompatActivity {
     private String facilityId;
     private OverallStorageController overallStorageController;
 
+    /**
+     * Initializes the activity and sets up the UI components and event listeners.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this Bundle contains the saved state data.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

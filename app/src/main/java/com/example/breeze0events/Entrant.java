@@ -1,10 +1,11 @@
 package com.example.breeze0events;
-import android.app.usage.EventStats;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * This is a class that defines an Entrant.
+ */
 
 public class Entrant {
     private String entrantId;
@@ -14,9 +15,11 @@ public class Entrant {
     private String profilePhoto;
     private String device;
     private Map<String, String> eventsStatus; // Each Pair represents <eventId, Status>
-    private Map<String, String> eventsName; // Each Pair represents <eventId, Status>
+    private Map<String, String> eventsName; // Each Pair represents <eventId, Name>
+    private List<Pair<String, String>> notifications; // List of Pair<String, String> to store notifications
 
-    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device, Map<String, String> eventsName, Map<String, String> eventsStatus) {
+    public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device,
+                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications) {
         this.entrantId = entrantId;
         this.name = name;
         this.email = email;
@@ -25,6 +28,7 @@ public class Entrant {
         this.device = device;
         this.eventsStatus = eventsStatus;
         this.eventsName = eventsName;
+        this.notifications = notifications;
     }
 
     // Getters and setters for all fields
@@ -80,6 +84,7 @@ public class Entrant {
     public Map<String, String> getEventsName() {
         return eventsName;
     }
+
     public Map<String, String> getEventsStatus() {
         return eventsStatus;
     }
@@ -91,24 +96,27 @@ public class Entrant {
 
     public String getStatus(String EventId) {
         String Status = eventsStatus.get(EventId);
-        if(Status != null){
+        if (Status != null) {
             return Status;
         } else {
             return "-1";
         }
     }
-    public boolean checkEventId(String EventId){
+
+    public boolean checkEventId(String EventId) {
         return eventsName.containsKey(EventId);
     }
+
     public String getName(String EventId) {
         String name = eventsName.get(EventId);
-        if(name != null){
+        if (name != null) {
             return name;
         } else {
             return null;
         }
     }
-    public void UnjoinEvent(String EventId){
+
+    public void UnjoinEvent(String EventId) {
         eventsName.remove(EventId);
         eventsStatus.remove(EventId);
     }
@@ -116,6 +124,14 @@ public class Entrant {
     public void set_add_Event(String eventId, String eventName, String Status) {
         eventsStatus.put(eventId, Status);
         eventsName.put(eventId, eventName);
+    }
+
+    public List<Pair<String, String>> getNotifications() {
+        return notifications;
+    }
+
+    public void addNotification(String notificationId, String notificationContent) {
+        notifications.add(new Pair<>(notificationId, notificationContent));
     }
 
     @Override
@@ -129,6 +145,7 @@ public class Entrant {
                 ", device='" + device + '\'' +
                 ", events=" + eventsName +
                 ", status=" + eventsStatus +
+                ", notifications=" + notifications +
                 '}';
     }
 }

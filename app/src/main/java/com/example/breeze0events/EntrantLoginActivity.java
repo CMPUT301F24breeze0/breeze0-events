@@ -20,12 +20,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * The EntrantLoginActivity class allows a new user to sign up by entering their info,
+ * uploading a profile image, and generating a default image if user not provided. The activity
+ * stores this data and navigates to the entrant's main list screen upon successful registration.
+ */
+
 public class EntrantLoginActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private EditText editTextName, editTextEmail, editTextPhone;
     private ImageView profileImage;
     private Button buttonSignUp, buttonReturn;
     private String profileImageString;
+
+    /**
+     * Initializes the activity, sets up input fields, and adds listeners for the image selector,
+     * sign-up, and return buttons.
+     *
+     * @param savedInstanceState
+     * the saved state of the activity
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +68,7 @@ public class EntrantLoginActivity extends AppCompatActivity {
                 profileImageString = generateDefaultProfileImage(name);
             }
 
-            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new HashMap<>(), new HashMap<>());
+            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new HashMap<>(), new HashMap<>(),new ArrayList<>());
             new OverallStorageController().addEntrant(newEntrant);
 
             Intent intent = new Intent(EntrantLoginActivity.this, EntrantMylistActivity.class);
@@ -66,11 +81,22 @@ public class EntrantLoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Opens the image selector to allow the user to choose a profile image from the gallery.
+     */
     private void openImageSelector() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+
+    /**
+     * Handles the result from the image picker
+     *
+     * @param requestCode the request code for the image picker
+     * @param resultCode  the result code indicating success or failure
+     * @param data        the intent data containing the image URI
+     */
     // Handle result from image picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -87,6 +113,12 @@ public class EntrantLoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Converts a Bitmap to a Base64 string for storage.
+     *
+     * @param bitmap the Bitmap to be converted
+     * @return the Base64 encoded string representation of the bitmap
+     */
     // Convert a Bitmap to Base64 string for storage
     private String convertBitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -95,6 +127,13 @@ public class EntrantLoginActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
+    /**
+     * Generate a default profile image as a colored circle with the first letter of the user's name
+     *
+     * @param name
+     * the name of the user, used to determine the first letter
+     * @return a Base64 string representation of the generated image
+     */
     // Generate a default profile image as a colored circle with the first letter of the user's name
     private String generateDefaultProfileImage(String name) {
         // Get the first letter of the name

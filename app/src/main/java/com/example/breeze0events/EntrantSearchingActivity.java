@@ -27,6 +27,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The EntrantSearchingActivity class provides a UI for entrants to search for events
+ * based on keywords and location. This activity allows users to filter event listings, view details,
+ * and refresh the list to show updated info from the database.
+ */
 public class EntrantSearchingActivity extends AppCompatActivity implements EntrantKeywordFilter.OnFragmentInteractionListener{
     private TextView search_title;
     private Button filter;
@@ -38,6 +43,13 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
     private Button refreshButton;
     private OverallStorageController overallStorageController;
     int limit = 20, semaphore = 0;
+
+    /**
+     * Updates the current keyword and location filters based on the user's input.
+     *
+     * @param keyword  The keyword to filter events by.
+     * @param location The location to filter events by.
+     */
     @Override
     public void UpdateKeyword(String keyword, String location) {
         this.keyword = keyword;
@@ -45,6 +57,12 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
         updateList();
     }
 
+    /**
+     * Called when the activity is first created. Initializes the user interface components, sets up
+     * event listeners for filtering and refreshing the event list, and loads the initial list of events.
+     *
+     * @param savedInstanceState The saved instance state bundle, if available.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +109,11 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
         });
     }
 
+    /**
+     * Updates the event list by fetching data from the database based on the current keyword
+     * and location filters. Limits the number of events retrieved and uses a semaphore to
+     * manage data loading state.
+     */
     // Synchronize data by loading from database
     private void updateList(){
         if (semaphore != 0){

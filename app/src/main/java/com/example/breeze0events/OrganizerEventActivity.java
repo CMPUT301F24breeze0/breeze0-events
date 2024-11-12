@@ -32,7 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+/**
+ * The OrganizerEventActivity class allows organizers to create and edit events,
+ * including setting event details, selecting facilities, uploading poster images,
+ * and generating QR codes for event access. The activity integrates with a shared
+ * storage controller for database operations.
+ */
 public class OrganizerEventActivity extends AppCompatActivity implements SelectFacilityForEventActivity.FacilitySelectListener {
     private static final int PICK_IMAGE_REQUEST = 2;
     private FirebaseFirestore db;
@@ -55,9 +60,20 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
 
     ArrayList<String> facilityList;
     // ImageView posterImageView;
+
+    /**
+     * Interface for fragment interaction, allowing communication with other fragments.
+     */
     public interface OnFragmentInteractionListener{
         void onOkPressed(Event newEvent);
     }
+
+    /**
+     * Called when the activity is first created. Initializes the UI components, sets up button
+     * click listeners, and prepares event details if editing an existing event.
+     *
+     * @param savedInstanceState The saved instance state bundle, if available.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -166,13 +182,20 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         backButton.setOnClickListener(v-> finish());
     }
 
+    /**
+     * Opens the device gallery for image selection to upload a poster image.
+     */
     private void openGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-
+    /**
+     * Handles the facility selection, updating the selected facility name.
+     *
+     * @param selectedFacilityName The name of the selected facility.
+     */
     @Override
     public void onFacilitySelected(String selectedFacilityName) {
         eventFacility = selectedFacilityName;
@@ -181,13 +204,24 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         selectedFacilityTextView.setText(selectedFacilityName);
     }
 
+    /**
+     * Retrieves the facility list from SharedPreferences.
+     *
+     * @return ArrayList of facility names saved in SharedPreferences.
+     */
     private ArrayList<String> getFacilityListFromSharedPreferences() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> facilitySet = prefs.getStringSet("facilityList", new HashSet<>());
         return new ArrayList<>(facilitySet);
     }
 
-
+    /**
+     * Handles the result from the gallery intent and updates the event's poster image.
+     *
+     * @param requestCode The request code originally supplied to startActivityForResult().
+     * @param resultCode  The result code returned by the child activity.
+     * @param data        An Intent that carries the result data.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
