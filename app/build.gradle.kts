@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.espresso.intents)
     implementation(libs.idling.concurrent)
     implementation(libs.uiautomator)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.core)

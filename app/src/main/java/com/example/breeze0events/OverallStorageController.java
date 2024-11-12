@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -32,8 +33,10 @@ public class OverallStorageController {
                 // Retrieve events and status lists
                 Map<String, String> eventsName = (Map<String, String>) documentSnapshot.get("events");
                 Map<String, String> eventsStatus = (Map<String, String>) documentSnapshot.get("status");
+                Map<String, GeoPoint> geoPointMap = (Map<String, GeoPoint>)documentSnapshot.get("Geolocation");
                 if (eventsName == null) eventsName = new HashMap<>();
                 if (eventsStatus == null) eventsStatus = new HashMap<>();
+                if (geoPointMap == null) geoPointMap = new HashMap<>();
 
                 // Retrieve notifications as a list of pairs
                 List<Map<String, String>> notificationsData = (List<Map<String, String>>) documentSnapshot.get("notifications");
@@ -47,7 +50,7 @@ public class OverallStorageController {
                 }
 
                 // Create Entrant object
-                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, eventsName, eventsStatus, notifications);
+                Entrant entrant = new Entrant(entrantId, name, email, phoneNumber, profilePhoto, device, eventsName, eventsStatus, notifications, geoPointMap);
                 callback.onSuccess(entrant);
             } else {
                 Log.d(TAG, "Entrant not found!");
@@ -70,6 +73,7 @@ public class OverallStorageController {
         entrantData.put("device", entrant.getDevice());
         entrantData.put("events", entrant.getEventsName());
         entrantData.put("status", entrant.getEventsStatus());
+        entrantData.put("Geolocation", entrant.getGeoPointMap());
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
@@ -97,6 +101,7 @@ public class OverallStorageController {
         entrantData.put("device", entrant.getDevice());
         entrantData.put("events", entrant.getEventsName());
         entrantData.put("status", entrant.getEventsStatus());
+        entrantData.put("Geolocation", entrant.getGeoPointMap());
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();

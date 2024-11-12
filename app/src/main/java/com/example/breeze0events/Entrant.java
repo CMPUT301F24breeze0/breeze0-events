@@ -1,5 +1,7 @@
 package com.example.breeze0events;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +19,10 @@ public class Entrant {
     private Map<String, String> eventsStatus; // Each Pair represents <eventId, Status>
     private Map<String, String> eventsName; // Each Pair represents <eventId, Name>
     private List<Pair<String, String>> notifications; // List of Pair<String, String> to store notifications
+    private Map<String, GeoPoint> geoPointMap;
 
     public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device,
-                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications) {
+                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications, Map<String, GeoPoint> geoPointMap) {
         this.entrantId = entrantId;
         this.name = name;
         this.email = email;
@@ -29,9 +32,21 @@ public class Entrant {
         this.eventsStatus = eventsStatus;
         this.eventsName = eventsName;
         this.notifications = notifications;
+        this.geoPointMap = geoPointMap;
     }
 
     // Getters and setters for all fields
+
+
+    public Map<String, GeoPoint> getGeoPointMap() {
+        return geoPointMap;
+    }
+    public void addGeoPoint(String eventId, GeoPoint geoPoint) {
+        this.geoPointMap.put(eventId, geoPoint);
+    }
+    public void setGeoPointMap(Map<String, GeoPoint> geoPointMap){
+        this.geoPointMap = geoPointMap;
+    }
 
     public String getEntrantId() {
         return entrantId;
