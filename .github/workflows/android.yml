@@ -26,5 +26,16 @@ jobs:
       run: ./gradlew build
     - name: Run Unit Test
       run: ./gradlew test
+
+    # run emulator for UI Test
+    - name: Start emulator
+      run: 
+          emulator -avd test -no-window -no-audio -no-boot-anim &
+          adb wait-for-device
+          adb shell input keyevent 82
+
     - name: Run UI Test
       run: ./gradlew connectedAndroidTest
+
+    - name: Stop emulator
+      run: adb -s emulator -5554 emu kill
