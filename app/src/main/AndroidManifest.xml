@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
 
@@ -34,11 +36,6 @@
         </activity>
 
         <!-- Entrant Activities -->
-        <activity
-            android:name=".EntrantEventActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Breeze0events" />
-
         <activity
             android:name=".EntrantLoginActivity"
             android:exported="true"
