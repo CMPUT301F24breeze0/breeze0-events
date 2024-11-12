@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "Part3_halfway" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "Part3_halfway" ]
+    branches: [ "main" ]
 
 jobs:
   build:
