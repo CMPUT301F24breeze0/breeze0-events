@@ -145,7 +145,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 Log.d("OrganizerSampling", "Found matching event with status: " + status);
 
                                 if ("Requested".equals(status)) {
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayRequested.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                     requestedCount++;
@@ -153,13 +153,13 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 } else if ("Joined".equals(status)) {
                                     joinedEntrants.add(document);
                                 } else if ("Accepted".equals(status)){
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayAccepted.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                     acceptedCount++;
                                     Log.d("OrganizerSampling", "Incremented requested count, current count: " + acceptedCount);
                                 }  else if ("Rejected".equals(status)){
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayRejected.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                 }
