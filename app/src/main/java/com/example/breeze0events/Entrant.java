@@ -56,9 +56,6 @@ public class Entrant {
         this.entrantId = entrantId;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public void setName(String name) {
         this.name = name;

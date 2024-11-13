@@ -1,5 +1,6 @@
 package com.example.breeze0events;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,16 +77,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             startActivity(OnlineSearching);
         });
         updateProfile();
-        mylist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String eventId = eventsList.get(i).getLeft();
-                Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
-                intent.putExtra("eventID", eventId);
-                startActivity(intent);
-                return false;
-            }
-        });
 
         QR_Scan = findViewById(R.id.buttonQRScan);
         QR_Scan.setOnClickListener(v -> {
@@ -175,6 +166,21 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         if (Objects.equals(update_event_id, "SetImage")){
             updateProfile();
             return;
+        } else if (Objects.equals(update_event_id, "SetNotification")) {
+            String notification_Id = intent.getStringExtra("notification");
+            String currentName = myEntrant.getName(notification_Id);
+            String currentStatus = myEntrant.getStatus(notification_Id);
+            AlertDialog.Builder builder = new AlertDialog.Builder(EntrantMylistActivity.this);
+            builder.setTitle("Event Name: "+currentName)
+                    .setMessage("Would you like to perform any operation on this event?")
+                    .setPositiveButton("View", (dialog, which)->{
+                        if(!Objects.equals(postName, "Admin")){
+                            onNotificationListener.onNotification();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
         }
         if (update_event_id != null) {
             overallStorageController.getEntrant(deviceId, new EntrantCallback() {

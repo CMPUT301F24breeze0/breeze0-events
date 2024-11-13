@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/listview_divider_color"
+    android:padding="8dp">
+    <TextView
+        android:id="@+id/publisher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Event Name"
+        android:textColor="@color/text_color"
+        android:layout_weight="2"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/notification_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Object: Message"
+        android:layout_weight="5"
+        android:backgroundTint="@color/ui_background"
+        android:textColor="@color/text_color"
+        android:ellipsize="end"
+        android:singleLine="true"/>
+
+</LinearLayout>
