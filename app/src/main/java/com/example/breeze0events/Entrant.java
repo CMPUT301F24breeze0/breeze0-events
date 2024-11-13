@@ -149,6 +149,7 @@ public class Entrant {
         notifications.add(new Pair<>(notificationId, notificationContent));
     }
 
+
     @Override
     public String toString() {
         return "Entrant{" +
