@@ -1,27 +1,44 @@
 package com.example.breeze0events;
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 import android.util.Base64;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.GeoPoint;
 
 
 /**
@@ -32,17 +49,15 @@ import android.widget.Toast;
  */
 
 public class EntrantEventDetail extends AppCompatActivity {
-    private TextView event_title;
-    private TextView event_information;
-    private ImageView QRcode;
-    private Button event_join;
-    private Button event_cancel;
-    private ImageView event_poster;
+    private TextView event_title, event_information;
+    private ImageView QRcode, event_poster;
+    private Button event_join, event_cancel;
     private OverallStorageController overallStorageController;
-    private String eventID;
-    private String eventLocation;
+    private String eventID, eventLocation,deviceId;
     private Event eventLocal;
-    private int Mutex=1;
+    private int Mutex=1, mutext2 = 0;
+    private FusedLocationProviderClient fusedLocationClient;
+    private GeoPoint entrantGeoPoint;
 
     /**
      * Called when the activity is created. Sets up the UI components, fetches event data,
@@ -64,8 +79,13 @@ public class EntrantEventDetail extends AppCompatActivity {
         event_cancel = findViewById(R.id.entrant_event_cancel);
         event_poster = findViewById(R.id.Entrant_event_poster);
         overallStorageController = new OverallStorageController();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         Intent intent = getIntent();
         String id = intent.getStringExtra("eventID");
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // initialize geolocation
+        requestLocation();
 
         // Receive data from firebase
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
@@ -82,15 +102,16 @@ public class EntrantEventDetail extends AppCompatActivity {
                         +"\nEvent Organizers: "+event.getOrganizers();
                 event_information.setText(information);
                 try {
-                    event_poster.setImageBitmap(ImageHashGenerator.decryptImage(event.getPosterPhoto()));
                     QRcode.setImageBitmap(QRHashGenerator.generateQRCode(event.getQrCode()));
                 } catch (Exception e) {
                 }
-//                event_poster.setImageBitmap(decodeBase64Image(event.getPosterPhoto()));
-//                QRcode.setImageBitmap(decodeBase64Image(event.getQrCode()));
+                try{
+                    event_poster.setImageBitmap(ImageHashGenerator.decryptImage(event.getPosterPhoto()));
+                }catch(Exception e) {
+
+                }
                 Mutex = 0;
             }
-
             @Override
             public void onFailure(String errorMessage) {
 
@@ -118,11 +139,10 @@ public class EntrantEventDetail extends AppCompatActivity {
         event_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Mutex != 0){
+                if(Mutex != 0 || mutext2 != 0){
                     Toast.makeText(EntrantEventDetail.this,"Loading data", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                 overallStorageController.getEntrant(deviceId, new EntrantCallback() {
                     @Override
                     public void onSuccess(Entrant entrant) {
@@ -130,6 +150,11 @@ public class EntrantEventDetail extends AppCompatActivity {
                             Toast.makeText(EntrantEventDetail.this,"You have joined this event", Toast.LENGTH_SHORT ).show();
                         }else{
                             entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
+                            if (entrantGeoPoint == null || entrantGeoPoint.getLatitude() == -1 || entrantGeoPoint.getLongitude() == -1){
+                                Toast.makeText(EntrantEventDetail.this,"Geolocation access failed", Toast.LENGTH_SHORT ).show();
+                            }else{
+                                entrant.addGeoPoint(eventID,entrantGeoPoint);
+                            }
                             overallStorageController.updateEntrant(entrant);
                             Toast.makeText(EntrantEventDetail.this,"Join successfully", Toast.LENGTH_SHORT ).show();
                             backToMyList();
@@ -137,7 +162,6 @@ public class EntrantEventDetail extends AppCompatActivity {
                         eventLocal.addEntrants(deviceId);
                         overallStorageController.updateEvent(eventLocal);
                         Mutex = 1;
-
                     }
                     @Override
                     public void onFailure(String errorMessage) {
@@ -147,6 +171,35 @@ public class EntrantEventDetail extends AppCompatActivity {
             }
         });
     }
+    private void requestLocation(){
+        mutext2++;
+        Toast.makeText(EntrantEventDetail.this,"Geolocation updating", Toast.LENGTH_SHORT ).show();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            entrantGeoPoint = null;
+            Toast.makeText(EntrantEventDetail.this,"Geolocation updating failed", Toast.LENGTH_SHORT ).show();
+            return;
+        }
+
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        String provider = LocationManager.GPS_PROVIDER;
+        manager.requestSingleUpdate(provider, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                entrantGeoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                Toast.makeText(EntrantEventDetail.this,"Geolocation updated success", Toast.LENGTH_SHORT ).show();
+                mutext2--;
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        }, null);
+    }
 
     /**
      * Decodes a Base64-encoded string to a Bitmap.
@@ -154,8 +207,7 @@ public class EntrantEventDetail extends AppCompatActivity {
      * @param base64ImageString the Base64-encoded image string
      * @return the decoded Bitmap image
      */
-
-    public static Bitmap decodeBase64Image(String base64ImageString) {
+    private static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
         // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
@@ -166,24 +218,12 @@ public class EntrantEventDetail extends AppCompatActivity {
      * Returns to the user's event list.
      * Called after successfully joining an event.
      */
-
     private void backToMyList(){
         Intent go_back = new Intent(EntrantEventDetail.this, EntrantMylistActivity.class);
         go_back.putExtra("update", eventID);
         go_back.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(go_back);
     }
-//    private void saveImageToStorage(Bitmap bitmap) {
-//        String filename = System.currentTimeMillis() + ".jpg";
-//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filename);
-//        try (FileOutputStream out = new FileOutputStream(file)) {
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        MediaScannerConnection.scanFile(EntrantEventDetail.this, new String[] { file.getAbsolutePath() }, null, null);
-//    }
 
     /**
      * Saves a Bitmap image to external storage in a specified directory.
@@ -191,7 +231,6 @@ public class EntrantEventDetail extends AppCompatActivity {
      * @param context the activity context
      * @param bitmap the image to save
      */
-
     private void saveImageToStorage(EntrantEventDetail context, Bitmap bitmap) {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DISPLAY_NAME, "downloaded_image.jpg");

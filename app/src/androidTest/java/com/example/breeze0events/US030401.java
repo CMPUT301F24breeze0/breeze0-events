@@ -1,7 +1,6 @@
 package com.example.breeze0events;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.intent.Intents;
 import static org.junit.Assert.assertTrue;
@@ -14,18 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.content.Intent;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import java.util.ArrayList;
 import androidx.test.espresso.IdlingPolicies;
 
 import java.util.Arrays;
@@ -43,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class US030401Test {
+public class US030401 {
 
     private OverallStorageController overallStorageController;
     private String mockEventId;
