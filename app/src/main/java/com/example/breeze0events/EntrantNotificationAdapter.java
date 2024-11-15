@@ -18,15 +18,13 @@ import java.util.Objects;
 // The adapter receives a array of a pair of
 public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String>> {
     private OnNotificationListener onNotificationListener;
-    private Entrant entrant;
     private OverallStorageController overallStorageController;
 
     public interface OnNotificationListener {
-        void OnNotification(String eventId, int id);
+        void OnNotification();
     }
-    public EntrantNotificationAdapter(@NonNull Context context, List<Pair<String, String>> notificationList, Entrant entrant) {
+    public EntrantNotificationAdapter(@NonNull Context context, List<Pair<String, String>> notificationList) {
         super(context, 0, notificationList);
-        this.entrant = entrant;
         if (context instanceof EntrantNotificationAdapter.OnNotificationListener){
             this.onNotificationListener = (EntrantNotificationAdapter.OnNotificationListener) context;
         }else{
@@ -40,40 +38,29 @@ public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String
         }
 
         // Set UI text from array
-        String eventId = getItem(position).getLeft();
+        String PostName = getItem(position).getLeft();
         String message = getItem(position).getRight();
 
         TextView UI_PostName = convertView.findViewById(R.id.publisher);
         Button UI_message = convertView.findViewById(R.id.notification_message);
-        String postName = entrant.getName(eventId);
-        if(postName == null){
-            overallStorageController.getEvent(eventId, new EventCallback() {
-                @Override
-                public void onSuccess(Event event) {
-                    UI_message.setText(message);
-                    UI_PostName.setText(event.getName());
-                }
 
-                @Override
-                public void onFailure(String errorMessage) {
+        UI_PostName.setText(PostName);
+        UI_message.setText(message);
 
-                }
-            });
-        }else {
-            UI_message.setText(message);
-            UI_PostName.setText(postName);
-        }
         // Set button click listener
         UI_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(postName)
+                builder.setTitle(PostName)
                         .setMessage(message)
-                        .setPositiveButton("View", (dialog, which)->{
-                            if(!Objects.equals(postName, "Admin")){
-                                onNotificationListener.OnNotification(eventId, position);
-                            }
+                        .setNegativeButton("OK", (dialog, which)->{
+
+                        }).setNeutralButton("Delete", (dialog, which)->{
+
+                        })
+                        .setPositiveButton("View MyList", (dialog, which)->{
+                            onNotificationListener.OnNotification();
                         });
                 AlertDialog dialog = builder.create();
                 dialog.show();

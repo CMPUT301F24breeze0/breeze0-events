@@ -38,12 +38,15 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         overallStorageController = new OverallStorageController();
+        notificationsList = new ArrayList<>();
+        entrantNotificationAdapter = new EntrantNotificationAdapter(EntrantNotificationActivity.this, notificationsList);
+        notificationListView.setAdapter(entrantNotificationAdapter);
+
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
-                notificationsList = entrant.getNotifications();
-                entrantNotificationAdapter = new EntrantNotificationAdapter(EntrantNotificationActivity.this, notificationsList, entrant);
-                notificationListView.setAdapter(entrantNotificationAdapter);
+                notificationsList.addAll(entrant.getNotifications());
+                entrantNotificationAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -54,7 +57,7 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
     }
 
     @Override
-    public void OnNotification(String eventId, int id) {
+    public void OnNotification() {
         Intent intent = new Intent(EntrantNotificationActivity.this, EntrantMylistActivity.class);
         intent.putExtra("update", "SetNotification");
         startActivity(intent);

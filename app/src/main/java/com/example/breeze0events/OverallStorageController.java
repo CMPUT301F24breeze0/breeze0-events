@@ -87,7 +87,7 @@ public class OverallStorageController {
                 if (notificationsData != null) {
                     for (Map<String, String> map : notificationsData) {
                         if (map.containsKey("left") && map.containsKey("right")) {
-                            notifications.add(new Pair<>(map.get("left"), map.get("right")));
+                            notifications.add(new Pair<>(map.get("left").toString(), map.get("right").toString()));
                         }
                     }
                 }
