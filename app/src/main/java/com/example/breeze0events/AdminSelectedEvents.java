@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -86,6 +87,15 @@ public class AdminSelectedEvents extends AppCompatActivity {
                 intent.putExtra("qrcode", selected_event.getQrCode());
                 startActivity(intent);
             }
+        });
+        imageButton.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View v){
+               Intent intent= new Intent(AdminSelectedEvents.this,AdminBrowseImage.class);
+
+               intent.putExtra("poster",selected_event.getPosterPhoto());
+               startActivity(intent);
+           }
         });
 
     }
