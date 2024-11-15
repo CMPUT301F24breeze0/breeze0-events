@@ -37,6 +37,7 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
 
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        overallStorageController = new OverallStorageController();
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
@@ -50,21 +51,12 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
 
             }
         });
-
-        viewBlackListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EntrantNotificationActivity.this, BlackListActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
     public void OnNotification(String eventId, int id) {
         Intent intent = new Intent(EntrantNotificationActivity.this, EntrantMylistActivity.class);
         intent.putExtra("update", "SetNotification");
-        intent.putExtra("notification", eventId);
         startActivity(intent);
     }
 }

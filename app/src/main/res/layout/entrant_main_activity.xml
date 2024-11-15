@@ -68,16 +68,16 @@
         app:layout_constraintTop_toBottomOf="@id/profileImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBlacklist"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNotification"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
     <!-- Bottom Buttons: Blacklist, Quiet Mode, Profile -->
     <Button
-        android:id="@+id/buttonBlacklist"
+        android:id="@+id/buttonNotification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Blacklist"
+        android:text="Notification"
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +94,7 @@
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonBlacklist"
+        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toStartOf="@id/buttonProfile"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp" />

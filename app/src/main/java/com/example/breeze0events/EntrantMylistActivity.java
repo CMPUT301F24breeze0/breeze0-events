@@ -7,22 +7,17 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,8 +33,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     private Button QR_Scan;
     private TextView eventName;
     private Button EventStatus;
-    private Button Blacklist;
-    private Button QuietMode;
+    private Button Notification;
     private Button ProfileModify;
     private ListView mylist;
     private EntrantMyListAdapter EntrantAdapter;
@@ -61,10 +55,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         // Initialize UI
         profileImage = findViewById(R.id.profileImage);
         entrantName = findViewById(R.id.entrantName);
-        QR_Scan = findViewById(R.id.buttonQRScan);
 
-        Blacklist = findViewById(R.id.buttonBlacklist);
-        QuietMode = findViewById(R.id.buttonQuietMode);
         ProfileModify = findViewById(R.id.buttonProfile);
         overallStorageController = new OverallStorageController();
         mylist = findViewById(R.id.entrant_mylist);
@@ -89,6 +80,12 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantProfileActivity.class);
             intent.putExtra("deviceId", deviceId); // Pass the deviceId to load the correct profile
             startActivityForResult(intent, 100);
+        });
+
+        Notification = findViewById(R.id.buttonNotification);
+        Notification.setOnClickListener(v -> {
+            Intent intent = new Intent(EntrantMylistActivity.this, EntrantNotificationActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -121,6 +118,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     @Override
     public void onUnjoin(String eventId, int id) {
         myEntrant.UnjoinEvent(eventId);
+        myEntrant.removeGeoPoint(eventId);
         overallStorageController.updateEntrant(myEntrant);
         eventsList.remove(id);
         updateUI();
@@ -167,20 +165,8 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
             updateProfile();
             return;
         } else if (Objects.equals(update_event_id, "SetNotification")) {
-            String notification_Id = intent.getStringExtra("notification");
-            String currentName = myEntrant.getName(notification_Id);
-            String currentStatus = myEntrant.getStatus(notification_Id);
-            AlertDialog.Builder builder = new AlertDialog.Builder(EntrantMylistActivity.this);
-            builder.setTitle("Event Name: "+currentName)
-                    .setMessage("Would you like to perform any operation on this event?")
-                    .setPositiveButton("View", (dialog, which)->{
-                        if(!Objects.equals(postName, "Admin")){
-                            onNotificationListener.onNotification();
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
+            updateProfile();
+            return;
         }
         if (update_event_id != null) {
             overallStorageController.getEntrant(deviceId, new EntrantCallback() {
