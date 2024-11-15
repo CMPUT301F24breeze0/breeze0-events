@@ -83,6 +83,7 @@ public class AdminSelectedEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminSelectedEvents.this, AdminQRcode.class);
+                intent.putExtra("eventId", selected_event.getEventId());
                 intent.putExtra("qrcode", selected_event.getQrCode());
                 startActivity(intent);
             }
