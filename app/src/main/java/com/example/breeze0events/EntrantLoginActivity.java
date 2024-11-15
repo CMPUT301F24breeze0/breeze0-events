@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +71,7 @@ public class EntrantLoginActivity extends AppCompatActivity {
                 profileImageString = generateDefaultProfileImage(name);
             }
 
-            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new HashMap<>(), new HashMap<>());
+            Entrant newEntrant = new Entrant(deviceId, name, email, phone, profileImageString, deviceId, new HashMap<>(), new HashMap<>(),new ArrayList<>(), new HashMap<>());
             new OverallStorageController().addEntrant(newEntrant);
 
             Intent intent = new Intent(EntrantLoginActivity.this, EntrantMylistActivity.class);
