@@ -40,6 +40,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation ("com.squareup.picasso:picasso:2.71828")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)

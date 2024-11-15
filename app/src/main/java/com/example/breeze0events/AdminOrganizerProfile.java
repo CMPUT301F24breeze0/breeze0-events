@@ -89,6 +89,7 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                      */
                     public void onFailure(String errorMessage) {
                         Log.e("event", "Failed to fetch event: ");
+
                     }
                 });
             }

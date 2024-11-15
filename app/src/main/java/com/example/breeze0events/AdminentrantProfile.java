@@ -79,6 +79,7 @@ public class AdminentrantProfile extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(String errorMessage) {
+                        overallStorageController.deleteEntrant(String.valueOf(id));
                         Log.e("event", "Failed to fetch event: " + errorMessage);
                     }
                 });
