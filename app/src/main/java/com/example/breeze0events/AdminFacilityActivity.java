@@ -3,6 +3,8 @@ package com.example.breeze0events;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -31,15 +33,15 @@ public class AdminFacilityActivity extends AppCompatActivity {
     private ListView facilityListView;
     private ArrayAdapter<String> facilityListAdapter;
     private ArrayList<String> facilityListDisplay = new ArrayList<>();;
-    private ArrayList<String> facilityList = new ArrayList<>();;
+    private ArrayList<Facility> facilityList = new ArrayList<>();;
     private OverallStorageController overallStorageController;
+    public Facility facility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_facility_page);
         Button return_button = findViewById(R.id.backButton);
-
 
         facilityListView = findViewById(R.id.facilityList);
         facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityListDisplay);
@@ -59,7 +61,7 @@ public class AdminFacilityActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Facility facility) {
                                 String info = "Facility Location:\n" + facility.getLocation();
-                                facilityList.add(info);
+                                facilityList.add(facility);
                                 facilityListDisplay.add(info);
                                 facilityListAdapter.notifyDataSetChanged();
                             }
@@ -80,5 +82,25 @@ public class AdminFacilityActivity extends AppCompatActivity {
         return_button.setOnClickListener(v -> {
             finish();
         });
+
+        facilityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (facilityList != null && position >= 0 && position < facilityList.size()) {
+                    Facility selectedFacility = facilityList.get(position);
+                    Log.d("FacilityListActivity", "Clicked facility ID: " + selectedFacility.getFacilityId());
+
+                    Intent intent = new Intent(AdminFacilityActivity.this, AdminFacilityDetail.class);
+                    intent.putExtra("selectedID", selectedFacility.getFacilityId());
+                    //intent.putExtra("location", selectedFacility.getLocation());
+                    intent.putStringArrayListExtra("facilityListDisplay", facilityListDisplay);
+                    startActivity(intent);
+
+                } else {
+                    Log.e("ItemClickError", "Invalid position or facilityList is null");
+                }
+            }
+        });
+
     }
 }
