@@ -202,6 +202,9 @@
         <activity android:name=".AdminentrantProfile"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"/>
+        <activity android:name=".OrganizerNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
 
 
 

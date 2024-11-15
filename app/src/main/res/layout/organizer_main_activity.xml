@@ -80,4 +80,17 @@
         android:textColor="@color/text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/organizer_notification_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/ui_background"
+        android:tint="@color/text_color"
+        app:layout_constraintBottom_toTopOf="@+id/organizer_event_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/stat_notify_chat" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
