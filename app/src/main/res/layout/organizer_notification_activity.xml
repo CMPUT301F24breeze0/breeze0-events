@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/organizer_notification_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Send Notification"
+        android:textColor="@color/text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/organizer_notification_activity_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/organizer_notification_activity_refresh_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/contact_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/view_background"
+        android:divider="@color/listview_divider_color"
+        android:dividerHeight="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/organizer_notification_activity_filter_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizer_notification_activity_back_button" />
+
+    <Button
+        android:id="@+id/organizer_notification_activity_filter_button"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/button_color"
+        android:text="Filter"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/organizer_notification_activity_message_button"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/button_color"
+        android:text="Send Notification"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/organizer_notification_activity_select_all_button"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:text="Select All"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/button_color"
+        app:layout_constraintEnd_toStartOf="@+id/organizer_notification_activity_message_button"
+        app:layout_constraintStart_toEndOf="@+id/organizer_notification_activity_filter_button"
+        app:layout_constraintTop_toBottomOf="@+id/contact_list_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

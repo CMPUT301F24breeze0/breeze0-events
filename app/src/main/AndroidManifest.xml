@@ -206,7 +206,12 @@
         <activity android:name=".AdminentrantProfile"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"/>
-        <activity android:name="com.example.breeze0events.AdminBrowseImage" />
+        <activity android:name=".OrganizerNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
+        <activity android:name="com.example.breeze0events.AdminBrowseImage" 
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
 
 
 
