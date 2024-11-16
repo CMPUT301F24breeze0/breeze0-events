@@ -144,6 +144,10 @@ public class Entrant {
         return notifications;
     }
 
+    public void setNotifications(List<Pair<String, String>> notifications) {
+        this.notifications = notifications;
+    }
+
     public void addNotification(String notificationId, String notificationContent) {
         notifications.add(new Pair<>(notificationId, notificationContent));
     }
