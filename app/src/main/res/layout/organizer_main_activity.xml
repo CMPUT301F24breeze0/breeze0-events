@@ -83,9 +83,11 @@
 
     <ImageButton
         android:id="@+id/organizer_notification_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:background="@color/ui_background"
         android:tint="@color/text_color"
         app:layout_constraintBottom_toTopOf="@+id/organizer_event_list"
