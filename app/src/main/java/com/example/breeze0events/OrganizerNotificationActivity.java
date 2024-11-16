@@ -30,6 +30,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class OrganizerNotificationActivity extends AppCompatActivity{
     private FirebaseFirestore db;
@@ -42,6 +43,8 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     private HashSet<Integer> selectedPositions;
     private String selectedEventId = null;
     private boolean isAllSelected = false;
+    private String selectedEventName = ""; // 选中的事件名称
+    private List<String> selectedStatuses = new ArrayList<>();
 
 
     @Override
@@ -234,7 +237,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     }
 
     private void showEventFilterDialog() {
-        // 获取当前 organizer 创建的所有 event
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("OrganizerDB").document(organizerId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -245,7 +247,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                             List<String> events = (List<String>) document.get("events"); // 获取 event 列表
 
                             if (events != null && !events.isEmpty()) {
-                                showEventSelectionDialog(events); // 显示选择对话框
+                                showStatusSelectionDialog(events); // 显示事件选择对话框后继续选择状态
                             } else {
                                 Toast.makeText(OrganizerNotificationActivity.this, "No events found", Toast.LENGTH_SHORT).show();
                             }
@@ -256,9 +258,10 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                 });
     }
 
-    private String selectedEventName = null; // 存储选中的 eventName
+    // private String selectedEventId = null; // 存储选中的 eventId
+    // private List<String> selectedStatuses = new ArrayList<>(); // 存储选中的 statuses
 
-    private void showEventSelectionDialog(List<String> eventIds) {
+    private void showStatusSelectionDialog(List<String> eventIds) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Event");
 
@@ -272,19 +275,18 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             }
         });
 
-        // 确认按钮
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        // 下一步选择状态
+        builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (selectedEventId != null) {
-                    loadEntrantsForSelectedEvent(selectedEventId); // 根据 event id 加载 entrants
+                    showStatusFilterDialog(); // 显示状态选择对话框
                 } else {
                     Toast.makeText(OrganizerNotificationActivity.this, "Please select an event", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        // 取消按钮
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -295,22 +297,66 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         builder.show();
     }
 
-    private void loadEntrantsForSelectedEvent(String eventId) {
+    private void showStatusFilterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Status");
+
+        String[] statusArray = {"Requested", "Joined"};
+        boolean[] checkedItems = {false, false};
+
+        selectedStatuses.clear(); // 每次显示状态选择对话框前清空
+
+        builder.setMultiChoiceItems(statusArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked) {
+                    if (!selectedStatuses.contains(statusArray[which])) {
+                        selectedStatuses.add(statusArray[which]); // 添加选中的状态
+                    }
+                } else {
+                    selectedStatuses.remove(statusArray[which]); // 移除未选中的状态
+                }
+            }
+        });
+
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (selectedStatuses.isEmpty()) {
+                    Toast.makeText(OrganizerNotificationActivity.this, "Please select at least one status", Toast.LENGTH_SHORT).show();
+                } else {
+                    loadFilteredEntrants(); // 加载筛选后的 entrants
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    // private String selectedEventName = ""; // 定义 selectedEventName
+
+    private void loadFilteredEntrants() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
 
-        Log.d("LoadEntrants", "Attempting to load entrants for event id: " + eventId);
+        Log.d("LoadEntrants", "Attempting to load entrants for event id: " + selectedEventId);
 
-        collectionRef.document(eventId).get()
+        collectionRef.document(selectedEventId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             DocumentSnapshot document = task.getResult();
 
-                            // 获取并设置 selectedEventName
+                            // 获取事件的名称
                             selectedEventName = document.getString("name");
-                            Log.d("LoadEntrants", "Selected Event Name: " + selectedEventName);
 
                             // 加载 entrants
                             List<String> entrantIds = (List<String>) document.get("entrants");
@@ -324,20 +370,38 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     if (task.isSuccessful() && task.getResult() != null) {
                                                         DocumentSnapshot entrantDoc = task.getResult();
-                                                        String entrantName = entrantDoc.getString("name");
 
-                                                        // 添加到 contactList_display
-                                                        contactList_display.add(new Pair<>(entrantId, entrantName));
-                                                        Log.d("LoadEntrants", "Entrant added: " + entrantId + ", " + entrantName);
+                                                        // 检查对应 event 的 status
+                                                        if (entrantDoc.contains("status")) {
+                                                            Object statusObject = entrantDoc.get("status");
+                                                            if (statusObject instanceof Map) {
+                                                                Map<String, String> statuses = (Map<String, String>) statusObject;
+                                                                String statusForEvent = statuses.get(selectedEventId);
 
-                                                        // 刷新 ListView
-                                                        contactListAdapter.notifyDataSetChanged();
+                                                                Log.d("LoadFilteredEntrants", "Entrant ID: " + entrantId + ", Status for Event: " + statusForEvent);
+
+                                                                if (statusForEvent != null && selectedStatuses.contains(statusForEvent)) {
+                                                                    String entrantName = entrantDoc.getString("name");
+                                                                    contactList_display.add(new Pair<>(entrantId, entrantName));
+                                                                    Log.d("LoadFilteredEntrants", "Entrant added: " + entrantId + ", " + entrantName);
+
+                                                                    // 刷新 ListView
+                                                                    contactListAdapter.notifyDataSetChanged();
+                                                                } else {
+                                                                    Log.d("LoadFilteredEntrants", "Entrant skipped: " + entrantId + ", Status: " + statusForEvent);
+                                                                }
+                                                            } else {
+                                                                Log.e("LoadFilteredEntrants", "Status field is not a Map for Entrant ID: " + entrantId);
+                                                            }
+                                                        } else {
+                                                            Log.d("LoadFilteredEntrants", "No status field for Entrant ID: " + entrantId);
+                                                        }
                                                     }
                                                 }
                                             });
                                 }
                             } else {
-                                Log.d("LoadEntrants", "No entrants found in document: " + document.getId());
+                                Log.d("LoadFilteredEntrants", "No entrants found in document: " + document.getId());
                             }
                         } else {
                             Log.e("FirestoreError", "Error loading entrants", task.getException());
@@ -345,4 +409,58 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                     }
                 });
     }
+    /*
+    private void loadFilteredEntrants() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("OverallDB");
+
+        Log.d("LoadEntrants", "Attempting to load entrants for event id: " + selectedEventId);
+
+        collectionRef.document(selectedEventId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            DocumentSnapshot document = task.getResult();
+
+                            // 加载 entrants
+                            List<String> entrantIds = (List<String>) document.get("entrants");
+                            contactList_display.clear(); // 清空之前的显示列表
+
+                            if (entrantIds != null) {
+                                for (String entrantId : entrantIds) {
+                                    db.collection("EntrantDB").document(entrantId).get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful() && task.getResult() != null) {
+                                                        DocumentSnapshot entrantDoc = task.getResult();
+
+                                                        // 检查对应 event 的 status
+                                                        if (entrantDoc.contains("status")) {
+                                                            Map<String, String> statuses = (Map<String, String>) entrantDoc.get("status");
+                                                            String statusForEvent = statuses.get(selectedEventId);
+
+                                                            if (selectedStatuses.contains(statusForEvent)) {
+                                                                String entrantName = entrantDoc.getString("name");
+                                                                contactList_display.add(new Pair<>(entrantId, entrantName));
+                                                                Log.d("LoadFilteredEntrants", "Entrant added: " + entrantId + ", " + entrantName);
+
+                                                                // 刷新 ListView
+                                                                contactListAdapter.notifyDataSetChanged();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            } else {
+                                Log.d("LoadFilteredEntrants", "No entrants found in document: " + document.getId());
+                            }
+                        } else {
+                            Log.e("FirestoreError", "Error loading entrants", task.getException());
+                        }
+                    }
+                });
+    }*/
 }
