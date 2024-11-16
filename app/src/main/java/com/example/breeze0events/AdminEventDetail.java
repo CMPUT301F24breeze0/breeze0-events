@@ -1,5 +1,6 @@
 package com.example.breeze0events;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -86,19 +87,102 @@ public class AdminEventDetail extends AppCompatActivity {
             }
         });
 
-        if (encryptedPosterImage != null) {displayDecryptedPosterImage(encryptedPosterImage);}
+        if (encryptedPosterImage != null) {
+            displayDecryptedPosterImage(encryptedPosterImage);
+        }
 
-        return_button.setOnClickListener(v -> {finish();});
+        return_button.setOnClickListener(v -> {
+            finish();
+        });
 
         delete_button.setOnClickListener(v -> {
             if (id != null && !id.isEmpty()) {
-                deleteEvent(id);
+                showDeleteConfirmationDialog(id);
             } else {
                 Log.e("AdminEventDetail", "Invalid event ID");
             }
         });
+    }
 
-        //old version of delete function, new version just easy for javadoc comments
+
+    /**
+     * Show a confirmation dialog before deleting an event.
+     *
+     * @param id The ID of the event to be deleted.
+     */
+    private void showDeleteConfirmationDialog(String id) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure to delete this event?")
+                .setPositiveButton("Confirm", (dialog, which) -> {
+                    deleteEvent(id);
+                })
+                .setNegativeButton("No, missClick", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+        }
+
+
+    /**
+     * Deletes the specified event and updates the event list display. Sends the updated event list
+     * back to the previous activity.
+     *
+     * @param id The ID of the event to be deleted.
+     */
+    private void deleteEvent(String id) {
+        overallStorageController.deleteEvent(id);
+        Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
+
+        if (eventList != null) {
+            eventList.removeIf(event -> event.getEventId().equals(id));
+        }
+
+        eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
+        setResult(RESULT_OK, resultIntent);
+
+        Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
+    /**
+     * Retrieves the encrypted image data from shared preferences.
+     *
+     * @return A string representing the encrypted image data.
+     */
+    private String getEncryptedImageFromStorage() {
+        return getSharedPreferences("EventDetails", MODE_PRIVATE).getString("encryptedPosterImage", null);
+    }
+
+
+    /**
+     * Displays a decrypted event poster image on the ImageView.
+     *
+     * @param encryptedImage The encrypted image string to decrypt and display.
+     */
+
+    private void displayDecryptedPosterImage(String encryptedImage) {
+        try {
+            Bitmap decryptedPosterImage = ImageHashGenerator.decryptImage(encryptedImage);
+            if (decryptedPosterImage != null) {
+                poster.setImageBitmap(decryptedPosterImage);
+            } else {
+                Toast.makeText(this, "Failed to decrypt image", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error decrypting image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+}
+
+
+//old version of delete function, new version just easy for javadoc comments
 //        delete_button.setOnClickListener(v -> {
 //            if (id != null && !id.isEmpty()) {
 //                overallStorageController.deleteEvent(id);
@@ -126,60 +210,3 @@ public class AdminEventDetail extends AppCompatActivity {
 //                Log.e("AdminEventDetail", "Invalid event ID");
 //            }
 //        });
-    }
-    /**
-     * Deletes the specified event and updates the event list display. Sends the updated event list
-     * back to the previous activity.
-     *
-     * @param id The ID of the event to be deleted.
-     */
-    private void deleteEvent(String id) {
-        overallStorageController.deleteEvent(id);
-        Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
-
-        if (eventList != null) {
-            eventList.removeIf(event -> event.getEventId().equals(id));
-        }
-
-        eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
-
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
-        setResult(RESULT_OK, resultIntent);
-
-        Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
-    /**
-     * Retrieves the encrypted image data from shared preferences.
-     *
-     * @return A string representing the encrypted image data.
-     */
-
-    private String getEncryptedImageFromStorage() {
-        return getSharedPreferences("EventDetails", MODE_PRIVATE).getString("encryptedPosterImage", null);
-    }
-
-
-    /**
-     * Displays a decrypted event poster image on the ImageView.
-     *
-     * @param encryptedImage The encrypted image string to decrypt and display.
-     */
-
-    private void displayDecryptedPosterImage(String encryptedImage) {
-        try {
-            Bitmap decryptedPosterImage = ImageHashGenerator.decryptImage(encryptedImage);
-            if (decryptedPosterImage != null) {
-                poster.setImageBitmap(decryptedPosterImage);
-            } else {
-                Toast.makeText(this, "Failed to decrypt image", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error decrypting image: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-}

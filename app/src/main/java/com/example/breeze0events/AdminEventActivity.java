@@ -127,6 +127,7 @@ public class AdminEventActivity extends AppCompatActivity {
                     Intent intent = new Intent(AdminEventActivity.this, AdminSelectedEvents.class);
                     intent.putExtra("selectedID", selectedEvent.getEventId());
                     intent.putStringArrayListExtra("eventListDisplay", eventListDisplay);
+                    intent.putExtra("poster_photo",selectedEvent.getPosterPhoto());
                     eventsLauncher.launch(intent);
 
                 } else {
