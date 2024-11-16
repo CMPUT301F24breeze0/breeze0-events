@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -203,9 +204,14 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
             if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
                 statusMap.put(eventId, "Requested");
-                db.collection("EntrantDB").document(entrant.getId()).update("status", statusMap)
-                        .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status updated to Selected for entrant: " + entrant.getId()))
-                        .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
+                String notificationMessage = "You have a status change in this event";
+                db.collection("EntrantDB").document(entrant.getId())
+                        .update(
+                                "status", statusMap,
+                                "notifications", FieldValue.arrayUnion(new Pair<>(selectedEvent.getName(), notificationMessage))
+                        )
+                        .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status and notification updated to Selected for entrant: " + entrant.getId()))
+                        .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status or notification", e));
             }
         }
 
