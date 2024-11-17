@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ui_background"
-    tools:context=".EntrantEventActivity">
+    tools:context=".EntrantMylistActivity">
 
     <ImageView
         android:id="@+id/profileImage"
@@ -68,59 +68,16 @@
         app:layout_constraintTop_toBottomOf="@id/profileImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBlacklist"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNotification"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
-<!--    <LinearLayout-->
-<!--        android:id="@+id/waitlistContainer"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:orientation="vertical"-->
-<!--        android:background="@color/button_color"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/profileImage"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/buttonBlacklist"-->
-<!--        android:layout_marginHorizontal="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginBottom="16dp">-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:padding="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:background="@color/listview_divider_color">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/eventName"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Event1"-->
-<!--                android:textColor="@color/text_color"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_gravity="center_vertical" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/buttonEventStatus"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Denied"-->
-<!--                android:backgroundTint="@color/ui_background"-->
-<!--                android:textColor="@color/text_color" />-->
-<!--        </LinearLayout>-->
-
-<!--        &lt;!&ndash; Repeat this block for other events or use a RecyclerView &ndash;&gt;-->
-<!--    </LinearLayout>-->
-
     <!-- Bottom Buttons: Blacklist, Quiet Mode, Profile -->
     <Button
-        android:id="@+id/buttonBlacklist"
+        android:id="@+id/buttonNotification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Blacklist"
+        android:text="Notification"
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -137,7 +94,7 @@
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonBlacklist"
+        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toStartOf="@id/buttonProfile"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp" />

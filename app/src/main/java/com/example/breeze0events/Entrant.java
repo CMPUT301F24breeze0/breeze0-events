@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,19 +11,15 @@ import java.util.Map;
  */
 
 public class Entrant {
-    private String entrantId;
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private String profilePhoto;
-    private String device;
+    private String entrantId, name, email, phoneNumber, profilePhoto, device;
     private Map<String, String> eventsStatus; // Each Pair represents <eventId, Status>
     private Map<String, String> eventsName; // Each Pair represents <eventId, Name>
     private List<Pair<String, String>> notifications; // List of Pair<String, String> to store notifications
     private Map<String, GeoPoint> geoPointMap;
 
     public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device,
-                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications, Map<String, GeoPoint> geoPointMap) {
+                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications,
+                   Map<String, GeoPoint> geoPointMap) {
         this.entrantId = entrantId;
         this.name = name;
         this.email = email;
@@ -47,6 +44,9 @@ public class Entrant {
     public void setGeoPointMap(Map<String, GeoPoint> geoPointMap){
         this.geoPointMap = geoPointMap;
     }
+    public void removeGeoPoint(String eventId){
+        geoPointMap.remove(eventId);
+    }
 
     public String getEntrantId() {
         return entrantId;
@@ -56,9 +56,6 @@ public class Entrant {
         this.entrantId = entrantId;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -121,7 +118,9 @@ public class Entrant {
     public boolean checkEventId(String EventId) {
         return eventsName.containsKey(EventId);
     }
-
+    public String getName(){
+        return name;
+    }
     public String getName(String EventId) {
         String name = eventsName.get(EventId);
         if (name != null) {
@@ -143,6 +142,10 @@ public class Entrant {
 
     public List<Pair<String, String>> getNotifications() {
         return notifications;
+    }
+
+    public void setNotifications(List<Pair<String, String>> notifications) {
+        this.notifications = notifications;
     }
 
     public void addNotification(String notificationId, String notificationContent) {

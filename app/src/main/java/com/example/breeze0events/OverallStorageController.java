@@ -2,12 +2,15 @@ package com.example.breeze0events;
 
 import android.util.Log;
 
+import com.google.android.gms.common.api.internal.StatusCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,9 +18,49 @@ import java.util.List;
 import java.util.Map;
 
 public class OverallStorageController {
+    private ListenerRegistration statusListener;
+    private ArrayList<String> lastChangedEventId;
 
     private static final String TAG = "OverallStorageController";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // Status listener
+    public void startStatusListener(String entrantId, StatusCallback callback) {
+        if (statusListener != null) {
+            statusListener.remove();
+        }
+
+        DocumentReference entrantRef = db.collection("EntrantDB").document(entrantId);
+
+        statusListener = entrantRef.addSnapshotListener((snapshot, error) -> {
+            if (error != null) {
+                Log.w("StatusListener", "Listen failed.", error);
+                return;
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                ArrayList<String> newArrayList = (ArrayList<String>) snapshot.get("fixme");
+                if (newArrayList != null && newArrayList.size()>lastChangedEventId.size()){
+                    callback.onStatusChanged(lastChangedEventId);
+                }
+                lastChangedEventId = newArrayList;
+            }
+        });
+    }
+    public void stopStatusListener() {
+        if (statusListener != null) {
+            statusListener.remove();
+            statusListener = null;
+        }
+    }
+
+    public ArrayList<String> getLatestStatus() {
+        return lastChangedEventId;
+    }
+
+    public interface StatusCallback {
+        void onStatusChanged(ArrayList<String> status);
+    }
 
     // Get Entrant
     public void getEntrant(String entrantId, final EntrantCallback callback) {
@@ -44,7 +87,7 @@ public class OverallStorageController {
                 if (notificationsData != null) {
                     for (Map<String, String> map : notificationsData) {
                         if (map.containsKey("left") && map.containsKey("right")) {
-                            notifications.add(new Pair<>(map.get("left"), map.get("right")));
+                            notifications.add(new Pair<>(map.get("left").toString(), map.get("right").toString()));
                         }
                     }
                 }
