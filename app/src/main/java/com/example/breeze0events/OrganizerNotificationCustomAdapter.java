@@ -44,27 +44,23 @@ public class OrganizerNotificationCustomAdapter extends ArrayAdapter<Pair<String
             convertView = inflater.inflate(R.layout.organizer_contact_layout, parent, false);
         }
 
-        // 获取列表项中的 TextView
         TextView nameTextView = convertView.findViewById(R.id.entrant_name);
         TextView idTextView = convertView.findViewById(R.id.entrant_id);
 
-        // 获取当前的 Pair 对象（entrantId 和 entrantName）
         Pair<String, String> currentEntrant = getItem(position);
 
-        // 检查并设置 TextView 的内容
         if (currentEntrant != null) {
-            nameTextView.setText(currentEntrant.second); // 设置名字
-            idTextView.setText(currentEntrant.first);    // 设置 ID
+            nameTextView.setText(currentEntrant.second);
+            idTextView.setText(currentEntrant.first);
         }
 
         nameTextView.setTextColor(context.getResources().getColor(R.color.text_color));
         idTextView.setTextColor(context.getResources().getColor(R.color.text_color));
 
-        // 设置选中状态的背景颜色
         if (selectedPositions.contains(position)) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.listview_divider_color)); // 选中的颜色
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.listview_divider_color));
         } else {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.button_color)); // 未选中的颜色
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.button_color));
         }
 
         return convertView;

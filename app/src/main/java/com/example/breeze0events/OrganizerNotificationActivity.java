@@ -43,7 +43,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     private HashSet<Integer> selectedPositions;
     private String selectedEventId = null;
     private boolean isAllSelected = false;
-    private String selectedEventName = ""; // 选中的事件名称
+    private String selectedEventName = "";
     private List<String> selectedStatuses = new ArrayList<>();
 
 
@@ -111,7 +111,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                             selectedPositions.add(i);
                         }
                         isAllSelected = true;
-                        selectAllButton.setText("Deselect");
+                        selectAllButton.setText("Deselect All");
                         Toast.makeText(OrganizerNotificationActivity.this, "All entrants selected", Toast.LENGTH_SHORT).show();
                     } else {
                         selectedPositions.clear();
@@ -254,8 +254,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                 });
     }
 
-    // private String selectedEventId = null;
-    // private List<String> selectedStatuses = new ArrayList<>();
 
     private void showStatusSelectionDialog(List<String> eventIds) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -335,8 +333,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
 
         builder.show();
     }
-
-    // private String selectedEventName = ""; /
 
     private void loadFilteredEntrants() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
