@@ -15,6 +15,8 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import android.util.Pair;
 
 /**
@@ -78,16 +80,25 @@ public class OrganizerMapActivity extends AppCompatActivity {
                         public void onSuccess(Entrant entrant) {
                             // Add markers for each event in the entrant's GeoPoint map
                             for (String eventId : entrant.getGeoPointMap().keySet()) {
-                                GeoPoint geoPoint = entrant.getGeoPointMap().get(eventId);
+                                overallStorageController.getEvent(eventId, new EventCallback() {
+                                    @Override
+                                    public void onSuccess(Event event) {
+                                        GeoPoint geoPoint = entrant.getGeoPointMap().get(eventId);
+                                        if (geoPoint != null && Objects.equals(event.getGeolocation(), "true")) {
+                                            String title = entrant.getName() + " joined " + eventId + " at " +
+                                                    geoPoint.getLatitude() + ", " + geoPoint.getLongitude();
 
-                                if (geoPoint != null) {
-                                    String title = entrant.getName() + " joined " + eventId + " at " +
-                                            geoPoint.getLatitude() + ", " + geoPoint.getLongitude();
+                                            // Add marker directly after data is fetched
+                                            runOnUiThread(() -> addMarker(geoPoint, title));
+                                            Log.d("OrganizerMapActivity", title);
+                                        }
+                                    }
 
-                                    // Add marker directly after data is fetched
-                                    runOnUiThread(() -> addMarker(geoPoint, title));
-                                    Log.d("OrganizerMapActivity", title);
-                                }
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+                                        Log.e("OrganizerMapActivity", "Failed to retrieve event data: " + errorMessage);
+                                    }
+                                });
                             }
                         }
 

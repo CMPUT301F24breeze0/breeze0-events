@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
     private String eventFacility, qrHashCode, ImageHashCode, eventId;
     private Uri selectedPosterUri;
     private Event currentEvent;
+    private Switch geolocationButton;
 
     /**
      * Called when the activity is first created. Initializes UI components, sets up
@@ -64,7 +66,7 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         saveButton = findViewById(R.id.organizer_edit_event_activity_add_button);
         backButton = findViewById(R.id.organizer_edit_event_activity_back_button);
         selectFacilityButton = findViewById(R.id.organizer_event_activity_facility_button);
-
+        geolocationButton = findViewById(R.id.permission_button);
         // Get event ID from intent to determine if in edit mode
         eventId = getIntent().getStringExtra("event_id");
         if (eventId != null) {
@@ -120,14 +122,14 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         String endDate = endDateEditText.getText().toString().trim();
         String entrants = entrantsEditText.getText().toString().trim();
         String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-
+        String geolocation = (geolocationButton.isChecked()==true)? "true":"false";
         if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrants.isEmpty()) {
             Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Update event details
-        Event updatedEvent = new Event(eventId, eventName, qrHashCode, ImageHashCode, eventFacility, startDate, endDate, entrants, currentEvent.getEntrants(), Arrays.asList(organizerId));
+        Event updatedEvent = new Event(eventId, eventName, qrHashCode, ImageHashCode, eventFacility, startDate, endDate, entrants, geolocation, currentEvent.getEntrants(), Arrays.asList(organizerId));
         overallStorageController.updateEvent(updatedEvent);
 
         Toast.makeText(this, "Event updated successfully", Toast.LENGTH_SHORT).show();

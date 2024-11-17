@@ -178,7 +178,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerMyListActivity.this);
                 alert.setTitle("Delete/ Edit");
                 alert.setMessage("Do you want to delete or edit this event?");
-                alert.show();
+
                 // delete event
                 alert.setNeutralButton("Delete", (dialogInterface, j) -> {
                     if(eventList.size() != 0) {

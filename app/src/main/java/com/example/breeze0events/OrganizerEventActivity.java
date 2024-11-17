@@ -29,6 +29,7 @@ import java.util.Set;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +92,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         EditText end_date = findViewById(R.id.event_end_date_bar);
         EditText entrants = findViewById(R.id.entrants_bar);
         Button facilityButton = findViewById(R.id.organizer_event_activity_facility_button);
+        Switch geolocationButton = findViewById(R.id.permission_button);
         overallStorageController = new OverallStorageController();
         posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
@@ -154,6 +156,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
             String limitedNumber = entrants.getText().toString();
             String qrCodePath = qrHashCode;
             String posterUri = ImageHashCode;
+            String geolocation = (geolocationButton.isChecked()==true)? "true":"false";
             String organizerId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); // Device ID as organizer ID
 
             // Check if required fields are empty
@@ -167,7 +170,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
 
             // Use facility name instead of an ID
-            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, limitedNumber,new ArrayList<>(), organizers);
+            Event newEvent = new Event(eventId, eventName, qrCodePath, posterUri, eventFacility, startDate, endDate, limitedNumber, geolocation, new ArrayList<>(), organizers);
             Log.d("OrganizerEventActivity", "Calling addEvent with Event ID: " + eventId + " and Facility: " + eventFacility);
 
             overallStorageController.addEvent(newEvent);
@@ -177,6 +180,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
             Toast.makeText(OrganizerEventActivity.this, "Event added successfully", Toast.LENGTH_SHORT).show();
             finish(); // Close activity
         });
+
 
         // by clicking "Back" button
         backButton.setOnClickListener(v-> finish());
