@@ -30,11 +30,13 @@
         android:id="@+id/organizer_notification_activity_refresh_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/ui_background"
         android:text="Refresh"
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/ui_background"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <ListView
         android:id="@+id/contact_list_view"
@@ -53,7 +55,7 @@
 
     <Button
         android:id="@+id/organizer_notification_activity_filter_button"
-        android:layout_width="85dp"
+        android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
@@ -77,14 +79,12 @@
 
     <Button
         android:id="@+id/organizer_notification_activity_select_all_button"
-        android:layout_width="110dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/ui_background"
         android:text="Select All"
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/button_color"
-        app:layout_constraintEnd_toStartOf="@+id/organizer_notification_activity_message_button"
-        app:layout_constraintStart_toEndOf="@+id/organizer_notification_activity_filter_button"
-        app:layout_constraintTop_toBottomOf="@+id/contact_list_view" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
