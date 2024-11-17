@@ -38,8 +38,6 @@ public class OrganizerMapActivity extends AppCompatActivity {
         // Set up the back button to return to the previous screen
         Button backButton = findViewById(R.id.map_activity_back_button);
         backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerMapActivity.this, OrganizerMyListActivity.class);
-            startActivity(intent);
             finish();
         });
 
