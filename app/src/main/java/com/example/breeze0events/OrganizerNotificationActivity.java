@@ -217,7 +217,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             String entrantId = contactList_display.get(position).first;
 
             db.collection("EntrantDB").document(entrantId)
-                    .update("notifications", FieldValue.arrayUnion(new Pair<>(selectedEventName, message)))
+                    .update("notifications", FieldValue.arrayUnion(new NewPair<>(selectedEventName, message)))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

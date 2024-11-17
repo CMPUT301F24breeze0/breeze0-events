@@ -83,11 +83,11 @@ public class OverallStorageController {
 
                 // Retrieve notifications as a list of pairs
                 List<Map<String, String>> notificationsData = (List<Map<String, String>>) documentSnapshot.get("notifications");
-                List<Pair<String, String>> notifications = new ArrayList<>();
+                List<NewPair<String, String>> notifications = new ArrayList<>();
                 if (notificationsData != null) {
                     for (Map<String, String> map : notificationsData) {
                         if (map.containsKey("left") && map.containsKey("right")) {
-                            notifications.add(new Pair<>(map.get("left").toString(), map.get("right").toString()));
+                            notifications.add(new NewPair<>(map.get("left").toString(), map.get("right").toString()));
                         }
                     }
                 }
@@ -120,7 +120,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());
@@ -148,7 +148,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());

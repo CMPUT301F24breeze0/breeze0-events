@@ -208,7 +208,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                 db.collection("EntrantDB").document(entrant.getId())
                         .update(
                                 "status", statusMap,
-                                "notifications", FieldValue.arrayUnion(new Pair<>(selectedEvent.getName(), notificationMessage))
+                                "notifications", FieldValue.arrayUnion(new NewPair<>(selectedEvent.getName(), notificationMessage))
                         )
                         .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status and notification updated to Selected for entrant: " + entrant.getId()))
                         .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status or notification", e));

@@ -20,7 +20,7 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
     private ListView notificationListView;
     private Button quietModeButton, backButton;
     private EntrantNotificationAdapter entrantNotificationAdapter;
-    private List<Pair<String, String>> notificationsList;
+    private List<NewPair<String, String>> notificationsList;
     private String deviceId;
     private OverallStorageController overallStorageController;
     private boolean isQuietModeEnabled = false;
