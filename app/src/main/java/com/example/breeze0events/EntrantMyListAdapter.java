@@ -18,7 +18,7 @@ import java.util.List;
  * EntrantMyListAdapter is a custom adapter for displaying a list of events that an entrant has joined.
  * It provides functionality for viewing details or handling event statuses.
  */
-public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
+public class EntrantMyListAdapter extends ArrayAdapter<NewPair<String, String>> {
     private OnUnjoinListener unjoinListener;
     private EventNameProvider eventNameProvider;
     private ViewListener viewListener;
@@ -51,7 +51,7 @@ public class EntrantMyListAdapter extends ArrayAdapter<Pair<String, String>> {
      * @param events  the list of events represented by pairs of event IDs and statuses
      * @throws RuntimeException if the context does not implement the required interfaces
      */
-    public EntrantMyListAdapter(Context context, List<Pair<String, String>> events) {
+    public EntrantMyListAdapter(Context context, List<NewPair<String, String>> events) {
         super(context, 0, events);
         if (context instanceof OnUnjoinListener) {
             this.unjoinListener = (OnUnjoinListener) context;

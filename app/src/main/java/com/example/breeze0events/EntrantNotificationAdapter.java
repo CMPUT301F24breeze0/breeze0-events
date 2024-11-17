@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 // Adapter for handling notifications
-public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String>> {
+public class EntrantNotificationAdapter extends ArrayAdapter<NewPair<String, String>> {
     private final OnNotificationListener onNotificationListener;
     private final OverallStorageController overallStorageController;
     private final String deviceId;
@@ -24,7 +24,7 @@ public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String
         void OnNotification();
     }
 
-    public EntrantNotificationAdapter(@NonNull Context context, List<Pair<String, String>> notificationList) {
+    public EntrantNotificationAdapter(@NonNull Context context, List<NewPair<String, String>> notificationList) {
         super(context, 0, notificationList);
         if (context instanceof EntrantNotificationAdapter.OnNotificationListener) {
             this.onNotificationListener = (EntrantNotificationAdapter.OnNotificationListener) context;
@@ -43,7 +43,7 @@ public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String
         }
 
         // Get notification data
-        Pair<String, String> notification = getItem(position);
+        NewPair<String, String> notification = getItem(position);
         String notificationId = notification.getLeft();
         String message = notification.getRight();
 
@@ -81,7 +81,7 @@ public class EntrantNotificationAdapter extends ArrayAdapter<Pair<String, String
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
-                List<Pair<String, String>> updatedNotifications = entrant.getNotifications();
+                List<NewPair<String, String>> updatedNotifications = entrant.getNotifications();
 
                 // Find and remove the notification with the matching ID
                 for (int i = 0; i < updatedNotifications.size(); i++) {

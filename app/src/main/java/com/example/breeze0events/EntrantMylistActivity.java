@@ -39,7 +39,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
     private EntrantMyListAdapter entrantAdapter;
     private OverallStorageController overallStorageController;
     private Entrant myEntrant;
-    private List<Pair<String, String>> eventsList;
+    private List<NewPair<String, String>> eventsList;
     private String deviceId;
 
     /**
@@ -187,7 +187,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
         for (String eventId : eventsStatus.keySet()) {
             String eventStatus = eventsStatus.get(eventId);
             if (eventStatus != null) {
-                eventsList.add(new Pair<>(eventId, eventStatus));
+                eventsList.add(new NewPair<>(eventId, eventStatus));
             }
         }
         entrantAdapter = new EntrantMyListAdapter(this, eventsList);
