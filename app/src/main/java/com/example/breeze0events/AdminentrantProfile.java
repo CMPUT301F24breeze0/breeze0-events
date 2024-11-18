@@ -62,8 +62,7 @@ public class AdminentrantProfile extends AppCompatActivity {
         Button back_button=findViewById(R.id.back_in_profile_detail);
         String eventid;
         back_button.setOnClickListener(v->{
-            Intent intent1=new Intent(AdminentrantProfile.this,AdminEntrantProfileActivity.class);
-            startActivity(intent1);
+            finish();
         });
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
