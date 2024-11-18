@@ -77,9 +77,16 @@ public class AdminEventDetail extends AppCompatActivity {
                 maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
+                String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
+                if (encryptedPosterImage != null && !encryptedPosterImage.isEmpty()) {
+                    displayDecryptedPosterImage(encryptedPosterImage);
+                } else {
+                    Toast.makeText(AdminEventDetail.this, "No poster available for this event.", Toast.LENGTH_SHORT).show();
+                }
 
-                Log.d("AdminEventDetail", "Admins data fetched successfully: ");
+                Log.d("AdminEventDetail", "Event details loaded successfully.");
             }
+
 
             @Override
             public void onFailure(String errorMessage) {
@@ -87,9 +94,6 @@ public class AdminEventDetail extends AppCompatActivity {
             }
         });
 
-        if (encryptedPosterImage != null) {
-            displayDecryptedPosterImage(encryptedPosterImage);
-        }
 
         return_button.setOnClickListener(v -> {
             finish();
