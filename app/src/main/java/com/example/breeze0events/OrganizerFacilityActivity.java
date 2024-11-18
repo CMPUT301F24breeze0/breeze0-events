@@ -65,8 +65,6 @@ public class OrganizerFacilityActivity extends AppCompatActivity {
 
         // by clicking "Back" button:
         back_button.setOnClickListener(v -> {
-            Intent intent = new Intent(OrganizerFacilityActivity.this, OrganizerMyListActivity.class);
-            startActivity(intent);
             finish();
         });
 

@@ -6,45 +6,40 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
  * EntrantMylistActivity represents the main page for the Entrant containing the wishlist,
- * profile of Entrant
+ * profile of Entrant.
  */
-// This is the main page of the Entrant containing the wishlist, profile of Entrant
-public class EntrantMylistActivity extends AppCompatActivity implements EntrantMyListAdapter.OnUnjoinListener, EntrantMyListAdapter.EventNameProvider, EntrantMyListAdapter.ViewListener{
+public class EntrantMylistActivity extends AppCompatActivity implements
+        EntrantMyListAdapter.OnUnjoinListener,
+        EntrantMyListAdapter.EventNameProvider,
+        EntrantMyListAdapter.ViewListener {
+
     private ImageView profileImage;
     private TextView entrantName;
     private Button QR_Scan;
-    private TextView eventName;
-    private Button EventStatus;
-    private Button Blacklist;
-    private Button QuietMode;
+    private Button Notification;
     private Button ProfileModify;
     private ListView mylist;
-    private EntrantMyListAdapter EntrantAdapter;
+    private EntrantMyListAdapter entrantAdapter;
     private OverallStorageController overallStorageController;
     private Entrant myEntrant;
-    private  List<Pair<String, String>> eventsList;
+    private List<NewPair<String, String>> eventsList;
     private String deviceId;
 
     /**
@@ -57,48 +52,45 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entrant_main_activity);
 
-        // Initialize UI
+        // Initialize UI components
         profileImage = findViewById(R.id.profileImage);
         entrantName = findViewById(R.id.entrantName);
-        QR_Scan = findViewById(R.id.buttonQRScan);
-
-        Blacklist = findViewById(R.id.buttonBlacklist);
-        QuietMode = findViewById(R.id.buttonQuietMode);
-        ProfileModify = findViewById(R.id.buttonProfile);
-        overallStorageController = new OverallStorageController();
         mylist = findViewById(R.id.entrant_mylist);
+
+        overallStorageController = new OverallStorageController();
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // Event Searching Functionality
-        FloatingActionButton EventSearch = findViewById(R.id.buttonEventSearch);
-        EventSearch.setOnClickListener(v->{
-            Intent OnlineSearching = new Intent(EntrantMylistActivity.this, EntrantSearchingActivity.class);
-            startActivity(OnlineSearching);
-        });
-        updateProfile();
-        mylist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String eventId = eventsList.get(i).getLeft();
-                Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
-                intent.putExtra("eventID", eventId);
-                startActivity(intent);
-                return false;
-            }
+        // Floating button for event search
+        FloatingActionButton eventSearch = findViewById(R.id.buttonEventSearch);
+        eventSearch.setOnClickListener(v -> {
+            Intent onlineSearch = new Intent(EntrantMylistActivity.this, EntrantSearchingActivity.class);
+            startActivity(onlineSearch);
         });
 
+        // QR Scan button
         QR_Scan = findViewById(R.id.buttonQRScan);
         QR_Scan.setOnClickListener(v -> {
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantQRScanActivity.class);
             startActivity(intent);
         });
 
+        // Profile modification button
         ProfileModify = findViewById(R.id.buttonProfile);
         ProfileModify.setOnClickListener(v -> {
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantProfileActivity.class);
             intent.putExtra("deviceId", deviceId); // Pass the deviceId to load the correct profile
             startActivityForResult(intent, 100);
         });
+
+        // Notification button
+        Notification = findViewById(R.id.buttonNotification);
+        Notification.setOnClickListener(v -> {
+            Intent intent = new Intent(EntrantMylistActivity.this, EntrantNotificationActivity.class);
+            startActivity(intent);
+        });
+
+        // Load profile and events
+        updateProfile();
     }
 
     /**
@@ -109,15 +101,14 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
      */
     public static Bitmap decodeBase64Image(String base64ImageString) {
         byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
-        // Decode Base64 string to byte array
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
     }
+
     /**
      * Updates the UI of the entrant's event list.
      */
-    public void updateUI(){
-        EntrantAdapter.notifyDataSetChanged();
+    public void updateUI() {
+        entrantAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -126,7 +117,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
      * @param eventId the ID of the event to unjoin
      * @param id      the position of the event in the list
      */
-    // Unjoin event
     @Override
     public void onUnjoin(String eventId, int id) {
         myEntrant.UnjoinEvent(eventId);
@@ -142,7 +132,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
 
             @Override
             public void onFailure(String errorMessage) {
-
+                // Handle failure
             }
         });
     }
@@ -153,42 +143,56 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
      * @param eventId the ID of the event
      * @return the name of the event
      */
-    // Get event name
     @Override
     public String getEventNameById(String eventId) {
         return myEntrant.getName(eventId);
     }
 
     /**
-     * Refreshes the list of events when a new intent is received. This is used for updating
-     * event statuses.
+     * Handles new intents and updates the event status if required.
      *
-     * @param intent
-     * the new intent containing the event update information
+     * @param intent the new intent
      */
-    // Update event status
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        String update_event_id = intent.getStringExtra("update");
-        if (Objects.equals(update_event_id, "SetImage")){
+        String updateEventId = intent.getStringExtra("update");
+        if (Objects.equals(updateEventId, "SetImage") || Objects.equals(updateEventId, "SetNotification")) {
             updateProfile();
             return;
         }
-        if (update_event_id != null) {
+        if (updateEventId != null) {
             overallStorageController.getEntrant(deviceId, new EntrantCallback() {
                 @Override
                 public void onSuccess(Entrant entrant) {
                     myEntrant = entrant;
-                    eventsList.add(new Pair<>(update_event_id, myEntrant.getStatus(update_event_id)));
-                    updateUI();
+                    updateEventsList();
                 }
+
                 @Override
                 public void onFailure(String errorMessage) {
+                    // Handle failure
                 }
             });
         }
+    }
+
+    /**
+     * Updates the event list from the entrant's data and refreshes the adapter.
+     */
+    private void updateEventsList() {
+        Map<String, String> eventsStatus = myEntrant.getEventsStatus();
+        eventsList = new ArrayList<>();
+        for (String eventId : eventsStatus.keySet()) {
+            String eventStatus = eventsStatus.get(eventId);
+            if (eventStatus != null) {
+                eventsList.add(new NewPair<>(eventId, eventStatus));
+            }
+        }
+        entrantAdapter = new EntrantMyListAdapter(this, eventsList);
+        mylist.setAdapter(entrantAdapter);
+        updateUI();
     }
 
     /**
@@ -196,7 +200,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
      *
      * @param eventId the ID of the event to view
      */
-    // View event
     @Override
     public void onView(String eventId) {
         Intent intent = new Intent(EntrantMylistActivity.this, EntrantEventDetail.class);
@@ -212,7 +215,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
      * @param resultCode  the result code indicating success or failure
      * @param data        the intent data containing updated profile information
      */
-    // Get updated profile data on Mylist
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -228,29 +230,19 @@ public class EntrantMylistActivity extends AppCompatActivity implements EntrantM
     /**
      * Updates the entrant's profile data, including the profile image, name, and list of joined events.
      */
-    // Update profile
-    private void updateProfile(){
+    private void updateProfile() {
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
                 myEntrant = entrant;
                 entrantName.setText(entrant.getName());
                 profileImage.setImageBitmap(decodeBase64Image(entrant.getProfilePhoto()));
-                Map<String, String> eventsStatus = entrant.getEventsStatus();
-                eventsList = new ArrayList<>();
-                for (String eventId:  eventsStatus.keySet()) {
-                    String eventStatus = eventsStatus.get(eventId);
-                    if (eventStatus != null) {
-                        eventsList.add(new Pair<>(eventId, eventStatus));
-                    }
-                }
-                EntrantAdapter = new EntrantMyListAdapter(EntrantMylistActivity.this, eventsList);
-                mylist.setAdapter(EntrantAdapter);
+                updateEventsList();
             }
 
             @Override
             public void onFailure(String errorMessage) {
-
+                // Handle failure
             }
         });
     }

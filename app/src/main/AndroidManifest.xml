@@ -37,6 +37,10 @@
 
         <!-- Entrant Activities -->
         <activity
+            android:name=".EntrantNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
+        <activity
             android:name=".EntrantLoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
@@ -171,6 +175,10 @@
             android:name=".AdminFacilityActivity"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events" />
+        <activity
+            android:name=".AdminFacilityDetail"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events" />
 
         <activity
             android:name=".AdminLoginActivity"
@@ -202,7 +210,12 @@
         <activity android:name=".AdminentrantProfile"
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"/>
-        <activity android:name="com.example.breeze0events.AdminBrowseImage" />
+        <activity android:name=".OrganizerNotificationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
+        <activity android:name="com.example.breeze0events.AdminBrowseImage" 
+            android:exported="true"
+            android:theme="@style/Theme.Breeze0events"/>
 
 
 

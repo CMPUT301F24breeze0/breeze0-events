@@ -13,10 +13,13 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +70,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         Button my_facility_button = findViewById(R.id.my_facility_button);
         Button new_event_button = findViewById(R.id.new_event_button);
         Button refresh_button = findViewById(R.id.refresh_button);
+        ImageButton notification_button = findViewById(R.id.organizer_notification_button);
 
         overallStorageController = new OverallStorageController();
         eventListView = findViewById(R.id.organizer_event_list);
@@ -137,6 +141,15 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
         // refreshEventList();
 
+        // By clicking "Notification" button
+        notification_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrganizerMyListActivity.this, OrganizerNotificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         // By short-clicking anything on the list, display event details
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -165,7 +178,7 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerMyListActivity.this);
                 alert.setTitle("Delete/ Edit");
                 alert.setMessage("Do you want to delete or edit this event?");
-                alert.show();
+
                 // delete event
                 alert.setNeutralButton("Delete", (dialogInterface, j) -> {
                     if(eventList.size() != 0) {

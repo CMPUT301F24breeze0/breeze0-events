@@ -2,12 +2,15 @@ package com.example.breeze0events;
 
 import android.util.Log;
 
+import com.google.android.gms.common.api.internal.StatusCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,9 +18,49 @@ import java.util.List;
 import java.util.Map;
 
 public class OverallStorageController {
+    private ListenerRegistration statusListener;
+    private ArrayList<String> lastChangedEventId;
 
     private static final String TAG = "OverallStorageController";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // Status listener
+    public void startStatusListener(String entrantId, StatusCallback callback) {
+        if (statusListener != null) {
+            statusListener.remove();
+        }
+
+        DocumentReference entrantRef = db.collection("EntrantDB").document(entrantId);
+
+        statusListener = entrantRef.addSnapshotListener((snapshot, error) -> {
+            if (error != null) {
+                Log.w("StatusListener", "Listen failed.", error);
+                return;
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                ArrayList<String> newArrayList = (ArrayList<String>) snapshot.get("fixme");
+                if (newArrayList != null && newArrayList.size()>lastChangedEventId.size()){
+                    callback.onStatusChanged(lastChangedEventId);
+                }
+                lastChangedEventId = newArrayList;
+            }
+        });
+    }
+    public void stopStatusListener() {
+        if (statusListener != null) {
+            statusListener.remove();
+            statusListener = null;
+        }
+    }
+
+    public ArrayList<String> getLatestStatus() {
+        return lastChangedEventId;
+    }
+
+    public interface StatusCallback {
+        void onStatusChanged(ArrayList<String> status);
+    }
 
     // Get Entrant
     public void getEntrant(String entrantId, final EntrantCallback callback) {
@@ -40,11 +83,11 @@ public class OverallStorageController {
 
                 // Retrieve notifications as a list of pairs
                 List<Map<String, String>> notificationsData = (List<Map<String, String>>) documentSnapshot.get("notifications");
-                List<Pair<String, String>> notifications = new ArrayList<>();
+                List<NewPair<String, String>> notifications = new ArrayList<>();
                 if (notificationsData != null) {
                     for (Map<String, String> map : notificationsData) {
                         if (map.containsKey("left") && map.containsKey("right")) {
-                            notifications.add(new Pair<>(map.get("left"), map.get("right")));
+                            notifications.add(new NewPair<>(map.get("left").toString(), map.get("right").toString()));
                         }
                     }
                 }
@@ -77,7 +120,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());
@@ -105,7 +148,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());
@@ -268,13 +311,14 @@ public class OverallStorageController {
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
                 String limitedNumber =documentSnapshot.getString("limitedNumber");
+                String geolocation =documentSnapshot.getString("geolocation");
                 List<String> entrants = (List<String>) documentSnapshot.get("entrants");
                 List<String> organizers = (List<String>) documentSnapshot.get("organizers");
 
                 if (entrants == null) entrants = new ArrayList<>();
                 if (organizers == null) organizers = new ArrayList<>();
 
-                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, geolocation, entrants, organizers);
                 callback.onSuccess(event);
             } else {
                 Log.d(TAG, "Event not found!");
@@ -297,6 +341,7 @@ public class OverallStorageController {
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
         eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("geolocation", event.getGeolocation());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
@@ -318,6 +363,7 @@ public class OverallStorageController {
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
         eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("geolocation", event.getGeolocation());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
@@ -449,10 +495,11 @@ public class OverallStorageController {
                         String startDate = document.getString("startDate");
                         String endDate = document.getString("endDate");
                         String limitedNumber = document.getString("limitedNumber");
+                        String geolocation = document.getString("geolocation");
                         List<String> entrants = (List<String>) document.get("entrants");
                         List<String> organizers = (List<String>) document.get("organizers");
 
-                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, geolocation, entrants, organizers);
                         callback.onSuccess(event);
                         return;
                     }
