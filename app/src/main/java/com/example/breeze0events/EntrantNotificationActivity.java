@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,25 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * EntrantNotificationActivity represents receives notification from Admin or Organizers the
- * information or messages in history can be viewed here
+ * EntrantNotificationActivity represents the notification box for the entrant.
  */
-public class EntrantNotificationActivity extends AppCompatActivity implements EntrantNotificationAdapter.OnNotificationListener{
+public class EntrantNotificationActivity extends AppCompatActivity implements EntrantNotificationAdapter.OnNotificationListener {
     private ListView notificationListView;
-    private Button viewBlackListButton;
+    private Button quietModeButton, backButton;
     private EntrantNotificationAdapter entrantNotificationAdapter;
-    private List<Pair<String, String>> notificationsList;
+    private List<NewPair<String, String>> notificationsList;
     private String deviceId;
     private OverallStorageController overallStorageController;
+    private boolean isQuietModeEnabled = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entrant_notification);
 
+        // Initialize UI components
         notificationListView = findViewById(R.id.notification_list);
-        viewBlackListButton = findViewById(R.id.BlackList_Button);
+        quietModeButton = findViewById(R.id.quietMode_Button);
+        backButton = findViewById(R.id.backButton);
 
+        // Get device ID
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         overallStorageController = new OverallStorageController();
@@ -42,18 +43,47 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
         entrantNotificationAdapter = new EntrantNotificationAdapter(EntrantNotificationActivity.this, notificationsList);
         notificationListView.setAdapter(entrantNotificationAdapter);
 
+        // Fetch notifications
+        updateNotifications();
+
+        // Quiet Mode Toggle
+        quietModeButton.setOnClickListener(v -> toggleQuietMode());
+
+        // Back to My List
+        backButton.setOnClickListener(v -> finish());
+    }
+
+    /**
+     * Fetches notifications from the database and updates the list.
+     */
+    private void updateNotifications() {
         overallStorageController.getEntrant(deviceId, new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
-                notificationsList.addAll(entrant.getNotifications());
-                entrantNotificationAdapter.notifyDataSetChanged();
+                if (!isQuietModeEnabled) {
+                    notificationsList.clear(); // Clear existing notifications to prevent duplicates
+                    notificationsList.addAll(entrant.getNotifications());
+                    entrantNotificationAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onFailure(String errorMessage) {
-
+                // Handle failure
             }
         });
+    }
+
+    /**
+     * Toggles the quiet mode state.
+     */
+    private void toggleQuietMode() {
+        isQuietModeEnabled = !isQuietModeEnabled;
+        quietModeButton.setText(isQuietModeEnabled ? "Disable Quiet Mode" : "Enable Quiet Mode");
+
+        if (!isQuietModeEnabled) {
+            updateNotifications();
+        }
     }
 
     @Override

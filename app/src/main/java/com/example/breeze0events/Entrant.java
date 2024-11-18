@@ -14,11 +14,11 @@ public class Entrant {
     private String entrantId, name, email, phoneNumber, profilePhoto, device;
     private Map<String, String> eventsStatus; // Each Pair represents <eventId, Status>
     private Map<String, String> eventsName; // Each Pair represents <eventId, Name>
-    private List<Pair<String, String>> notifications; // List of Pair<String, String> to store notifications
+    private List<NewPair<String, String>> notifications; // List of Pair<String, String> to store notifications
     private Map<String, GeoPoint> geoPointMap;
 
     public Entrant(String entrantId, String name, String email, String phoneNumber, String profilePhoto, String device,
-                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<Pair<String, String>> notifications,
+                   Map<String, String> eventsName, Map<String, String> eventsStatus, List<NewPair<String, String>> notifications,
                    Map<String, GeoPoint> geoPointMap) {
         this.entrantId = entrantId;
         this.name = name;
@@ -140,13 +140,18 @@ public class Entrant {
         eventsName.put(eventId, eventName);
     }
 
-    public List<Pair<String, String>> getNotifications() {
+    public List<NewPair<String, String>> getNotifications() {
         return notifications;
     }
 
-    public void addNotification(String notificationId, String notificationContent) {
-        notifications.add(new Pair<>(notificationId, notificationContent));
+    public void setNotifications(List<NewPair<String, String>> notifications) {
+        this.notifications = notifications;
     }
+
+    public void addNotification(String notificationId, String notificationContent) {
+        notifications.add(new NewPair<>(notificationId, notificationContent));
+    }
+
 
     @Override
     public String toString() {

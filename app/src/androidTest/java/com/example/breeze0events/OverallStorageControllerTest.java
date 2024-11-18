@@ -41,7 +41,7 @@ public class OverallStorageControllerTest {
     // Test adding an Entrant
     @Test
     public void testAddEntrant_Success() {
-        Entrant entrant = new Entrant("testEntrantId", "Test User", "test@example.com", "1234567890", "photoUrl", "device1", new HashMap<>(), new HashMap<>());
+        Entrant entrant = new Entrant("testEntrantId", "Test User", "test@example.com", "1234567890", "photoUrl", "device1", new HashMap<>(), new HashMap<>(),new ArrayList<>());
         controller.addEntrant(entrant);
 
         // Verify the Entrant is added by retrieving it
@@ -57,7 +57,7 @@ public class OverallStorageControllerTest {
     // Test updating an Entrant
     @Test
     public void testUpdateEntrant_Success() {
-        Entrant entrant = new Entrant("testEntrantId", "Updated User", "updated@example.com", "0987654321", "newPhotoUrl", "device1", new HashMap<>(), new HashMap<>());
+        Entrant entrant = new Entrant("testEntrantId", "Updated User", "updated@example.com", "0987654321", "newPhotoUrl", "device1", new HashMap<>(), new HashMap<>(),new ArrayList<>());
         controller.updateEntrant(entrant);
 
         // Verify the Entrant is updated by retrieving it

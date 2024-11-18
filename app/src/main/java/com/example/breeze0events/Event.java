@@ -1,16 +1,15 @@
 package com.example.breeze0events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
-
 
 /**
- * This is a class that defines a Event.
+ * This is a class that defines an Event.
  */
 
-public class Event implements Serializable{
-    private String eventId; // Event ID (previously organizerId)
+public class Event implements Serializable {
+    private String eventId; // Event ID
     private String name; // Name of the event
     private String qrCode; // QR code for the event
     private String posterPhoto; // URL or path to the poster
@@ -20,10 +19,18 @@ public class Event implements Serializable{
     private String limitedNumber; // Limit for the number of entrants
     private List<String> entrants; // List of entrant IDs participating in the event
     private List<String> organizers; // List of organizer IDs managing the event
+    private String geolocation; // Geolocation of the event
 
-    public Event() {}
+    // Default constructor
+    public Event() {
+        this.entrants = new ArrayList<>();
+        this.organizers = new ArrayList<>();
+    }
 
-    public Event(String eventId, String name, String qrCode, String posterPhoto, String facility, String startDate, String endDate, String limitedNumber, List<String> entrants, List<String> organizers) {
+    // Parameterized constructor
+    public Event(String eventId, String name, String qrCode, String posterPhoto, String facility,
+                 String startDate, String endDate, String limitedNumber,String geolocation, List<String> entrants,
+                 List<String> organizers) {
         this.eventId = eventId;
         this.name = name;
         this.qrCode = qrCode;
@@ -32,8 +39,9 @@ public class Event implements Serializable{
         this.startDate = startDate;
         this.endDate = endDate;
         this.limitedNumber = limitedNumber;
-        this.entrants = entrants;
-        this.organizers = organizers;
+        this.entrants = entrants == null ? new ArrayList<>() : entrants;
+        this.organizers = organizers == null ? new ArrayList<>() : organizers;
+        this.geolocation = geolocation;
     }
 
     // Getters and setters
@@ -106,13 +114,20 @@ public class Event implements Serializable{
     }
 
     public void setEntrants(List<String> entrants) {
-        this.entrants = entrants;
+        this.entrants = entrants == null ? new ArrayList<>() : entrants;
     }
-    public void addEntrants(String EntrantsId){
-        this.entrants.add(EntrantsId);
+
+    public void addEntrants(String entrantId) {
+        if (this.entrants == null) {
+            this.entrants = new ArrayList<>();
+        }
+        this.entrants.add(entrantId);
     }
-    public void removeEntrant(String EntrantId){
-        this.entrants.remove(EntrantId);
+
+    public void removeEntrant(String entrantId) {
+        if (this.entrants != null) {
+            this.entrants.remove(entrantId);
+        }
     }
 
     public List<String> getOrganizers() {
@@ -120,7 +135,28 @@ public class Event implements Serializable{
     }
 
     public void setOrganizers(List<String> organizers) {
-        this.organizers = organizers;
+        this.organizers = organizers == null ? new ArrayList<>() : organizers;
+    }
+
+    public void addOrganizer(String organizerId) {
+        if (this.organizers == null) {
+            this.organizers = new ArrayList<>();
+        }
+        this.organizers.add(organizerId);
+    }
+
+    public void removeOrganizer(String organizerId) {
+        if (this.organizers != null) {
+            this.organizers.remove(organizerId);
+        }
+    }
+
+    public String getGeolocation() {
+        return geolocation;
+    }
+
+    public void setGeolocation(String geolocation) {
+        this.geolocation = geolocation;
     }
 
     @Override
@@ -136,6 +172,7 @@ public class Event implements Serializable{
                 ", limitedNumber='" + limitedNumber + '\'' +
                 ", entrants=" + entrants +
                 ", organizers=" + organizers +
+                ", geolocation='" + geolocation + '\'' +
                 '}';
     }
 }

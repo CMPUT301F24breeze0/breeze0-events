@@ -83,11 +83,11 @@ public class OverallStorageController {
 
                 // Retrieve notifications as a list of pairs
                 List<Map<String, String>> notificationsData = (List<Map<String, String>>) documentSnapshot.get("notifications");
-                List<Pair<String, String>> notifications = new ArrayList<>();
+                List<NewPair<String, String>> notifications = new ArrayList<>();
                 if (notificationsData != null) {
                     for (Map<String, String> map : notificationsData) {
                         if (map.containsKey("left") && map.containsKey("right")) {
-                            notifications.add(new Pair<>(map.get("left").toString(), map.get("right").toString()));
+                            notifications.add(new NewPair<>(map.get("left").toString(), map.get("right").toString()));
                         }
                     }
                 }
@@ -120,7 +120,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());
@@ -148,7 +148,7 @@ public class OverallStorageController {
 
         // Convert notifications to a format compatible with Firestore
         List<Map<String, String>> notificationsData = new ArrayList<>();
-        for (Pair<String, String> notification : entrant.getNotifications()) {
+        for (NewPair<String, String> notification : entrant.getNotifications()) {
             Map<String, String> map = new HashMap<>();
             map.put("left", notification.getLeft());
             map.put("right", notification.getRight());
@@ -311,13 +311,14 @@ public class OverallStorageController {
                 String startDate = documentSnapshot.getString("startDate");
                 String endDate = documentSnapshot.getString("endDate");
                 String limitedNumber =documentSnapshot.getString("limitedNumber");
+                String geolocation =documentSnapshot.getString("geolocation");
                 List<String> entrants = (List<String>) documentSnapshot.get("entrants");
                 List<String> organizers = (List<String>) documentSnapshot.get("organizers");
 
                 if (entrants == null) entrants = new ArrayList<>();
                 if (organizers == null) organizers = new ArrayList<>();
 
-                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, geolocation, entrants, organizers);
                 callback.onSuccess(event);
             } else {
                 Log.d(TAG, "Event not found!");
@@ -340,6 +341,7 @@ public class OverallStorageController {
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
         eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("geolocation", event.getGeolocation());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
@@ -361,6 +363,7 @@ public class OverallStorageController {
         eventData.put("startDate", event.getStartDate());
         eventData.put("endDate", event.getEndDate());
         eventData.put("limitedNumber", event.getLimitedNumber());
+        eventData.put("geolocation", event.getGeolocation());
         eventData.put("entrants", new ArrayList<>(event.getEntrants()));
         eventData.put("organizers", new ArrayList<>(event.getOrganizers()));
 
@@ -492,10 +495,11 @@ public class OverallStorageController {
                         String startDate = document.getString("startDate");
                         String endDate = document.getString("endDate");
                         String limitedNumber = document.getString("limitedNumber");
+                        String geolocation = document.getString("geolocation");
                         List<String> entrants = (List<String>) document.get("entrants");
                         List<String> organizers = (List<String>) document.get("organizers");
 
-                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+                        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, geolocation, entrants, organizers);
                         callback.onSuccess(event);
                         return;
                     }

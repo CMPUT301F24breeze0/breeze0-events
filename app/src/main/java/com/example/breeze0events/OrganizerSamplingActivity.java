@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -145,7 +146,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 Log.d("OrganizerSampling", "Found matching event with status: " + status);
 
                                 if ("Requested".equals(status)) {
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayRequested.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                     requestedCount++;
@@ -153,13 +154,13 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 } else if ("Joined".equals(status)) {
                                     joinedEntrants.add(document);
                                 } else if ("Accepted".equals(status)){
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayAccepted.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                     acceptedCount++;
                                     Log.d("OrganizerSampling", "Incremented requested count, current count: " + acceptedCount);
                                 }  else if ("Rejected".equals(status)){
-                                    String entrantName = document.getString("name")+"\n("+document.getString("entrantId")+" )";
+                                    String entrantName = document.getString("name");
                                     entrantDisplayRejected.add(entrantName != null ? entrantName : "Unknown Entrant");
                                     Log.d("OrganizerSampling", "Added entrant with status Selected: " + entrantName);
                                 }
@@ -203,9 +204,14 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
             if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
                 statusMap.put(eventId, "Requested");
-                db.collection("EntrantDB").document(entrant.getId()).update("status", statusMap)
-                        .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status updated to Selected for entrant: " + entrant.getId()))
-                        .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status", e));
+                String notificationMessage = "You have a status change in this event";
+                db.collection("EntrantDB").document(entrant.getId())
+                        .update(
+                                "status", statusMap,
+                                "notifications", FieldValue.arrayUnion(new NewPair<>(selectedEvent.getName(), notificationMessage))
+                        )
+                        .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status and notification updated to Selected for entrant: " + entrant.getId()))
+                        .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status or notification", e));
             }
         }
 
