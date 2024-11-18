@@ -5,16 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@color/ui_background">
+
 
 
     <ListView
         android:id="@+id/organizer_list_view"
+
         android:layout_width="380dp"
         android:layout_height="604dp"
         android:layout_marginBottom="20dp"
         android:background="#40484D"
         app:layout_constraintBottom_toTopOf="@+id/back_in_organizer_list"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +28,10 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginTop="4dp"
         android:background="@color/ui_background"
+
         android:text="Organization List"
         android:textColor="#F4EEEE"
         app:layout_constraintEnd_toEndOf="parent"
