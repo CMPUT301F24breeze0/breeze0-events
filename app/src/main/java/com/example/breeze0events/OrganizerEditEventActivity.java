@@ -98,6 +98,7 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 selectedFacilityTextView.setText(event.getFacility());
                 eventFacility = event.getFacility();
                 qrHashCode = event.getQrCode();
+                geolocationButton.setChecked((event.getGeolocation().equals("true"))?true:false);
                 ImageHashCode = event.getPosterPhoto();
 
                 if (ImageHashCode != null) {
