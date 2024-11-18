@@ -8,42 +8,52 @@
 
 
     <Button
-        android:id="@+id/back_in_main"
-        android:layout_width="155dp"
-        android:layout_height="57dp"
-        android:backgroundTint="@color/button_color"
+        android:id="@+id/organizer_facility_activity_back_button"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
         android:text="Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/text_color"
+        android:backgroundTint="@color/ui_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.885" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/organization"
-        android:layout_width="155dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="488dp"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="176dp"
         android:backgroundTint="@color/button_color"
         android:text="Organization profile"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/entrant"
-        android:layout_width="155dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="488dp"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="68dp"
         android:backgroundTint="@color/button_color"
+
         android:text="Entrant profile"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.968"
+        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintTop_toBottomOf="@+id/organization" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:fontFamily="cursive"
+        android:text="Welcome"
+        android:textColor="#96FFFFFF"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
