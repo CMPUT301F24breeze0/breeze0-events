@@ -106,6 +106,16 @@ public class EntrantMyListAdapter extends ArrayAdapter<NewPair<String, String>> 
         // Set button click listener for handling status changes
         eventStatusButton.setOnClickListener(v -> {
             switch (status) {
+                case "Requested":
+                    // Organizer has requested acceptance; ask entrant to accept or reject
+                    AlertDialog.Builder requestedBuilder = new AlertDialog.Builder(getContext());
+                    requestedBuilder.setTitle("Event Request")
+                            .setMessage("The organizer has requested your acceptance. Would you like to accept or reject this event?")
+                            .setPositiveButton("Accept", (dialog, which) -> updateEventStatus(eventId, "Accepted", position))
+                            .setNegativeButton("Reject", (dialog, which) -> updateEventStatus(eventId, "Rejected", position));
+                    requestedBuilder.create().show();
+                    break;
+                    
                 case "Joined":
                     // Organizer has not yet reviewed; only unjoin is possible
                     AlertDialog.Builder joinedBuilder = new AlertDialog.Builder(getContext());
