@@ -215,8 +215,6 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             }
         }
 
-
-
         loadEntrantsWithJoinedStatus();
     }
 }
