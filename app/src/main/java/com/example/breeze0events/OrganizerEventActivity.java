@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -106,6 +109,49 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         if (newEventId != null) {
             idTextView.setText(newEventId);
         }
+
+        start_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarView calendarView = new CalendarView(OrganizerEventActivity.this);
+                Calendar calendar = Calendar.getInstance();
+                calendarView.setDate(calendar.getTimeInMillis());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
+                alert.setTitle("Select a Date");
+                alert.setView(calendarView);
+                calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    start_date.setText(selectedDate);
+                    Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+                });
+                alert.setPositiveButton("Confirm", (dialog, which) -> {
+                    Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + start_date.getText().toString(), Toast.LENGTH_SHORT).show();
+                });
+                alert.show();
+            }
+        });
+
+        end_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarView calendarView = new CalendarView(OrganizerEventActivity.this);
+                Calendar calendar = Calendar.getInstance();
+                calendarView.setDate(calendar.getTimeInMillis());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
+                alert.setTitle("Select a Date");
+                alert.setView(calendarView);
+                calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    end_date.setText(selectedDate);
+                });
+                alert.setPositiveButton("Confirm", (dialog, which) -> {
+                    Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + end_date.getText().toString(), Toast.LENGTH_SHORT).show();
+                });
+                alert.show();
+            }
+        });
 
         //  by clicking "Select Facility" button
         facilityButton.setOnClickListener(v -> {
