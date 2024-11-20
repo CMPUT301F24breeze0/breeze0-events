@@ -121,7 +121,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 .setPositiveButton("Delete", (dialog, which) -> {
                     deleteEvent(id);
                 })
-                .setNegativeButton("No, missClick", (dialog, which) -> {
+                .setNegativeButton("No, MissClick", (dialog, which) -> {
                     dialog.dismiss();
                 })
                 .show();

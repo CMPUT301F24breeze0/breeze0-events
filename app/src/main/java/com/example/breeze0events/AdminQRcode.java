@@ -99,8 +99,8 @@ public class AdminQRcode extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Delete QR Code")
                 .setMessage("Are you sure to delete this QR code?")
-                .setPositiveButton("Confirm", (dialog, which) -> deleteQRCodeData())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("Delete", (dialog, which) -> deleteQRCodeData())
+                .setNegativeButton("No, MissClick", (dialog, which) -> dialog.dismiss())
                 .show();
 
     }

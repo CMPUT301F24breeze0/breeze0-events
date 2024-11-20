@@ -83,7 +83,7 @@ public class AdminFacilityDetail extends AppCompatActivity {
                                Log.e("DeleteError", "Error deleting facility", e);
                             });
                  })
-                 .setNegativeButton("No, missClick", null)
+                 .setNegativeButton("No, MissClick", null)
                  .show();
       });
    }
