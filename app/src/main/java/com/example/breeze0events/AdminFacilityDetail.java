@@ -1,12 +1,16 @@
 package com.example.breeze0events;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -46,8 +50,8 @@ public class AdminFacilityDetail extends AppCompatActivity {
       overallStorageController.getFacility(String.valueOf(facilityId), new FacilityCallback() {
          @Override
          public void onSuccess(Facility facility) {
-            facilityName.setText("Facility Name:"+ facility.getLocation());
-            facilityID.setText("Facility ID:" + facility.getFacilityId());
+            facilityName.setText("Facility Name: "+ facility.getLocation());
+            facilityID.setText("Facility ID: " + facility.getFacilityId());
          }
 
          @Override
@@ -58,6 +62,25 @@ public class AdminFacilityDetail extends AppCompatActivity {
 
       return_button.setOnClickListener(v -> {
          finish();
+      });
+
+      delete_button.setOnClickListener(v -> {
+         new AlertDialog.Builder(this)
+                 .setTitle("Delete Facility")
+                 .setMessage("Are you sure to delete this facility?")
+                 .setPositiveButton("Delete", (dialog, which) -> {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("FacilityDB").document(facilityId).delete()
+                            .addOnSuccessListener(aVoid -> {
+                               Toast.makeText(this, "Facility deleted successfully.", Toast.LENGTH_SHORT).show();
+                               finish();
+                            })
+                            .addOnFailureListener(e -> {
+                               Log.e("DeleteError", "Error deleting facility", e);
+                            });
+                 })
+                 .setNegativeButton("No, missClick", null)
+                 .show();
       });
    }
 }
