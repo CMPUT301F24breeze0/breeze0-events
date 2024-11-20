@@ -1,6 +1,8 @@
 package com.example.breeze0events;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -44,6 +46,7 @@ public class AdminFacilityDetail extends AppCompatActivity {
 
       overallStorageController = new OverallStorageController();
       facilityId = getIntent().getStringExtra("selectedID");
+      if (facilityId == null || facilityId.isEmpty()) {finish();}
       facilityListDisplay = getIntent().getStringArrayListExtra("facilityListDisplay");
 
 
@@ -73,14 +76,16 @@ public class AdminFacilityDetail extends AppCompatActivity {
                     db.collection("FacilityDB").document(facilityId).delete()
                             .addOnSuccessListener(aVoid -> {
                                Toast.makeText(this, "Facility deleted successfully.", Toast.LENGTH_SHORT).show();
+                               //BackToFacilityList(); // in case user click detail again
                                finish();
                             })
                             .addOnFailureListener(e -> {
                                Log.e("DeleteError", "Error deleting facility", e);
                             });
                  })
-                 .setNegativeButton("No, missClick", null)
+                 .setNegativeButton("No, MissClick", null)
                  .show();
       });
    }
+
 }

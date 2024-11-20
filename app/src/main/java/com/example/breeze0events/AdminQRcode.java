@@ -82,31 +82,6 @@ public class AdminQRcode extends AppCompatActivity {
         }
     }
 
-    //old version
-//    private void loadQRCode() {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        db.collection("OverallDB").document(eventId)
-//                .get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        String qrCodeValue = documentSnapshot.getString("qrCode");
-//
-//                        if (qrCodeValue != null) {
-//                            Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrCodeValue);
-//                            if (qrCodeBitmap != null) {
-//                                qrCodeImageView.setImageBitmap(qrCodeBitmap);
-//                                deleteButton.setEnabled(true);
-//                            }
-//                        } else {
-//                            QRCodeMissing();
-//                        }
-//                    } else {
-//                        QRCodeMissing();
-//                    }
-//                })
-//    }
-
 
     /**
      * The case where QR code data is missing.
@@ -124,8 +99,8 @@ public class AdminQRcode extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Delete QR Code")
                 .setMessage("Are you sure to delete this QR code?")
-                .setPositiveButton("Confirm", (dialog, which) -> deleteQRCodeData())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("Delete", (dialog, which) -> deleteQRCodeData())
+                .setNegativeButton("No, MissClick", (dialog, which) -> dialog.dismiss())
                 .show();
 
     }
@@ -150,8 +125,12 @@ public class AdminQRcode extends AppCompatActivity {
                     Log.e("AdminQRcode", "Failed to delete QR code field", e);
                 });
     }
+
+    /**
+     * In in case user click the qr code again, but it is not updated
+     */
     private void BackToEventList() {
-        Intent intent = new Intent(this, AdminEventActivity.class);
+        Intent intent = new Intent(AdminQRcode.this, AdminEventActivity.class);
         startActivity(intent);
         finish();
     }
@@ -160,7 +139,30 @@ public class AdminQRcode extends AppCompatActivity {
 }
 
 
-
+//old version
+//    private void loadQRCode() {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//        db.collection("OverallDB").document(eventId)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        String qrCodeValue = documentSnapshot.getString("qrCode");
+//
+//                        if (qrCodeValue != null) {
+//                            Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrCodeValue);
+//                            if (qrCodeBitmap != null) {
+//                                qrCodeImageView.setImageBitmap(qrCodeBitmap);
+//                                deleteButton.setEnabled(true);
+//                            }
+//                        } else {
+//                            QRCodeMissing();
+//                        }
+//                    } else {
+//                        QRCodeMissing();
+//                    }
+//                })
+//    }
 
 //    /**
 //     * Old version of Delete QR code data.
