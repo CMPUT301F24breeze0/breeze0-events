@@ -18,6 +18,7 @@
 
         <TextView
             android:id="@+id/FacilityDetail"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Facility Detail"
@@ -30,6 +31,7 @@
 
         <TextView
             android:id="@+id/facilityName"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -43,6 +45,7 @@
 
         <TextView
             android:id="@+id/facilityID"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -56,6 +59,7 @@
 
         <TextView
             android:id="@+id/ViolatedPolicies"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -69,6 +73,7 @@
 
         <TextView
             android:id="@+id/Evidence"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

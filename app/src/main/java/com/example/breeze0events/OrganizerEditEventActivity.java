@@ -1,5 +1,6 @@
 package com.example.breeze0events;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -18,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -78,6 +82,49 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         saveButton.setOnClickListener(v -> saveEvent());
         backButton.setOnClickListener(v -> finish());
         selectFacilityButton.setOnClickListener(v -> openFacilitySelectionDialog());
+
+        startDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarView calendarView = new CalendarView(OrganizerEditEventActivity.this);
+                Calendar calendar = Calendar.getInstance();
+                calendarView.setDate(calendar.getTimeInMillis());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
+                alert.setTitle("Select a Date");
+                alert.setView(calendarView);
+                calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    startDateEditText.setText(selectedDate);
+                    Toast.makeText(OrganizerEditEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+                });
+                alert.setPositiveButton("Confirm", (dialog, which) -> {
+                    Toast.makeText(OrganizerEditEventActivity.this, "Selected Date: " + startDateEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                });
+                alert.show();
+            }
+        });
+
+        endDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarView calendarView = new CalendarView(OrganizerEditEventActivity.this);
+                Calendar calendar = Calendar.getInstance();
+                calendarView.setDate(calendar.getTimeInMillis());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
+                alert.setTitle("Select a Date");
+                alert.setView(calendarView);
+                calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    endDateEditText.setText(selectedDate);
+                });
+                alert.setPositiveButton("Confirm", (dialog, which) -> {
+                    Toast.makeText(OrganizerEditEventActivity.this, "Selected Date: " +  endDateEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                });
+                alert.show();
+            }
+        });
     }
 
     /**
@@ -98,6 +145,7 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 selectedFacilityTextView.setText(event.getFacility());
                 eventFacility = event.getFacility();
                 qrHashCode = event.getQrCode();
+                geolocationButton.setChecked((event.getGeolocation().equals("true"))?true:false);
                 ImageHashCode = event.getPosterPhoto();
 
                 if (ImageHashCode != null) {
