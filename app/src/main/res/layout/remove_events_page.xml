@@ -36,7 +36,7 @@
         android:background="#40484D"/>
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/back_in_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"

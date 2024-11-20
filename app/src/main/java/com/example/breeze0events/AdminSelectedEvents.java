@@ -8,7 +8,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +50,7 @@ public class AdminSelectedEvents extends AppCompatActivity {
         String Id = (String) getIntent().getSerializableExtra("selectedID");
         ArrayList<String> eventListDisplay = getIntent().getStringArrayListExtra("eventListDisplay");
 
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.back_in_main);
         DetailButton = findViewById(R.id.DetailButton);
         QRCodeButton = findViewById(R.id.QRCodeButton);
         EventName = findViewById(R.id.EventName);
@@ -101,7 +100,7 @@ public class AdminSelectedEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminSelectedEvents.this, AdminBrowseImage.class);
-
+                intent.putExtra("eventId", selected_event.getEventId());
                 intent.putExtra("poster", selected_event.getPosterPhoto());
                 startActivity(intent);
             }

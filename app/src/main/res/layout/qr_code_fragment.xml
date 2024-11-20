@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/back_in_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -38,7 +38,9 @@
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toEndOf="@+id/backButton" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

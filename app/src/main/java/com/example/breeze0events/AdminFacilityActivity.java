@@ -41,7 +41,7 @@ public class AdminFacilityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_facility_page);
-        Button return_button = findViewById(R.id.backButton);
+        Button return_button = findViewById(R.id.back_in_main);
 
         facilityListView = findViewById(R.id.facilityList);
         facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityListDisplay);

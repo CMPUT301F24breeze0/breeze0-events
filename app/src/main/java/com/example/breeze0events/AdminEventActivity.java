@@ -71,7 +71,7 @@ public class AdminEventActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remove_events_page);
-        Button return_button = findViewById(R.id.backButton);
+        Button return_button = findViewById(R.id.back_in_main);
         refreshButton = findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(v -> refreshEventList());
 
