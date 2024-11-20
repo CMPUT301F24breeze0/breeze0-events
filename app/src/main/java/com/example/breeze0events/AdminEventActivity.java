@@ -173,7 +173,7 @@ public class AdminEventActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    Toast.makeText(AdminEventActivity.this, "Event list refreshed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminEventActivity.this, "Refreshed", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("FirestoreError", "Error to fetch DB: ", task.getException());
                 }

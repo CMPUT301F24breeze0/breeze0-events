@@ -118,7 +118,7 @@ public class AdminEventDetail extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Event")
                 .setMessage("Are you sure to delete this event?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton("Delete", (dialog, which) -> {
                     deleteEvent(id);
                 })
                 .setNegativeButton("No, missClick", (dialog, which) -> {
