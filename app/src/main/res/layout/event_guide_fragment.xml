@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/back_in_main"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:backgroundTint="#000000"
