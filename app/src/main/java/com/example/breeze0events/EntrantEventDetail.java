@@ -97,9 +97,9 @@ public class EntrantEventDetail extends AppCompatActivity {
                 eventLocation = event.getFacility();
                 event_title.setText(event.getName());
                 String information = "Event Name: "+event.getName()
-                        +"\nEvent Date: "+event.getStartDate()
-                        +"\nSign up Due Date: "+event.getEndDate()
-                        +"\nEvent Organizers: "+event.getOrganizers();
+                        +"\n\nEvent Date: "+event.getStartDate()
+                        +"\n\nSign up Due Date: "+event.getEndDate()
+                        +"\n\nEvent Organizers: "+event.getOrganizers();
                 event_information.setText(information);
                 try {
                     QRcode.setImageBitmap(QRHashGenerator.generateQRCode(event.getQrCode()));
