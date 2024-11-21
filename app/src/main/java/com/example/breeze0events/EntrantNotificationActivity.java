@@ -3,7 +3,6 @@ package com.example.breeze0events;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -33,7 +32,7 @@ public class EntrantNotificationActivity extends AppCompatActivity implements En
         // Initialize UI components
         notificationListView = findViewById(R.id.notification_list);
         quietModeButton = findViewById(R.id.quietMode_Button);
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.back_in_main);
 
         // Get device ID
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);

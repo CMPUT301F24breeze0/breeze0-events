@@ -77,9 +77,16 @@ public class AdminEventDetail extends AppCompatActivity {
                 maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
                 signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
+                String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
+                if (encryptedPosterImage != null && !encryptedPosterImage.isEmpty()) {
+                    displayDecryptedPosterImage(encryptedPosterImage);
+                } else {
+                    Toast.makeText(AdminEventDetail.this, "No poster available for this event.", Toast.LENGTH_SHORT).show();
+                }
 
-                Log.d("AdminEventDetail", "Admins data fetched successfully: ");
+                Log.d("AdminEventDetail", "Event details loaded successfully.");
             }
+
 
             @Override
             public void onFailure(String errorMessage) {
@@ -87,9 +94,6 @@ public class AdminEventDetail extends AppCompatActivity {
             }
         });
 
-        if (encryptedPosterImage != null) {
-            displayDecryptedPosterImage(encryptedPosterImage);
-        }
 
         return_button.setOnClickListener(v -> {
             finish();
@@ -114,10 +118,10 @@ public class AdminEventDetail extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Event")
                 .setMessage("Are you sure to delete this event?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton("Delete", (dialog, which) -> {
                     deleteEvent(id);
                 })
-                .setNegativeButton("No, missClick", (dialog, which) -> {
+                .setNegativeButton("No, MissClick", (dialog, which) -> {
                     dialog.dismiss();
                 })
                 .show();
@@ -125,28 +129,66 @@ public class AdminEventDetail extends AppCompatActivity {
 
 
     /**
-     * Deletes the specified event and updates the event list display. Sends the updated event list
-     * back to the previous activity.
+     * Deletes the specified event and updates the event list display. And also delete event from
+     * corresponding organizer. Sends the updated event list back to the previous activity.
      *
      * @param id The ID of the event to be deleted.
      */
     private void deleteEvent(String id) {
-        overallStorageController.deleteEvent(id);
-        Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
-
-        if (eventList != null) {
-            eventList.removeIf(event -> event.getEventId().equals(id));
+        if (selected_event == null) {
+            Log.e("AdminEventDetail", "no event");
+            return;
         }
 
-        eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+        ArrayList<String> organizers = new ArrayList<>(selected_event.getOrganizers());
 
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
-        setResult(RESULT_OK, resultIntent);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("OverallDB").document(id).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("AdminEventDetail", "Event successfully deleted from OverallDB");
 
-        Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
-        finish();
+                    for (String organizerId : organizers) {
+                        db.collection("OrganizerDB").document(organizerId)
+                                .update("events", com.google.firebase.firestore.FieldValue.arrayRemove(id))
+                                .addOnSuccessListener(aVoid1 -> Log.d("AdminEventDetail", "Event removed from Organizer: " + organizerId))
+                                .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Organizer: " + organizerId, e));
+                    }
+
+                    if (eventList != null) {
+                        eventList.removeIf(event -> event.getEventId().equals(id));
+                    }
+                    eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
+                    setResult(RESULT_OK, resultIntent);
+
+                    Toast.makeText(this, "Event deleted successfully.", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("AdminEventDetail", "Failed to delete event from OverallDB", e);
+                });
     }
+
+    // old version of deleteEvent, in case new one has bugs
+//    private void deleteEvent(String id) {
+//        overallStorageController.deleteEvent(id);
+//        Log.d("AdminEventDetail", "Delete function called from OverallStorageController");
+//
+//        if (eventList != null) {
+//            eventList.removeIf(event -> event.getEventId().equals(id));
+//        }
+//
+//        eventListDisplay.removeIf(eventInfo -> eventInfo.contains(id));
+//
+//        Intent resultIntent = new Intent();
+//        resultIntent.putExtra("UPDATED_LIST", eventListDisplay);
+//        setResult(RESULT_OK, resultIntent);
+//
+//        Toast.makeText(this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+//        finish();
+//    }
 
 
     /**

@@ -19,6 +19,7 @@
 
         <TextView
             android:id="@+id/EventDetail"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Event Detail"
@@ -31,10 +32,11 @@
 
         <TextView
             android:id="@+id/EventName"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Event Name"
+            android:text="Event Name: "
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,10 +46,11 @@
 
         <TextView
             android:id="@+id/EventDate"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Event Date"
+            android:text="Event Date: "
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,10 +60,11 @@
 
         <TextView
             android:id="@+id/MaxEntrants"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="MAX No. of Entrants"
+            android:text="MAX No. of Entrants: "
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,10 +74,11 @@
 
         <TextView
             android:id="@+id/duedate"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Sign up due date"
+            android:text="Sign up due date: "
             android:textColor="@color/text_color"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,10 +88,11 @@
 
         <TextView
             android:id="@+id/description"
+            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Event description"
+            android:text="Event description: "
             android:textColor="@color/text_color"
             android:textSize="14sp"
 
@@ -97,11 +103,12 @@
 
         <TextView
             android:id="@+id/posterText"
+            android:layout_marginStart="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"
             android:layout_marginBottom="20dp"
-            android:text="   Poster"
+            android:text="Poster"
             android:textColor="@color/text_color"
             android:textSize="19sp"
             android:textStyle="bold"
@@ -112,9 +119,9 @@
 
         <ImageView
             android:id="@+id/poster"
+            android:layout_marginStart="10dp"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_marginLeft="7dp"
             android:background="@drawable/circle_image"
             android:clipToOutline="true"
             android:contentDescription="Event Poster"

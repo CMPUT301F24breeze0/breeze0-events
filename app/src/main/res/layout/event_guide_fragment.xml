@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/EventName"
-        android:layout_width="275dp"
-        android:layout_height="38dp"
+        android:layout_width="397dp"
+        android:layout_height="44dp"
         android:layout_marginBottom="72dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Select Event Name"
         android:textAlignment="center"
-        android:textSize="28sp"
+        android:textSize="31sp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/back_in_main"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:backgroundTint="#000000"
@@ -67,5 +67,14 @@
         app:layout_constraintTop_toBottomOf="@+id/DetailButton"
         app:layout_constraintVertical_bias="0.052" />
 
+    <ImageView
+        android:id="@+id/posterImageView"
+        android:layout_width="271dp"
+        android:layout_height="94dp"
+        android:contentDescription="event_poster"
+        android:scaleType="centerCrop"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="140dp"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

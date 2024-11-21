@@ -71,7 +71,7 @@ public class AdminEventActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remove_events_page);
-        Button return_button = findViewById(R.id.backButton);
+        Button return_button = findViewById(R.id.back_in_main);
         refreshButton = findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(v -> refreshEventList());
 
@@ -173,7 +173,7 @@ public class AdminEventActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    Toast.makeText(AdminEventActivity.this, "Event list refreshed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminEventActivity.this, "Refreshed", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("FirestoreError", "Error to fetch DB: ", task.getException());
                 }

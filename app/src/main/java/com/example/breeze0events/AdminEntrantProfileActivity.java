@@ -95,8 +95,7 @@ public class AdminEntrantProfileActivity extends AppCompatActivity  {
             });
             Button back_button=findViewById(R.id.back_in_organizer_list);
             back_button.setOnClickListener(v->{
-                Intent intent1=new Intent(AdminEntrantProfileActivity.this,AdminOperateActivity.class);
-                startActivity(intent1);
+                finish();
             });
             entrantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

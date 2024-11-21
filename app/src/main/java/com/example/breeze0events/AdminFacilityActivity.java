@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,7 +42,8 @@ public class AdminFacilityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_facility_page);
-        Button return_button = findViewById(R.id.backButton);
+        Button return_button = findViewById(R.id.back_in_main);
+        Button refresh_button = findViewById(R.id.refresh_button);
 
         facilityListView = findViewById(R.id.facilityList);
         facilityListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, facilityListDisplay);
@@ -78,6 +80,9 @@ public class AdminFacilityActivity extends AppCompatActivity {
             }
         });
 
+        refresh_button.setOnClickListener(v -> {
+            refreshFacilityList();
+        });
 
         return_button.setOnClickListener(v -> {
             finish();
@@ -103,4 +108,42 @@ public class AdminFacilityActivity extends AppCompatActivity {
         });
 
     }
+
+    private void refreshFacilityList() {
+        facilityList.clear();
+        facilityListDisplay.clear();
+        facilityListAdapter.notifyDataSetChanged();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("FacilityDB");
+
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String id = document.getId();
+                        overallStorageController.getFacility(id, new FacilityCallback() {
+                            @Override
+                            public void onSuccess(Facility facility) {
+                                String info = "Facility Location:\n" + facility.getLocation();
+                                facilityListDisplay.add(info);
+                                facilityList.add(facility);
+                                facilityListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                Log.e("AdminFacilityActivity", "Failed to fetch facility data: " + errorMessage);
+                            }
+                        });
+                    }
+                    Toast.makeText(AdminFacilityActivity.this, "Refreshed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("FirestoreError", "Error fetching data: ", task.getException());
+                }
+            }
+        });
+    }
+
 }
