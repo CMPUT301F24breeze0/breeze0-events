@@ -82,23 +82,10 @@
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttonQuietMode"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/buttonQuietMode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Quiet mode"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/text_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toStartOf="@id/buttonProfile"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp" />
-
+    
     <Button
         android:id="@+id/buttonProfile"
         android:layout_width="0dp"
@@ -107,7 +94,7 @@
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonQuietMode"
+        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp" />
 
