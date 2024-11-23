@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -9,22 +10,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
+/**
+ * Unit tests for Event functionality and QR code generation.
+ */
 @RunWith(AndroidJUnit4.class)
 public class US020102 {
 
     private Context context;
+    private OverallStorageController overallStorageController;
 
     @Before
     public void setUp() {
-        // Get the application context for any operations requiring it
+        // Get the application context for operations requiring it
         context = ApplicationProvider.getApplicationContext();
+        overallStorageController = new OverallStorageController();
     }
 
     @Test
@@ -44,27 +48,27 @@ public class US020102 {
         List<String> organizers = new ArrayList<>();
         organizers.add("organizer1");
 
-        // Initialize the event with all fields
-        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, entrants, organizers);
+        // Create a new Event instance
+        Event event = new Event(eventId, name, qrCode, posterPhoto, facility, startDate, endDate, limitedNumber, "false", entrants, organizers);
 
         // Act
         Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrCode);
 
-        // Assert
+        // Assert QR code generation
         assertNotNull("QR Code Bitmap should not be null.", qrCodeBitmap);
         assertEquals("QR Code width should be 512 pixels.", 512, qrCodeBitmap.getWidth());
         assertEquals("QR Code height should be 512 pixels.", 512, qrCodeBitmap.getHeight());
-        assertEquals("Event QR code hash should match expected hash code.", qrCode, event.getQrCode());
+        assertEquals("Event QR code hash should match the expected hash.", qrCode, event.getQrCode());
 
-        // Add the event to OverallStorageController
-        OverallStorageController overallStorageController = new OverallStorageController();
+        // Add the event to the OverallStorageController
         overallStorageController.addEvent(event);
 
         // Verify if the event is correctly added
         overallStorageController.getEvent(eventId, new EventCallback() {
             @Override
             public void onSuccess(Event retrievedEvent) {
-                assertEquals("Retrieved event ID should match", eventId, retrievedEvent.getEventId());
+                assertNotNull("Retrieved event should not be null.", retrievedEvent);
+                assertEquals("Retrieved event ID should match.", eventId, retrievedEvent.getEventId());
             }
 
             @Override
@@ -77,7 +81,6 @@ public class US020102 {
         overallStorageController.deleteEvent(eventId);
     }
 
-
     @Test
     public void testGenerateHash_emptyInput() {
         // Arrange
@@ -87,7 +90,7 @@ public class US020102 {
         // Act
         String generatedHash = QRHashGenerator.generateHash(input);
 
-        // Assert
+        // Assert hash generation
         assertNotNull("Hash should not be null.", generatedHash);
         assertEquals("Generated hash for empty input does not match expected hash.", expectedHash, generatedHash);
     }
@@ -100,12 +103,11 @@ public class US020102 {
         // Act
         Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(qrHashCode);
 
-        // Assert
+        // Assert QR code generation
         assertNotNull("QR Code Bitmap should not be null.", qrCodeBitmap);
         assertEquals("QR Code width should be 512 pixels.", 512, qrCodeBitmap.getWidth());
         assertEquals("QR Code height should be 512 pixels.", 512, qrCodeBitmap.getHeight());
     }
-
 
     @Test
     public void testQRCodeEncodingAndDecoding() {
@@ -114,6 +116,12 @@ public class US020102 {
 
         // Act
         Bitmap qrCodeBitmap = QRHashGenerator.generateQRCode(originalText);
+
+        // Assert QR code generation
         assertNotNull("Generated QR Code Bitmap should not be null.", qrCodeBitmap);
+
+        // Optional: Add decoding logic if required for end-to-end validation
+        // String decodedText = QRHashGenerator.decodeQRCode(qrCodeBitmap);
+        // assertEquals("Decoded text should match the original text.", originalText, decodedText);
     }
 }

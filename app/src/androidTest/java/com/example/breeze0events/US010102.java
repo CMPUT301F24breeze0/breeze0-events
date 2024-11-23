@@ -133,9 +133,9 @@ public class US010102 {
 
     // Custom matcher to match the data item with the given eventId
     public static Matcher<Object> withEventId(final String eventId) {
-        return new BoundedMatcher<Object, Pair<String, String>>(castClass(Pair.class)) {
+        return new BoundedMatcher<Object, NewPair<String, String>>(castClass(NewPair.class)) {
             @Override
-            protected boolean matchesSafely(Pair<String, String> item) {
+            protected boolean matchesSafely(NewPair<String, String> item) {
                 return item.getLeft().equals(eventId);
             }
 
