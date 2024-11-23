@@ -18,22 +18,30 @@ import androidx.test.espresso.IdlingPolicies;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+/**
+ * UI test for deleting an event from the admin interface.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class US030101{
+public class US030101 {
     private OverallStorageController overallStorageController;
     private String mockEventId;
 
+    /**
+     * Matcher to find a list item with specific text.
+     */
     public static Matcher<Object> withItemContent(final String text) {
         return new TypeSafeMatcher<Object>() {
             @Override
@@ -50,10 +58,13 @@ public class US030101{
 
     @Before
     public void setup() {
-
+        // Set global timeout for idling policies
         IdlingPolicies.setMasterPolicyTimeout(6, TimeUnit.SECONDS);
+
+        // Initialize OverallStorageController
         overallStorageController = new OverallStorageController();
 
+        // Create and add a mock event
         Event mockEvent = new Event(
                 "test_event_id_to_delete",
                 "Test Event for Deletion",
@@ -63,6 +74,7 @@ public class US030101{
                 "2023-11-07",
                 "2023-11-08",
                 "100",
+                "false",
                 Arrays.asList("entrant1"),
                 Arrays.asList("organizer1")
         );
@@ -72,55 +84,52 @@ public class US030101{
 
     @After
     public void tearDown() {
+        // Ensure the mock event is removed from the database
         if (overallStorageController != null) {
             overallStorageController.deleteEvent(mockEventId);
         }
     }
 
     @Test
-    public void testRemoveEvent() throws InterruptedException { //
-
+    public void testRemoveEvent() throws InterruptedException {
+        // Launch the AdminEventActivity
         ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class);
+
+        // Wait for the database to load (use IdlingResource for production code)
         Thread.sleep(4000);
-        // figure it out database showing slowly, giving time delay to solve this
+
+        // Verify the event list is displayed
         onView(withId(R.id.eventsList)).check(ViewAssertions.matches(isDisplayed()));
 
-
-//        onData(anything())
-//                .inAdapterView(withId(R.id.eventsList))
-//                .atPosition(0)
-//                .perform(click());
-
-        // due to mock event randomly show in the listview i choose to use text
+        // Select the mock event from the list
         onData(withItemContent("Test Event for Deletion"))
                 .inAdapterView(withId(R.id.eventsList))
                 .perform(click());
 
-        // eventName
+        // Verify event name is displayed
         onView(withId(R.id.EventName)).check(ViewAssertions.matches(isDisplayed()));
 
-        // QR Code test
+        // Test the "QR Code" button
         onView(withId(R.id.QRCodeButton)).perform(click());
-
         onView(withId(R.id.QRcode)).check(ViewAssertions.matches(isDisplayed()));
+        Espresso.pressBack(); // Return to previous screen
 
-        Espresso.pressBack();
-
-        // "Detail" button test
+        // Test the "Detail" button
         onView(withId(R.id.DetailButton)).perform(click());
-
         onView(withId(R.id.EventDetail)).check(ViewAssertions.matches(isDisplayed()));
 
-        // "Delete" button to remove the event test
+        // Test the "Delete" button to remove the event
         onView(withId(R.id.Deletebutton)).perform(click());
+        Espresso.pressBack(); // Return to the list view
 
-        Espresso.pressBack();
-
-        // test delete successful or not
+        // Verify the event is no longer in the list
         onView(withId(R.id.eventsList))
                 .check(ViewAssertions.matches(not(withText("Test Event for Deletion"))));
 
+        // Wait to ensure database reflects changes
         Thread.sleep(5000);
+
+        // Verify the event is removed from the database
         overallStorageController.getEvent(mockEventId, new EventCallback() {
             @Override
             public void onSuccess(Event event) {
