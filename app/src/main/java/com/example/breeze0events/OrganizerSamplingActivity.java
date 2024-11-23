@@ -149,11 +149,41 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         });
 
 
-        // by finalize the event
+// Finalize the event by setting its limited number to 0
         finalizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                // Fetch the event details using the provided eventId
+                overallStorageController.getEvent(eventId, new EventCallback() {
+                    @Override
+                    public void onSuccess(Event event) {
+                        if (event != null) {
+                            // Log the event retrieval for debugging purposes
+                            Log.d("FinalizeEvent", "Successfully retrieved event: " + eventId);
+
+                            // Set the event's limited number to 0 to finalize it
+                            event.setLimitedNumber("0");
+
+                            // Update the event in the database
+                            overallStorageController.updateEvent(event);
+
+                            // Provide feedback to the user after the update
+                            Log.d("FinalizeEvent", "Event finalized successfully: " + eventId);
+                            Toast.makeText(OrganizerSamplingActivity.this, "Event finalized successfully!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Handle the case where the event is not found
+                            Log.e("FinalizeEvent", "Event not found: " + eventId);
+                            Toast.makeText(OrganizerSamplingActivity.this, "Event not found. Please check the event ID.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        // Log and display an error message if event retrieval fails
+                        Log.e("FinalizeEvent", "Failed to retrieve event: " + errorMessage);
+                        Toast.makeText(OrganizerSamplingActivity.this, "Failed to retrieve event. Please try again.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
