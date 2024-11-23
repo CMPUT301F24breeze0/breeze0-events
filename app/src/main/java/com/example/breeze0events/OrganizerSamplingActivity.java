@@ -153,7 +153,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         finalizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                
             }
         });
     }
