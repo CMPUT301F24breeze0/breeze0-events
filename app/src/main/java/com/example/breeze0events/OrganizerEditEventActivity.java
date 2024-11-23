@@ -189,6 +189,11 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
             return;
         }
 
+        if (startDateEditText.getText().toString().compareTo(endDateEditText.getText().toString())>0){
+            Toast.makeText(OrganizerEditEventActivity.this, "start date cannot be after end date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Update event details
         Event updatedEvent = new Event(eventId, eventName, qrHashCode, ImageHashCode, eventFacility, startDate, endDate, entrants, geolocation, currentEvent.getEntrants(), Arrays.asList(organizerId));
         overallStorageController.updateEvent(updatedEvent);

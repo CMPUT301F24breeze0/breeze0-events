@@ -223,7 +223,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 Toast.makeText(OrganizerEventActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if (start_date.getText().toString().compareTo(end_date.getText().toString())>0){
+                Toast.makeText(OrganizerEventActivity.this, "start date cannot be after end date", Toast.LENGTH_SHORT).show();
+                return;
+            }
             List<String> organizers = new ArrayList<>();
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
