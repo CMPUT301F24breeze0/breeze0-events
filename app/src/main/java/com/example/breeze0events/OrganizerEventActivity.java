@@ -99,6 +99,9 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         overallStorageController = new OverallStorageController();
         posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
+        start_date.setFocusable(false);
+        end_date.setFocusable(false);
+
         // set header
         TextView headerTextView = findViewById(R.id.organizer_edit_event_activity_header);
         if (headerText != null) {
@@ -116,6 +119,11 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 CalendarView calendarView = new CalendarView(OrganizerEventActivity.this);
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
+
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                start_date.setText(Year+"-"+Month+"-"+Day);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
@@ -138,6 +146,11 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 CalendarView calendarView = new CalendarView(OrganizerEventActivity.this);
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
+
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                end_date.setText(Year+"-"+Month+"-"+Day);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
