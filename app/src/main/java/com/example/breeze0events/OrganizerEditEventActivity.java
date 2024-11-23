@@ -96,13 +96,13 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 int Year = calendar.get(Calendar.YEAR);
                 int Month = calendar.get(Calendar.MONTH) + 1;
                 int Day = calendar.get(Calendar.DAY_OF_MONTH);
-                startDateEditText.setText(Year+"-"+Month+"-"+Day);
+                startDateEditText.setText(String.format("%d-%02d-%02d", Year, Month, Day));
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
                     startDateEditText.setText(selectedDate);
                     Toast.makeText(OrganizerEditEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 });
@@ -123,13 +123,13 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 int Year = calendar.get(Calendar.YEAR);
                 int Month = calendar.get(Calendar.MONTH) + 1;
                 int Day = calendar.get(Calendar.DAY_OF_MONTH);
-                endDateEditText.setText(Year+"-"+Month+"-"+Day);
+                endDateEditText.setText(String.format("%d-%02d-%02d", Year, Month, Day));
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
                     endDateEditText.setText(selectedDate);
                 });
                 alert.setPositiveButton("Confirm", (dialog, which) -> {

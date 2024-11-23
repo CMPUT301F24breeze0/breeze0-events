@@ -123,13 +123,13 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 int Year = calendar.get(Calendar.YEAR);
                 int Month = calendar.get(Calendar.MONTH) + 1;
                 int Day = calendar.get(Calendar.DAY_OF_MONTH);
-                start_date.setText(Year+"-"+Month+"-"+Day);
+                start_date.setText(String.format("%d-%02d-%02d", Year, Month, Day));
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
                     start_date.setText(selectedDate);
                     Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 });
@@ -150,13 +150,13 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 int Year = calendar.get(Calendar.YEAR);
                 int Month = calendar.get(Calendar.MONTH) + 1;
                 int Day = calendar.get(Calendar.DAY_OF_MONTH);
-                end_date.setText(Year+"-"+Month+"-"+Day);
+                end_date.setText(String.format("%d-%02d-%02d", Year, Month, Day));
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
                     end_date.setText(selectedDate);
                 });
                 alert.setPositiveButton("Confirm", (dialog, which) -> {

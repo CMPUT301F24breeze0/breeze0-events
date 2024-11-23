@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -61,13 +62,13 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         entrantDisplayRejected = new ArrayList<>();
         joinedEntrants = new ArrayList<>();
 
-        entrantAdapterRequested = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayRequested);
+        entrantAdapterRequested = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entrantDisplayRequested);
         entrantListViewRequested.setAdapter(entrantAdapterRequested);
 
-        entrantAdapterAccepted = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayAccepted);
+        entrantAdapterAccepted = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entrantDisplayAccepted);
         entrantListViewAccepted.setAdapter(entrantAdapterAccepted);
 
-        entrantAdapterRejected = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantDisplayRejected);
+        entrantAdapterRejected = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entrantDisplayRejected);
         entrantListViewRejected.setAdapter(entrantAdapterRejected);
 
         // Assume eventId is passed via intent
@@ -80,6 +81,8 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         Button pickApplicantButton = findViewById(R.id.organizer_sampling_activity_pick_new_applicant_button);
         Button backButton = findViewById(R.id.organizer_sampling_activity_back_button);
         Button refreshButton = findViewById(R.id.organizer_sampling_activity_refresh_button);
+        Button cancelButton = findViewById(R.id.cancel_button);
+        Button finalizeButton = findViewById(R.id.finalist_button);
 
         // by clicking back button
         backButton.setOnClickListener(v -> finish());
@@ -89,6 +92,70 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         // by clicking refresh button
         refreshButton.setOnClickListener(v -> loadEntrantsWithJoinedStatus());
+
+// Cancel entrants who requested to join the event
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Access the EntrantDB collection in the Firestore database
+                db.collection("EntrantDB").get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // Log success when the database query is successful
+                                Log.d("OrganizerSampling", "Database query successful");
+
+                                // Iterate through all documents retrieved from the EntrantDB collection
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d("OrganizerSampling", "Processing document: " + document.getId());
+
+                                    // Retrieve the events and status maps from the current document
+                                    Map<String, String> eventsMap = (Map<String, String>) document.get("events");
+                                    Map<String, String> statusMap = (Map<String, String>) document.get("status");
+
+                                    // Log the contents of the maps for debugging purposes
+                                    Log.d("OrganizerSampling", "Document eventsMap: " + eventsMap);
+                                    Log.d("OrganizerSampling", "Document statusMap: " + statusMap);
+
+                                    // Check if both maps are not null and contain the eventId as a key
+                                    if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && statusMap.containsKey(eventId)) {
+                                        // Retrieve the status of the current event
+                                        String status = statusMap.get(eventId);
+                                        Log.d("OrganizerSampling", "Found matching event with status: " + status);
+
+                                        // If the status is "Requested", update it to "Rejected"
+                                        if ("Requested".equals(status)) {
+                                            statusMap.put(eventId, "Rejected");
+
+                                            // Update the status map in the Firestore document
+                                            db.collection("EntrantDB").document(document.getId()).update(
+                                                            "status", statusMap
+                                                    ).addOnSuccessListener(aVoid ->
+                                                            Log.d("OrganizerSampling", "Status updated to Rejected for entrant: " + document.getId()))
+                                                    .addOnFailureListener(e ->
+                                                            Log.e("OrganizerSampling", "Failed to update status", e));
+                                        }
+                                    } else {
+                                        // Log an error if the document structure is invalid or does not contain the eventId
+                                        Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
+                                    }
+                                }
+                            } else {
+                                // Log and display an error if the database query fails
+                                Log.e("OrganizerSampling", "Failed to load entrants", task.getException());
+                                Toast.makeText(OrganizerSamplingActivity.this, "Failed to load entrants", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+
+
+        // by finalize the event
+        finalizeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void loadEventDetails(String eventId) {
@@ -204,7 +271,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
             if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
                 statusMap.put(eventId, "Requested");
-                String notificationMessage = "You have a status change in this event";
+                String notificationMessage = "You are selected to join the event.";
                 db.collection("EntrantDB").document(entrant.getId())
                         .update(
                                 "status", statusMap,
