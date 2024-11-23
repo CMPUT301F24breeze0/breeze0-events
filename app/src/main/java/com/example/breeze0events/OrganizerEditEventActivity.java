@@ -123,7 +123,7 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 int Year = calendar.get(Calendar.YEAR);
                 int Month = calendar.get(Calendar.MONTH) + 1;
                 int Day = calendar.get(Calendar.DAY_OF_MONTH);
-                startDateEditText.setText(Year+"-"+Month+"-"+Day);
+                endDateEditText.setText(Year+"-"+Month+"-"+Day);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
                 alert.setTitle("Select a Date");
