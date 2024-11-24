@@ -248,6 +248,4 @@ public class EntrantEventDetail extends AppCompatActivity {
             }
         }
     }
-
-
 }

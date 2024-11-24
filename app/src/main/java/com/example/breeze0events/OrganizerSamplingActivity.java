@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class OrganizerSamplingActivity extends AppCompatActivity {
-    private OverallStorageController overallStorageController;
+    public OverallStorageController overallStorageController;
     private FirebaseFirestore db;
     private ListView entrantListViewRequested,entrantListViewAccepted,entrantListViewRejected;
     ArrayAdapter<String> entrantAdapterRequested,entrantAdapterAccepted,entrantAdapterRejected;
@@ -31,9 +31,9 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     private TextView remainingSlotsTextView;
     int limitedNumber; // Maximum number of entrants allowed
     int requestedCount,acceptedCount; // Number of entrants already requested
-    private String eventId; // The ID of the current event
-    private Event selectedEvent;
-
+    public String eventId; // The ID of the current event
+    Event selectedEvent;
+    Button finalizeButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +82,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.organizer_sampling_activity_back_button);
         Button refreshButton = findViewById(R.id.organizer_sampling_activity_refresh_button);
         Button cancelButton = findViewById(R.id.cancel_button);
-        Button finalizeButton = findViewById(R.id.finalist_button);
+        finalizeButton = findViewById(R.id.finalist_button);
 
         // by clicking back button
         backButton.setOnClickListener(v -> finish());
