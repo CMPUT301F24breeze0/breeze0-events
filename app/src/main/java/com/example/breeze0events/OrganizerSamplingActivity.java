@@ -93,60 +93,8 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         // by clicking refresh button
         refreshButton.setOnClickListener(v -> loadEntrantsWithJoinedStatus());
 
-// Cancel entrants who requested to join the event
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Access the EntrantDB collection in the Firestore database
-                db.collection("EntrantDB").get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Log success when the database query is successful
-                                Log.d("OrganizerSampling", "Database query successful");
-
-                                // Iterate through all documents retrieved from the EntrantDB collection
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("OrganizerSampling", "Processing document: " + document.getId());
-
-                                    // Retrieve the events and status maps from the current document
-                                    Map<String, String> eventsMap = (Map<String, String>) document.get("events");
-                                    Map<String, String> statusMap = (Map<String, String>) document.get("status");
-
-                                    // Log the contents of the maps for debugging purposes
-                                    Log.d("OrganizerSampling", "Document eventsMap: " + eventsMap);
-                                    Log.d("OrganizerSampling", "Document statusMap: " + statusMap);
-
-                                    // Check if both maps are not null and contain the eventId as a key
-                                    if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && statusMap.containsKey(eventId)) {
-                                        // Retrieve the status of the current event
-                                        String status = statusMap.get(eventId);
-                                        Log.d("OrganizerSampling", "Found matching event with status: " + status);
-
-                                        // If the status is "Requested", update it to "Rejected"
-                                        if ("Requested".equals(status)) {
-                                            statusMap.put(eventId, "Rejected");
-
-                                            // Update the status map in the Firestore document
-                                            db.collection("EntrantDB").document(document.getId()).update(
-                                                            "status", statusMap
-                                                    ).addOnSuccessListener(aVoid ->
-                                                            Log.d("OrganizerSampling", "Status updated to Rejected for entrant: " + document.getId()))
-                                                    .addOnFailureListener(e ->
-                                                            Log.e("OrganizerSampling", "Failed to update status", e));
-                                        }
-                                    } else {
-                                        // Log an error if the document structure is invalid or does not contain the eventId
-                                        Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
-                                    }
-                                }
-                            } else {
-                                // Log and display an error if the database query fails
-                                Log.e("OrganizerSampling", "Failed to load entrants", task.getException());
-                                Toast.makeText(OrganizerSamplingActivity.this, "Failed to load entrants", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
+        // Cancel entrants who requested to join the event
+        cancelButton.setOnClickListener(v-> changeRequestToReject());
 
 
 // Finalize the event by setting its limited number to 0
@@ -184,6 +132,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                         Toast.makeText(OrganizerSamplingActivity.this, "Failed to retrieve event. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
+                changeRequestToReject();
             }
         });
     }
@@ -313,5 +262,55 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         }
 
         loadEntrantsWithJoinedStatus();
+    }
+    void changeRequestToReject(){
+        // Access the EntrantDB collection in the Firestore database
+        db.collection("EntrantDB").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Log success when the database query is successful
+                        Log.d("OrganizerSampling", "Database query successful");
+
+                        // Iterate through all documents retrieved from the EntrantDB collection
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("OrganizerSampling", "Processing document: " + document.getId());
+
+                            // Retrieve the events and status maps from the current document
+                            Map<String, String> eventsMap = (Map<String, String>) document.get("events");
+                            Map<String, String> statusMap = (Map<String, String>) document.get("status");
+
+                            // Log the contents of the maps for debugging purposes
+                            Log.d("OrganizerSampling", "Document eventsMap: " + eventsMap);
+                            Log.d("OrganizerSampling", "Document statusMap: " + statusMap);
+
+                            // Check if both maps are not null and contain the eventId as a key
+                            if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && statusMap.containsKey(eventId)) {
+                                // Retrieve the status of the current event
+                                String status = statusMap.get(eventId);
+                                Log.d("OrganizerSampling", "Found matching event with status: " + status);
+
+                                // If the status is "Requested", update it to "Rejected"
+                                if ("Requested".equals(status)) {
+                                    statusMap.put(eventId, "Rejected");
+
+                                    // Update the status map in the Firestore document
+                                    db.collection("EntrantDB").document(document.getId()).update(
+                                                    "status", statusMap
+                                            ).addOnSuccessListener(aVoid ->
+                                                    Log.d("OrganizerSampling", "Status updated to Rejected for entrant: " + document.getId()))
+                                            .addOnFailureListener(e ->
+                                                    Log.e("OrganizerSampling", "Failed to update status", e));
+                                }
+                            } else {
+                                // Log an error if the document structure is invalid or does not contain the eventId
+                                Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
+                            }
+                        }
+                    } else {
+                        // Log and display an error if the database query fails
+                        Log.e("OrganizerSampling", "Failed to load entrants", task.getException());
+                        Toast.makeText(OrganizerSamplingActivity.this, "Failed to load entrants", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
