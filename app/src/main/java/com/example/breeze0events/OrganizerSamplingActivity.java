@@ -132,6 +132,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                         Toast.makeText(OrganizerSamplingActivity.this, "Failed to retrieve event. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
+                changeRequestToReject();
             }
         });
     }
