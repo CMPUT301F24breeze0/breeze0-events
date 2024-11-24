@@ -37,10 +37,11 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
     private Button filter;
     private ListView event_search_List;
     private ArrayList<Event> dataList;
-    SearchingAdapter eventAdapter;
+    private SearchingAdapter eventAdapter;
     private String keyword = "";
     private String location = "";
     private Button refreshButton;
+    private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
     // FIXME need a functionality to shown the next page or more than 20 events
     int limit = 20, semaphore = 0;
@@ -76,6 +77,7 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
         refreshButton = findViewById(R.id.refresh);
         overallStorageController = new OverallStorageController();
         dataList = new ArrayList<Event>();
+        db = FirebaseFirestore.getInstance();
 
         // ListView Adaption
         eventAdapter = new SearchingAdapter(this,  dataList);
@@ -125,6 +127,22 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
         eventAdapter.notifyDataSetChanged();
         for (int i=0; i<=limit; i++){
             semaphore++;
+            // The following comment part is an substitution for get event without extra loop
+//            CollectionReference collectionRef = db.collection("OverallDB");
+//            collectionRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        String facilityInfo = "Facility: " + document.getString("location");
+//                        String facilityId = document.getId();
+//
+//                        facilityList.add(facilityInfo);
+//                        facilityIdList.add(facilityId);
+//                    }
+//                    facilityListAdapter.notifyDataSetChanged();
+//                } else {
+//                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
+//                }
+//            });
             overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
                 @Override
                 public void onSuccess(Event event) {

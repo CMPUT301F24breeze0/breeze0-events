@@ -120,6 +120,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
     @Override
     public void onUnjoin(String eventId, int id) {
         myEntrant.UnjoinEvent(eventId);
+        myEntrant.removeGeoPoint(eventId);
         overallStorageController.updateEntrant(myEntrant);
         eventsList.remove(id);
         updateUI();
