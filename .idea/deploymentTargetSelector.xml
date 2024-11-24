@@ -13,19 +13,10 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="US020603">
+      <SelectionState runConfigName="US020604">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testFinalizeButtonUpdatesLimitedNumberToZero()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testFinalizeButtonUpdatesLimitedNumberToZero() (1)">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testUpdateEventDetailsSuccessfully()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testEventIdPassedBeforeActivityLaunch()">
+      <SelectionState runConfigName="testCancelButtonUpdatesStatusToRejected()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
