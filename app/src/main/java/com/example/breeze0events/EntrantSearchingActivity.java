@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -126,6 +127,7 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
         dataList.clear();
         eventAdapter.notifyDataSetChanged();
         for (int i=0; i<=limit; i++){
+            int currentIndex = i;
             semaphore++;
             // The following comment part is an substitution for get event without extra loop
 //            CollectionReference collectionRef = db.collection("OverallDB");
@@ -149,13 +151,18 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
                     if (event.getName().toLowerCase().contains(keyword.toLowerCase()) &&
                                     event.getFacility().toLowerCase().contains(location.toLowerCase())){
                         dataList.add(event);
-                        eventAdapter.notifyDataSetChanged();
                     }
                     semaphore--;
+                    if (semaphore == 0){
+                        Collections.sort(dataList);
+                        eventAdapter.notifyDataSetChanged();
+                    }
                 }
                 @Override
                 public void onFailure(String errorMessage) {
                     semaphore--;
+                    Collections.sort(dataList);
+                    eventAdapter.notifyDataSetChanged();
                     Log.e("EntrantSearchingActivity", "Error loading event: " + errorMessage);
                 }
             });
