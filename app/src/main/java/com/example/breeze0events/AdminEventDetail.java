@@ -164,11 +164,22 @@ public class AdminEventDetail extends AppCompatActivity {
                     setResult(RESULT_OK, resultIntent);
 
                     Toast.makeText(this, "Event deleted successfully.", Toast.LENGTH_SHORT).show();
+                    BackToEventList();
                     finish();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("AdminEventDetail", "Failed to delete event from OverallDB", e);
                 });
+    }
+
+
+    /**
+     * In in case user click the details again, but it is not updated yet
+     */
+    private void BackToEventList() {
+        Intent intent = new Intent(AdminEventDetail.this, AdminEventActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // old version of deleteEvent, in case new one has bugs
