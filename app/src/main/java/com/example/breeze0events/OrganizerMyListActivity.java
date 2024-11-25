@@ -379,7 +379,3 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
         });
     }
 }
-
-
-
-

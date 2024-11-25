@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class US020502 {
+public class US020503 {
 
     @Rule
     public ActivityTestRule<OrganizerSamplingActivity> activityRule =
@@ -126,7 +126,7 @@ public class US020502 {
 
         // Check if joinedEntrants has elements
         assertFalse("joinedEntrants should not be empty", activity.joinedEntrants.isEmpty());
-
+       
         // Verify that joinedEntrants has at least one entry with status "Requested"
         boolean hasJoinedEntrant = false;
 
