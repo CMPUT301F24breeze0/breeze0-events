@@ -1,6 +1,7 @@
 package com.example.breeze0events;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import android.util.Base64;
 import android.widget.Toast;
@@ -58,6 +60,7 @@ public class EntrantEventDetail extends AppCompatActivity {
     private int Mutex=1, mutext2 = 0;
     private FusedLocationProviderClient fusedLocationClient;
     private GeoPoint entrantGeoPoint;
+    private boolean geoRequest;
 
     /**
      * Called when the activity is created. Sets up the UI components, fetches event data,
@@ -84,9 +87,6 @@ public class EntrantEventDetail extends AppCompatActivity {
         String id = intent.getStringExtra("eventID");
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // initialize geolocation
-        requestLocation();
-
         // Receive data from firebase
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             // FIXME: 2024/10/27 Add functionality to show Max number of entrants
@@ -110,6 +110,22 @@ public class EntrantEventDetail extends AppCompatActivity {
                 }catch(Exception e) {
 
                 }
+                if(Objects.equals(event.getGeolocation(), "true")){
+                    geoRequest = true;
+                }
+                // initialize geolocation
+                if (geoRequest){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EntrantEventDetail.this);
+                    builder.setTitle("This Event requires your geolocation ")
+                            .setMessage("Do you want to continue or return?")
+                            .setNeutralButton("Return", (dialog, which) -> {
+                                finish();
+                            })
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                requestLocation();
+                            });
+                    builder.create().show();
+                }
                 Mutex = 0;
             }
             @Override
@@ -117,6 +133,7 @@ public class EntrantEventDetail extends AppCompatActivity {
 
             }
         });
+
         QRcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

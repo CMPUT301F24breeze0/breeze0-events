@@ -92,7 +92,7 @@ public class US010401 {
 //        byte[] byteArray = byteArrayOutputStream.toByteArray();
 //        QRHash, Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-        Event event = new Event("1", "Test",QRHash, null,"1","2024-10-05", "2024-12-12","true", "deviceId",null, null);
+        Event event = new Event("1", "Test",QRHash, null,"1","2024-10-05", "2024-12-12","1", "false",null, null);
         storageController.updateEvent(event);
 
         Thread.sleep(1000);
