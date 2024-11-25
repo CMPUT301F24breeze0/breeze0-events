@@ -167,7 +167,7 @@ public class EntrantEventDetail extends AppCompatActivity {
                             Toast.makeText(EntrantEventDetail.this,"You have joined this event", Toast.LENGTH_SHORT ).show();
                         }else{
                             entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
-                            if (entrantGeoPoint == null || entrantGeoPoint.getLatitude() == -1 || entrantGeoPoint.getLongitude() == -1){
+                            if ((entrantGeoPoint== null || entrantGeoPoint.getLatitude() == -1 || entrantGeoPoint.getLongitude() == -1) && geoRequest){
                                 Toast.makeText(EntrantEventDetail.this,"Geolocation access failed", Toast.LENGTH_SHORT ).show();
                             }else{
                                 entrant.addGeoPoint(eventID,entrantGeoPoint);
@@ -193,7 +193,7 @@ public class EntrantEventDetail extends AppCompatActivity {
         Toast.makeText(EntrantEventDetail.this,"Geolocation updating", Toast.LENGTH_SHORT ).show();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            entrantGeoPoint = null;
+            entrantGeoPoint = new GeoPoint(-1,-1);
             Toast.makeText(EntrantEventDetail.this,"Geolocation updating failed", Toast.LENGTH_SHORT ).show();
             return;
         }
