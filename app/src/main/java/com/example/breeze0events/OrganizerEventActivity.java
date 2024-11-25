@@ -60,7 +60,9 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
     private Uri selectedPosterUri = null;
 
     private ImageView posterImageView;
-    private String eventFacility,qrHashCode,ImageHashCode;
+    String eventFacility;
+    private String qrHashCode;
+    private String ImageHashCode;
 
     ArrayList<String> facilityList;
     // ImageView posterImageView;
