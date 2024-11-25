@@ -126,7 +126,7 @@ public class US020503 {
 
         // Check if joinedEntrants has elements
         assertFalse("joinedEntrants should not be empty", activity.joinedEntrants.isEmpty());
-       
+
         // Verify that joinedEntrants has at least one entry with status "Requested"
         boolean hasJoinedEntrant = false;
 
