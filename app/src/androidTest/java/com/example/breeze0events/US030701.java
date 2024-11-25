@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.IdlingPolicies;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -26,19 +25,18 @@ import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 /**
- * UI test for deleting an event from the admin interface.
+ * UI test for deleting a facility from the admin interface.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class US030101 {
+public class US030701 {
     private OverallStorageController overallStorageController;
-    private String mockEventId;
+    private String mockFacilityId;
 
     /**
      * Matcher to find a list item with specific text.
@@ -63,55 +61,35 @@ public class US030101 {
 
         overallStorageController = new OverallStorageController();
 
-        Event mockEvent = new Event(
-                "mock_test_id_",
-                "Test Event for Deletion",
-                "QRCode123",
-                "mockPosterUrl",
-                "Mock Facility",
-                "2023-11-07",
-                "2023-11-08",
-                "100",
-                "false",
-                Arrays.asList("entrant1"),
-                Arrays.asList("organizer1")
+        Facility mockFacility = new Facility(
+                "Mock test id",
+                "Mock Violated Facility Location",
+                "Mock device"
         );
-        overallStorageController.addEvent(mockEvent);
-        mockEventId = mockEvent.getEventId();
+        overallStorageController.addFacility(mockFacility);
+        mockFacilityId = mockFacility.getFacilityId();
     }
 
     @After
     public void tearDown() {
         if (overallStorageController != null) {
-            overallStorageController.deleteEvent(mockEventId);
+            overallStorageController.deleteFacility(mockFacilityId);
         }
     }
 
     @Test
-    public void testRemoveEvent() throws InterruptedException {
-        ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class);
+    public void testRemoveFacility() throws InterruptedException {
+        ActivityScenario<AdminFacilityActivity> scenario = ActivityScenario.launch(AdminFacilityActivity.class);
 
-        // use IdlingResource for production code to wait database loading
         Thread.sleep(4000);
 
-        onView(withId(R.id.eventsList)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.facilityList)).check(ViewAssertions.matches(isDisplayed()));
 
-        onData(withItemContent("Test Event for Deletion"))
-                .inAdapterView(withId(R.id.eventsList))
+        onData(withItemContent("Mock Violated Facility Location"))
+                .inAdapterView(withId(R.id.facilityList))
                 .perform(click());
 
-
-        onView(withId(R.id.EventName)).check(ViewAssertions.matches(isDisplayed()));
-
-
-        onView(withId(R.id.QRCodeButton)).perform(click());
-        onView(withId(R.id.QRcode)).check(ViewAssertions.matches(isDisplayed()));
-        Espresso.pressBack();
-
-
-        onView(withId(R.id.DetailButton)).perform(click());
-        onView(withId(R.id.EventDetail)).check(ViewAssertions.matches(isDisplayed()));
-
+        onView(withId(R.id.facilityName)).check(ViewAssertions.matches(isDisplayed()));
 
         onView(withId(R.id.Deletebutton)).perform(click());
         onView(withText("Delete"))
@@ -119,24 +97,27 @@ public class US030101 {
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
+        Thread.sleep(1000);
 
-        onView(withId(R.id.eventsList))
-                .check(ViewAssertions.matches(not(withText("Test Event for Deletion"))));
+        onView(withId(R.id.refresh_button)).perform(click());
+        Thread.sleep(700);
 
-        // Wait to ensure database reflects changes
-        Thread.sleep(5000);
+        onView(withId(R.id.facilityList))
+                .check(ViewAssertions.matches(not(withText("Mock Violated Facility Location"))));
 
+        Thread.sleep(4000);
 
-        overallStorageController.getEvent(mockEventId, new EventCallback() {
+        overallStorageController.getFacility(mockFacilityId, new FacilityCallback() {
             @Override
-            public void onSuccess(Event event) {
-                fail("Event was not deleted from the database.");
+            public void onSuccess(Facility facility) {
+                fail("Facility was not deleted from the database.");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                assertNull("Event successfully deleted from database", null);
+                assertNull("Facility successfully deleted from database", null);
             }
         });
     }
 }
+
