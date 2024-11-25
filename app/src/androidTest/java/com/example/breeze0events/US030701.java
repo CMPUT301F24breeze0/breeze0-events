@@ -63,7 +63,7 @@ public class US030701 {
 
         Facility mockFacility = new Facility(
                 "Mock test id",
-                "Mock Facility Location",
+                "Mock Violated Facility Location",
                 "Mock device"
         );
         overallStorageController.addFacility(mockFacility);
@@ -85,7 +85,7 @@ public class US030701 {
 
         onView(withId(R.id.facilityList)).check(ViewAssertions.matches(isDisplayed()));
 
-        onData(withItemContent("Mock Facility Location"))
+        onData(withItemContent("Mock Violated Facility Location"))
                 .inAdapterView(withId(R.id.facilityList))
                 .perform(click());
 
@@ -97,8 +97,13 @@ public class US030701 {
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
+        Thread.sleep(1000);
+
+        onView(withId(R.id.refresh_button)).perform(click());
+        Thread.sleep(700);
+
         onView(withId(R.id.facilityList))
-                .check(ViewAssertions.matches(not(withText("Mock Facility Location"))));
+                .check(ViewAssertions.matches(not(withText("Mock Violated Facility Location"))));
 
         Thread.sleep(4000);
 
