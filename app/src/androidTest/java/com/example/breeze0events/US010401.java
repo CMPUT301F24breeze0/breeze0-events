@@ -60,6 +60,7 @@ public class US010401 {
     public void tearDown() {
         release();
         storageController.deleteEntrant(deviceId);
+        storageController.deleteEvent("1");
     }
 
     @Test
@@ -85,15 +86,17 @@ public class US010401 {
 //        activityRule.launchActivity(null);
 
         // Entrant part
+        storageController.deleteEvent("1");
+
         String QRHash = QRHashGenerator.generateHash("1");
 //        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cmput301poster);
 //        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 //        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 //        byte[] byteArray = byteArrayOutputStream.toByteArray();
-//        QRHash, Base64.encodeToString(byteArray, Base64.DEFAULT)
+//         Base64.encodeToString(byteArray, Base64.DEFAULT)
 
         Event event = new Event("1", "Test",QRHash, null,"1","2024-10-05", "2024-12-12","1", "false",null, null);
-        storageController.updateEvent(event);
+        storageController.addEvent(event);
 
         Thread.sleep(1000);
         onView(withId(R.id.entrant_button)).perform(click());
