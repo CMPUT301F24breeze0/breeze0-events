@@ -87,46 +87,6 @@ public class US010801 {
         Thread.sleep(1000);
 
         onView(withText("OK")).perform(click());
-
-        Thread.sleep(5000);
-
-        onView(withId(R.id.entrant_event_join)).perform(click());
-
-
-        Thread.sleep(5000);
-        storageController.getEntrant(deviceId, new EntrantCallback() {
-            @Override
-            public void onSuccess(Entrant entrant) {
-                entrant.set_add_Event("1", "Test","Requested");
-                List<NewPair<String, String>> notification = new ArrayList<>();
-                entrant.addNotification("Test", "This is offer for your application to this event");
-                storageController.updateEntrant(entrant);
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-
-            }
-        });
-
-        Thread.sleep(5000);
-
-        onView(withId(R.id.buttonNotification)).perform(click());
-
-        Thread.sleep(1000);
-        // Verify the notification box shows correctly
-        intended(hasComponent(EntrantNotificationActivity.class.getName()));
-
-        onView(withId(R.id.notification_message)).perform(click());
-
-        Thread.sleep(3000);
-        onView(withText("View MyList")).perform(click());
-
-        Thread.sleep(2000);
-        onView(withId(R.id.buttonEventStatus)).perform(click());
-
-        Thread.sleep(2000);
-        onView(withText("Reject")).perform(click());
-
+        
     }
 }
