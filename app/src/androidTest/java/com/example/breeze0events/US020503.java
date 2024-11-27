@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class US020502 {
+public class US020503 {
 
     @Rule
     public ActivityTestRule<OrganizerSamplingActivity> activityRule =

@@ -26,6 +26,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertTrue;
 
+
+/**
+ * UI test for browsing an event from the admin interface.
+ */
 @RunWith(AndroidJUnit4.class)
 public class US030401 {
 
@@ -52,19 +56,16 @@ public class US030401 {
 
     @Before
     public void setup() throws InterruptedException {
-        // Set up global timeouts for Espresso IdlingPolicies
         IdlingPolicies.setMasterPolicyTimeout(5, TimeUnit.SECONDS);
 
-        // Initialize intents and storage controller
         Intents.init();
         overallStorageController = new OverallStorageController();
 
-        // Create and add a mock event to the database
         Event mockEvent = createMockEvent();
         overallStorageController.addEvent(mockEvent);
         mockEventId = mockEvent.getEventId();
 
-        // Verify that the event was added to the database
+
         verifyEventInDatabase();
     }
 
@@ -75,17 +76,17 @@ public class US030401 {
      */
     private Event createMockEvent() {
         return new Event(
-                "browse_test_event_id",       // Event ID
-                mockEventName,               // Event name
-                "QRCode123",                 // QR code
-                "mockPosterPath",            // Poster photo URL/path
-                "Mock Facility",             // Facility name
-                "2024-11-07",                // Start date
-                "2024-11-08",                // End date
-                "10",                        // Limited number of participants
-                "51.5074, -0.1278",          // Geolocation (mock coordinates)
-                new ArrayList<>(Arrays.asList("entrant1")), // List of entrant IDs
-                new ArrayList<>(Arrays.asList("organizer1")) // List of organizer IDs
+                "mock_browse_test_id",
+                mockEventName,
+                "QRCode123",
+                "mockPosterPath",
+                "Mock Facility",
+                "2024-11-07",
+                "2024-11-08",
+                "10",
+                "51.5074, -0.1278",
+                new ArrayList<>(Arrays.asList("entrant1")),
+                new ArrayList<>(Arrays.asList("organizer1"))
         );
     }
 

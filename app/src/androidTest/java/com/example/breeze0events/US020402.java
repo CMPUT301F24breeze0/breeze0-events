@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.action.GeneralClickAction;
+import androidx.test.espresso.action.GeneralLocation;
+import androidx.test.espresso.action.Press;
+import androidx.test.espresso.action.Tap;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.intent.Intents;
 
@@ -17,6 +21,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.fail;
@@ -72,9 +77,10 @@ public class US020402 {
 
         // Step 2: Update event details
         onView(withId(R.id.event_name_bar)).perform(typeText(UPDATED_EVENT_NAME)); // Enter updated event name
-        onView(withId(R.id.event_start_date_bar)).perform(typeText(UPDATED_START_DATE)); // Enter updated start date
-        onView(withId(R.id.event_end_date_bar)).perform(typeText(UPDATED_END_DATE)); // Enter updated end date
-        onView(withId(R.id.entrants_bar)).perform(typeText(UPDATED_ENTRANTS)); // Enter updated number of entrants
+        // Simulate a click on the start date bar and select a date from the calendar
+        onView(withId(R.id.entrants_bar)).perform(typeText(UPDATED_ENTRANTS)); // Enter updated number of entrantsrm(click()); // Simulate a click on the entrants bar
+        onView(withId(R.id.event_end_date_bar)).perform(click()); // Click the start date field
+
 /*
         // Step 3: Click the "Save" button to save updates
         onView(withId(R.id.organizer_edit_event_activity_add_button)).perform(click());

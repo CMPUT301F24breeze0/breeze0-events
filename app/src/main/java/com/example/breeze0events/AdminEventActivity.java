@@ -1,7 +1,10 @@
 package com.example.breeze0events;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 
@@ -123,11 +128,12 @@ public class AdminEventActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (eventList != null && position >= 0 && position < eventList.size()) {
                     Event selectedEvent = eventList.get(position);
-
+                    String posterPhotoPath = savePosterPhotoToFile(selectedEvent.getPosterPhoto());
                     Intent intent = new Intent(AdminEventActivity.this, AdminSelectedEvents.class);
                     intent.putExtra("selectedID", selectedEvent.getEventId());
                     intent.putStringArrayListExtra("eventListDisplay", eventListDisplay);
-                    intent.putExtra("poster_photo",selectedEvent.getPosterPhoto());
+                    intent.putExtra("poster_photo",posterPhotoPath);
+                    //intent.putExtra("poster_photo",selectedEvent.getPosterPhoto());
                     eventsLauncher.launch(intent);
 
                 } else {
@@ -135,6 +141,30 @@ public class AdminEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    /**
+     * Saves a Base64-encoded image to a file in the app's cache directory.
+     *
+     * @param base64Image The Base64-encoded image string.
+     * @return The file path where the image is saved, or null if saving fails.
+     */
+
+    private String savePosterPhotoToFile(String base64Image) {
+        try {
+            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            File file = new File(getCacheDir(), "poster.jpg");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("ImageSaveError", "Error saving image", e);
+            return null;
+        }
     }
 
 
