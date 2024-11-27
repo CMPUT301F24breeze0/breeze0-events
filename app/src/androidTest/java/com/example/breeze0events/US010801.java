@@ -87,6 +87,6 @@ public class US010801 {
         Thread.sleep(1000);
 
         onView(withText("OK")).perform(click());
-        
+
     }
 }
