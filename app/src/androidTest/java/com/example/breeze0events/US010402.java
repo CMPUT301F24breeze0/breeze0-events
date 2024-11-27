@@ -6,6 +6,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -13,9 +14,15 @@ import static org.hamcrest.CoreMatchers.anything;
 
 import android.content.Context;
 import android.provider.Settings;
+import android.service.autofill.FieldClassification;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 
 import org.junit.After;
 import org.junit.Before;
@@ -106,13 +113,25 @@ public class US010402 {
         Thread.sleep(1000);
         onView(withId(R.id.notification_message)).perform(click());
 
+
         Thread.sleep(3000);
         onView(withText("View MyList")).perform(click());
 
         Thread.sleep(2000);
         onView(withId(R.id.buttonEventStatus)).perform(click());
 
-        Thread.sleep(2000);
-        onView(withText("Rejoin")).perform(click());
     }
+//    public static Matcher<View> isDialogTitle(String expectedTitle) {
+//        return new BoundedMatcher<View, TextView>(TextView.class) {
+//            @Override
+//            protected boolean matchesSafely(TextView textView) {
+//                return textView.getText().toString().equals(expectedTitle);
+//            }
+//
+//            @Override
+//            public void describeTo(Description description) {
+//                description.appendText("with dialog title: " + expectedTitle);
+//            }
+//        };
+//    }
 }
