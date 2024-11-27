@@ -84,13 +84,14 @@ public class US010801 {
         // Click on the first event in the event_search_view ListView
         onData(anything()).inAdapterView(withId(R.id.event_search_view)).atPosition(0).perform(click());
 
+        Thread.sleep(1000);
+
+        onView(withText("OK")).perform(click());
+
         Thread.sleep(5000);
 
         onView(withId(R.id.entrant_event_join)).perform(click());
 
-        Thread.sleep(1000);
-
-        onView(withText("OK")).perform(click());
 
         Thread.sleep(5000);
         storageController.getEntrant(deviceId, new EntrantCallback() {
