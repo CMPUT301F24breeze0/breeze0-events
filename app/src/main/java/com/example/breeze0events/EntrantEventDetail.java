@@ -118,6 +118,7 @@ public class EntrantEventDetail extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EntrantEventDetail.this);
                     builder.setTitle("This Event requires your geolocation ")
                             .setMessage("Do you want to continue or return?")
+                            .setCancelable(false)
                             .setNeutralButton("Return", (dialog, which) -> {
                                 finish();
                             })
