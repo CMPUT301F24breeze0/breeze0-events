@@ -279,8 +279,18 @@ public class OrganizerMyListActivity extends AppCompatActivity implements Organi
                         String androidId=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                         List<String> organizers=(List<String>) document.get("organizers");
 
-                        if(!Objects.equals(organizers.get(0), androidId))
+                        // if(!Objects.equals(organizers.get(0), androidId))
+                            // continue;
+                        if (organizers == null || organizers.isEmpty()) {
+                            Log.e("OrganizerMyListActivity", "Organizers list is null or empty for document: " + docId);
                             continue;
+                        }
+
+                        if (!Objects.equals(organizers.get(0), androidId)) {
+                            Log.d("OrganizerMyListActivity", "Organizer ID mismatch for document: " + docId);
+                            continue;
+                        }
+
                         Map<String, Object> data = document.getData();
                         overallStorageController.getEvent(String.valueOf(docId), new EventCallback() {
                             @Override
