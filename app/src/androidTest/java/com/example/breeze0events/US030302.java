@@ -1,6 +1,8 @@
 package com.example.breeze0events;
 
+
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.filters.LargeTest;
@@ -19,30 +21,32 @@ import androidx.test.espresso.IdlingPolicies;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.anything;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import android.content.Intent;
+import android.widget.ImageView;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
- * UI test for deleting an event from the admin interface.
+ * UI test for deleting a QR code in AdminQRcode activity.
  */
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class US030101 {
+public class US030302 {
     private OverallStorageController overallStorageController;
     private String mockEventId;
 
-    /**
-     * Matcher to find a list item with specific text.
-     */
     public static Matcher<Object> withItemContent(final String text) {
         return new TypeSafeMatcher<Object>() {
             @Override
@@ -59,23 +63,24 @@ public class US030101 {
 
     @Before
     public void setup() {
-        IdlingPolicies.setMasterPolicyTimeout(6, TimeUnit.SECONDS);
+        IdlingPolicies.setMasterPolicyTimeout(5, TimeUnit.SECONDS);
 
         overallStorageController = new OverallStorageController();
 
         Event mockEvent = new Event(
                 "Mock test ID",
-                "Test Event for Deletion",
-                "QRCode123",
+                "Mock Event Name",
+                "MockQRCodeValue",
                 "mockPosterUrl",
-                "Mock Facility",
-                "2023-11-07",
-                "2023-11-08",
+                "MockFacility",
+                "2024-11-11",
+                "2025-11-11",
                 "100",
                 "false",
                 Arrays.asList("entrant1"),
                 Arrays.asList("organizer1")
         );
+
         overallStorageController.addEvent(mockEvent);
         mockEventId = mockEvent.getEventId();
     }
@@ -88,54 +93,62 @@ public class US030101 {
     }
 
     @Test
-    public void testRemoveEvent() throws InterruptedException {
-        ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class);
+    public void testDeleteQRCode() throws InterruptedException {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), AdminQRcode.class);
+        intent.putExtra("qrcode", "MockQRCodeValue");
+        intent.putExtra("eventId", "Mock test ID");
+        ActivityScenario<AdminQRcode> scenario = ActivityScenario.launch(intent);
 
-        // use IdlingResource for production code to wait database loading
-        Thread.sleep(4000);
+        Thread.sleep(3000);
 
-        onView(withId(R.id.eventsList)).check(ViewAssertions.matches(isDisplayed()));
-
-        onData(withItemContent("Test Event for Deletion"))
-                .inAdapterView(withId(R.id.eventsList))
-                .perform(click());
-
-
-        onView(withId(R.id.EventName)).check(ViewAssertions.matches(isDisplayed()));
-
-
-        onView(withId(R.id.QRCodeButton)).perform(click());
         onView(withId(R.id.QRcode)).check(ViewAssertions.matches(isDisplayed()));
-        Espresso.pressBack();
 
+        onView(withId(R.id.delete_button)).perform(click());
 
-        onView(withId(R.id.DetailButton)).perform(click());
-        onView(withId(R.id.EventDetail)).check(ViewAssertions.matches(isDisplayed()));
-
-
-        onView(withId(R.id.Deletebutton)).perform(click());
         onView(withText("Delete"))
                 .inRoot(isDialog())
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
+        Thread.sleep(1000);
 
-        onView(withId(R.id.eventsList))
-                .check(ViewAssertions.matches(not(withText("Test Event for Deletion"))));
+        onView(withId(R.id.refreshButton)).perform(click());
 
-        // Wait to ensure database reflects changes
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
+        onData(withItemContent("Mock Event Name"))
+                .inAdapterView(withId(R.id.eventsList))
+                .perform(click());
+
+        Thread.sleep(1000);
+        onView(withId(R.id.QRCodeButton)).perform(click());
+
+        Thread.sleep(1000);
+        onView(withId(R.id.QRcode)).check(ViewAssertions.matches(not(isDisplayed())));
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("OverallDB").document("Mock test ID")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String qrCodeValue = task.getResult().getString("qrCode");
+                        assertNull("QR code value should be null after deletion", qrCodeValue);
+                    } else {
+                        fail("Failed to fetch the event from Firestore");
+                    }
+                });
+
+        Thread.sleep(1000);
 
         overallStorageController.getEvent(mockEventId, new EventCallback() {
             @Override
             public void onSuccess(Event event) {
-                fail("Event was not deleted from the database.");
+                fail("QR code was not deleted from the database.");
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                assertNull("Event successfully deleted from database", null);
+                assertNull("QR code successfully deleted from database", null);
             }
         });
     }
