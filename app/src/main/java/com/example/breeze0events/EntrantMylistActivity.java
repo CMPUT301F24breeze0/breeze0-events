@@ -35,7 +35,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
     private ImageView profileImage;
     private TextView entrantName;
     private Button QR_Scan;
-    private Button Notification;
+    private Button Notification, RefreshButton;
     private Button ProfileModify;
     private ListView mylist;
     private EntrantMyListAdapter entrantAdapter;
@@ -59,6 +59,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
         profileImage = findViewById(R.id.profileImage);
         entrantName = findViewById(R.id.entrantName);
         mylist = findViewById(R.id.entrant_mylist);
+        RefreshButton = findViewById(R.id.buttonRefresh);
 
         overallStorageController = new OverallStorageController();
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -75,6 +76,10 @@ public class EntrantMylistActivity extends AppCompatActivity implements
         QR_Scan.setOnClickListener(v -> {
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantQRScanActivity.class);
             startActivity(intent);
+        });
+
+        RefreshButton.setOnClickListener(v -> {
+            updateProfile();
         });
 
         // Profile modification button
@@ -208,7 +213,6 @@ public class EntrantMylistActivity extends AppCompatActivity implements
                 }
             });
         }
-
         checkForNotifications();
     }
 
