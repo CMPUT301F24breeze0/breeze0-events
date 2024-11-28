@@ -131,7 +131,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1 , dayOfMonth);
                     start_date.setText(selectedDate);
                     Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 });
@@ -158,7 +158,7 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = String.format("%d-%02d-%02d", year, month, dayOfMonth);
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1, dayOfMonth);
                     end_date.setText(selectedDate);
                 });
                 alert.setPositiveButton("Confirm", (dialog, which) -> {
