@@ -93,6 +93,6 @@
         app:layout_constraintBottom_toTopOf="@+id/organizer_event_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/stat_notify_chat" />
+        app:srcCompat="@drawable/bell" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
