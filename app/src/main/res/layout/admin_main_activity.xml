@@ -20,7 +20,7 @@
     <Button
         android:id="@+id/organization"
         android:layout_width="300dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_marginTop="176dp"
         android:backgroundTint="@color/button_color"
         android:text="Organization profile"
@@ -33,7 +33,7 @@
     <Button
         android:id="@+id/entrant"
         android:layout_width="300dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_marginTop="68dp"
         android:backgroundTint="@color/button_color"
 
