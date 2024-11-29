@@ -60,8 +60,6 @@ public class AdminSelectedEvents extends AppCompatActivity {
         if (posterPhoto != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(posterPhoto);
             posterImageView.setImageBitmap(bitmap);
-        } else {
-            Log.e("AdminSelectedEvents", "No poster photo");
         }
 
 
