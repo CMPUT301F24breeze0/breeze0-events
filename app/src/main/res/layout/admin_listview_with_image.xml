@@ -3,13 +3,14 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:divider="@color/button_color"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/posterImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="10dp"
         android:scaleType="centerCrop"
         android:contentDescription="Event Poster" />
 
@@ -20,5 +21,6 @@
         android:layout_weight="1"
         android:background="#B8B4B4"
         android:text="Event Info"
-        android:textSize="16sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 </LinearLayout>
