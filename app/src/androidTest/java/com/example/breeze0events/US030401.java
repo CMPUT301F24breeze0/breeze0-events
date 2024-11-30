@@ -3,7 +3,6 @@ package com.example.breeze0events;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.intent.Intents;
-import static org.junit.Assert.assertTrue;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -16,27 +15,31 @@ import org.junit.runner.RunWith;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.espresso.IdlingPolicies;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.anything;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
+
+/**
+ * UI test for browsing an event from the admin interface.
+ */
 @RunWith(AndroidJUnit4.class)
 public class US030401 {
 
     private OverallStorageController overallStorageController;
     private String mockEventId;
-    private String mockEventName = "Mock Event for Browse Test";
+    private final String mockEventName = "Mock Event for Browse Test";
 
+    /**
+     * Custom matcher to find a list item with specific text.
+     */
     public static Matcher<Object> withItemContent(final String text) {
         return new TypeSafeMatcher<Object>() {
             @Override
@@ -54,28 +57,42 @@ public class US030401 {
     @Before
     public void setup() throws InterruptedException {
         IdlingPolicies.setMasterPolicyTimeout(5, TimeUnit.SECONDS);
+
         Intents.init();
         overallStorageController = new OverallStorageController();
-        // ActivityScenario.launch(AdminEventActivity.class);
 
-        Event mockEvent = new Event(
-                "browse_test_event_id",
-                "Browse test Event",
+        Event mockEvent = createMockEvent();
+        overallStorageController.addEvent(mockEvent);
+        mockEventId = mockEvent.getEventId();
+
+
+        verifyEventInDatabase();
+    }
+
+    /**
+     * Creates a mock event for testing.
+     *
+     * @return A fully initialized Event object.
+     */
+    private Event createMockEvent() {
+        return new Event(
+                "mock_browse_test_id",
+                mockEventName,
                 "QRCode123",
-                "mockPoster",
+                "mockPosterPath",
                 "Mock Facility",
                 "2024-11-07",
                 "2024-11-08",
                 "10",
-                Arrays.asList("entrant1"),
-                Arrays.asList("organizer1")
+                "51.5074, -0.1278",
+                new ArrayList<>(Arrays.asList("entrant1")),
+                new ArrayList<>(Arrays.asList("organizer1"))
         );
-        overallStorageController.addEvent(mockEvent);
-        mockEventId = mockEvent.getEventId();
-        verifyEventInDatabase();
     }
 
-
+    /**
+     * Verifies that the mock event exists in the database before proceeding with tests.
+     */
     private void verifyEventInDatabase() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -83,50 +100,41 @@ public class US030401 {
             @Override
             public void onSuccess(Event event) {
                 if (event != null && event.getEventId().equals(mockEventId)) {
-                    latch.countDown(); 
+                    latch.countDown(); // Event confirmed
                 }
             }
 
             @Override
             public void onFailure(String errorMessage) {
+                // No action needed, will fail the assertion
             }
         });
-        assertTrue("Failed to confirm event added to database", latch.await(5, TimeUnit.SECONDS));
+
+        // Await the confirmation with a timeout
+        assertTrue("Failed to confirm event was added to the database", latch.await(5, TimeUnit.SECONDS));
     }
 
     @After
     public void tearDown() {
+        // Remove the mock event from the database and release intents
         overallStorageController.deleteEvent(mockEventId);
         Intents.release();
     }
 
+    /**
+     * Tests if the event list is displayed and event details can be accessed.
+     */
     @Test
     public void testEventListDisplayedAndEventDetailsOpened() throws InterruptedException {
-        ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class);
-        Thread.sleep(4000);
-        onView(withId(R.id.eventsList))
-                .check(ViewAssertions.matches(isDisplayed()));;
+        try (ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class)) {
+            // Verify the event list is displayed
+            onView(withId(R.id.eventsList))
+                    .check(ViewAssertions.matches(isDisplayed()));
 
-//        onData(anything())
-//                .inAdapterView(withId(R.id.eventsList))
-//                .atPosition(0)
-//                .check(ViewAssertions.matches(isDisplayed()));
-
-        onData(withItemContent("Browse test Event"))
-                .inAdapterView(withId(R.id.eventsList))
-                .check(ViewAssertions.matches(isDisplayed()));
-
-//        Thread.sleep(70000);
-//        overallStorageController.getEvent(mockEventId, new EventCallback() {
-//            @Override
-//            public void onSuccess(Event event) {
-//                assertEquals("Retrieved event ID should match", mockEventId, event.getEventId());
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//                fail("Failed to retrieve event from database: " + errorMessage);
-//            }
-//        });
+            // Verify the mock event is present in the list
+            onData(withItemContent(mockEventName))
+                    .inAdapterView(withId(R.id.eventsList))
+                    .check(ViewAssertions.matches(isDisplayed()));
+        }
     }
 }

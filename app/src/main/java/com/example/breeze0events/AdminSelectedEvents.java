@@ -57,9 +57,11 @@ public class AdminSelectedEvents extends AppCompatActivity {
         imageButton = findViewById(R.id.imageButton);
 
 
-        backButton.setOnClickListener(v -> {
-            finish();
-        });
+        if (posterPhoto != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(posterPhoto);
+            posterImageView.setImageBitmap(bitmap);
+        }
+
 
         overallStorageController = new OverallStorageController();
         overallStorageController.getEvent(Id, new EventCallback() {
@@ -74,6 +76,10 @@ public class AdminSelectedEvents extends AppCompatActivity {
             }
         });
 
+
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
 
         DetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,48 +114,49 @@ public class AdminSelectedEvents extends AppCompatActivity {
         });
 
 
-        //11.17 POSTER PHOTO UPDATE
-        if (posterPhoto != null && !posterPhoto.isEmpty()) {
-            if (posterPhoto.startsWith("http")) {
-                // Load image from URL using a background thread
-                loadImageFromUrl(posterPhoto, posterImageView);
-            } else {
-                // Decode Base64 string and set to ImageView
-                try {
-                    byte[] decodedString = Base64.decode(posterPhoto, Base64.DEFAULT);
-                    Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    posterImageView.setImageBitmap(decodedBitmap);
-                } catch (IllegalArgumentException e) {
-                    Log.e("AdminSelectedEvents", "Invalid Base64 string for poster photo", e);
-                    Toast.makeText(this, "Failed to load poster photo", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
+//        //11.17 POSTER PHOTO UPDATE but TransactionTooLargeException
+//        if (posterPhoto != null && !posterPhoto.isEmpty()) {
+//            if (posterPhoto.startsWith("http")) {
+//                // Load image from URL using a background thread
+//                loadImageFromUrl(posterPhoto, posterImageView);
+//            } else {
+//                // Decode Base64 string and set to ImageView
+//                try {
+//                    byte[] decodedString = Base64.decode(posterPhoto, Base64.DEFAULT);
+//                    Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//                    posterImageView.setImageBitmap(decodedBitmap);
+//                } catch (IllegalArgumentException e) {
+//                    Log.e("AdminSelectedEvents", "Invalid Base64 string for poster photo", e);
+//                    Toast.makeText(this, "Failed to load poster photo", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    }
+//    //11.17 POSTER PHOTO UPDATE
+///**
+// * Loads an image from a URL into an ImageView.
+// *
+// * @param imageUrl The URL of the image to load.
+// * @param imageView The ImageView where the image will be displayed.
+// */
+//        private void loadImageFromUrl (String imageUrl, ImageView imageView){
+//            new Thread(() -> {
+//                try {
+//                    java.net.URL url = new java.net.URL(imageUrl);
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                    connection.setDoInput(true);
+//                    connection.connect();
+//                    InputStream input = connection.getInputStream();
+//                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+//
+//                    // Update the ImageView on the main thread
+//                    runOnUiThread(() -> imageView.setImageBitmap(bitmap));
+//                } catch (Exception e) {
+//                    Log.e("AdminSelectedEvents", "Failed to load image from URL", e);
+//                    runOnUiThread(() -> Toast.makeText(this, "Failed to load poster photo.", Toast.LENGTH_SHORT).show());
+//                }
+//            }).start();
+//        }
+
     }
-    //11.17 POSTER PHOTO UPDATE
-/**
- * Loads an image from a URL into an ImageView.
- *
- * @param imageUrl The URL of the image to load.
- * @param imageView The ImageView where the image will be displayed.
- */
-        private void loadImageFromUrl (String imageUrl, ImageView imageView){
-            new Thread(() -> {
-                try {
-                    java.net.URL url = new java.net.URL(imageUrl);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(input);
-
-                    // Update the ImageView on the main thread
-                    runOnUiThread(() -> imageView.setImageBitmap(bitmap));
-                } catch (Exception e) {
-                    Log.e("AdminSelectedEvents", "Failed to load image from URL", e);
-                    runOnUiThread(() -> Toast.makeText(this, "Failed to load poster photo.", Toast.LENGTH_SHORT).show());
-                }
-            }).start();
-        }
-
 }

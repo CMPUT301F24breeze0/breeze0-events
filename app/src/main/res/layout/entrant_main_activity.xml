@@ -52,8 +52,6 @@
         android:clickable="true"
         app:backgroundTint="@color/button_color"
         app:srcCompat="@android:drawable/ic_input_add"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="40dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonQRScan"
         android:layout_marginEnd="8dp"
@@ -71,8 +69,9 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonNotification"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
-    <!-- Bottom Buttons: Blacklist, Quiet Mode, Profile -->
+        android:layout_marginBottom="16dp" />
+
+    <!-- Bottom Buttons: Notification, Profile -->
     <Button
         android:id="@+id/buttonNotification"
         android:layout_width="0dp"
@@ -82,22 +81,23 @@
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttonQuietMode"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/buttonQuietMode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Quiet mode"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/text_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toStartOf="@id/buttonProfile"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp" />
+
+    <!-- Notification Badge -->
+    <TextView
+        android:id="@+id/notification_badge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/badge_background"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/buttonNotification"
+        app:layout_constraintTop_toTopOf="@id/buttonNotification"
+        android:layout_marginEnd="-8dp"
+        android:layout_marginTop="-5dp" />
 
     <Button
         android:id="@+id/buttonProfile"
@@ -107,7 +107,7 @@
         android:backgroundTint="@color/button_color"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonQuietMode"
+        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp" />
 

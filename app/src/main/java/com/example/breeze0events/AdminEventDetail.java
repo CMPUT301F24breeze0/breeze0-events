@@ -75,7 +75,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 eventName.setText("Event Name: " + selected_event.getName());
                 eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
                 maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
-                signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
+                //signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
                 String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
                 if (encryptedPosterImage != null && !encryptedPosterImage.isEmpty()) {
@@ -164,11 +164,22 @@ public class AdminEventDetail extends AppCompatActivity {
                     setResult(RESULT_OK, resultIntent);
 
                     Toast.makeText(this, "Event deleted successfully.", Toast.LENGTH_SHORT).show();
+                    BackToEventList();
                     finish();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("AdminEventDetail", "Failed to delete event from OverallDB", e);
                 });
+    }
+
+
+    /**
+     * In in case user click the details again, but it is not updated yet
+     */
+    private void BackToEventList() {
+        Intent intent = new Intent(AdminEventDetail.this, AdminEventActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // old version of deleteEvent, in case new one has bugs

@@ -83,6 +83,9 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         backButton.setOnClickListener(v -> finish());
         selectFacilityButton.setOnClickListener(v -> openFacilitySelectionDialog());
 
+        startDateEditText.setFocusable(false);
+        endDateEditText.setFocusable(false);
+
         startDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,11 +93,16 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
 
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                startDateEditText.setText(String.format("%d-%02d-%02d", Year, Month, Day));
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1 , dayOfMonth);
                     startDateEditText.setText(selectedDate);
                     Toast.makeText(OrganizerEditEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 });
@@ -112,11 +120,16 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
 
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                endDateEditText.setText(String.format("%d-%02d-%02d", Year, Month, Day));
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEditEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1 , dayOfMonth);
                     endDateEditText.setText(selectedDate);
                 });
                 alert.setPositiveButton("Confirm", (dialog, which) -> {
@@ -173,6 +186,11 @@ public class OrganizerEditEventActivity extends AppCompatActivity implements Sel
         String geolocation = (geolocationButton.isChecked()==true)? "true":"false";
         if (eventName.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || entrants.isEmpty()) {
             Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (startDateEditText.getText().toString().compareTo(endDateEditText.getText().toString())>0){
+            Toast.makeText(OrganizerEditEventActivity.this, "start date cannot be after end date", Toast.LENGTH_SHORT).show();
             return;
         }
 

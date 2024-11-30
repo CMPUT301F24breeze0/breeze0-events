@@ -112,6 +112,7 @@ public class EntrantMyListAdapter extends ArrayAdapter<NewPair<String, String>> 
                     requestedBuilder.setTitle("Event Request")
                             .setMessage("The organizer has requested your acceptance. Would you like to accept or reject this event?")
                             .setPositiveButton("Accept", (dialog, which) -> updateEventStatus(eventId, "Accepted", position))
+                            .setNegativeButton("Cancel", null)
                             .setNegativeButton("Reject", (dialog, which) -> updateEventStatus(eventId, "Rejected", position));
                     requestedBuilder.create().show();
                     break;
@@ -132,7 +133,8 @@ public class EntrantMyListAdapter extends ArrayAdapter<NewPair<String, String>> 
                     acceptedBuilder.setTitle("Event Decision")
                             .setMessage("You have been accepted. Would you like to accept or reject this event?")
                             .setPositiveButton("Accept", (dialog, which) -> updateEventStatus(eventId, "Accepted", position))
-                            .setNegativeButton("Reject", (dialog, which) -> updateEventStatus(eventId, "Rejected", position));
+                            .setNegativeButton("Reject", (dialog, which) -> updateEventStatus(eventId, "Rejected", position))
+                            .setNeutralButton ("Cancel", null);
                     acceptedBuilder.create().show();
                     break;
 
@@ -140,7 +142,7 @@ public class EntrantMyListAdapter extends ArrayAdapter<NewPair<String, String>> 
                     // Entrant has rejected but can rejoin
                     AlertDialog.Builder rejectedBuilder = new AlertDialog.Builder(getContext());
                     rejectedBuilder.setTitle("Rejoin Event?")
-                            .setMessage("You have rejected this event. Would you like to rejoin?")
+                            .setMessage("You have been rejected. Would you like to rejoin?")
                             .setPositiveButton("Rejoin", (dialog, which) -> updateEventStatus(eventId, "Joined", position))
                             .setNegativeButton("Cancel", null);
                     rejectedBuilder.create().show();

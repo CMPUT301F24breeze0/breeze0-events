@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.core.utilities.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
     private Entrant myEntrant;
     private List<NewPair<String, String>> eventsList;
     private String deviceId;
+    private TextView notificationBadge;
 
     /**
      * Initializes the activity, sets up UI components, and loads the entrant's profile and event list.
@@ -84,13 +87,41 @@ public class EntrantMylistActivity extends AppCompatActivity implements
 
         // Notification button
         Notification = findViewById(R.id.buttonNotification);
+        notificationBadge = findViewById(R.id.notification_badge);
+        notificationBadge.setVisibility(View.GONE);
         Notification.setOnClickListener(v -> {
             Intent intent = new Intent(EntrantMylistActivity.this, EntrantNotificationActivity.class);
             startActivity(intent);
+            notificationBadge.setVisibility(View.GONE);
         });
 
         // Load profile and events
         updateProfile();
+
+        // Check for notifications
+        checkForNotifications();
+    }
+
+    /**
+     * Checks for notifications and updates the badge visibility accordingly.
+     */
+    private void checkForNotifications() {
+        overallStorageController.getEntrant(deviceId, new EntrantCallback() {
+            @Override
+            public void onSuccess(Entrant entrant) {
+                List<NewPair<String, String>> notifications = entrant.getNotifications();
+                if (!notifications.isEmpty()) {
+                    // Show badge if there are unread notifications
+                    notificationBadge.setVisibility(View.VISIBLE);
+                    notificationBadge.setText(String.valueOf(notifications.size())); // Optional: show count
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle failure
+            }
+        });
     }
 
     /**
@@ -120,6 +151,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
     @Override
     public void onUnjoin(String eventId, int id) {
         myEntrant.UnjoinEvent(eventId);
+        myEntrant.removeGeoPoint(eventId);
         overallStorageController.updateEntrant(myEntrant);
         eventsList.remove(id);
         updateUI();
@@ -176,6 +208,8 @@ public class EntrantMylistActivity extends AppCompatActivity implements
                 }
             });
         }
+
+        checkForNotifications();
     }
 
     /**
