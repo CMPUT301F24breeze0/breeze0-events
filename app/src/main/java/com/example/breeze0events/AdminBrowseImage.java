@@ -15,19 +15,26 @@ import android.util.Base64;
 import com.squareup.picasso.Picasso;
 
 public class AdminBrowseImage extends AppCompatActivity {
-    String eventId=getIntent().getStringExtra("eventId");
-    OverallStorageController overallStorageController;
+    OverallStorageController overallStorageController= new OverallStorageController();;
+
     protected void onCreate(Bundle savedInstanceState){
+        String eventId=getIntent().getStringExtra("event1Id");
+        System.out.println(eventId);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_poster_photo);
         ImageView poster_photo= findViewById(R.id.posterPhoto);
         String posterPhotoValue= getIntent().getStringExtra("poster");
         Button delete_button=findViewById(R.id.delete_button);
+        Button back_button=findViewById(R.id.back_button);
+        back_button.setOnClickListener(v->{
+            finish();
+        });
         delete_button.setOnClickListener(v->{
             overallStorageController.getEvent(eventId,new EventCallback(){
                 public void onSuccess(Event event){
                     event.setPosterPhoto(null);
                     overallStorageController.updateEvent(event);
+                    finish();
                 }
                 public void onFailure(String errorMessage){
 
