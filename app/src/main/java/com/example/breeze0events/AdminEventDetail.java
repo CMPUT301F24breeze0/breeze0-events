@@ -75,7 +75,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 eventName.setText("Event Name: " + selected_event.getName());
                 eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
                 maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
-                signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
+                //signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
                 String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
                 if (encryptedPosterImage != null && !encryptedPosterImage.isEmpty()) {

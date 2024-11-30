@@ -36,8 +36,8 @@ public class AdminEventListAdapter extends ArrayAdapter<Event> {
         TextView eventInfo = convertView.findViewById(R.id.eventInfo);
         ImageView posterImage = convertView.findViewById(R.id.posterImage);
 
-        eventInfo.setText("Name: " + event.getName() + "\nStart date: " + event.getStartDate() +
-                "\nEnd date: " + event.getEndDate());
+        eventInfo.setText(" " + event.getName() + "\n From " + event.getStartDate() +
+                "\n To " + event.getEndDate());
 
         String encryptedImage = event.getPosterPhoto();
         if (encryptedImage != null && !encryptedImage.isEmpty()) {
