@@ -100,7 +100,8 @@ public class AdminSelectedEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminSelectedEvents.this, AdminBrowseImage.class);
-                intent.putExtra("eventId", selected_event.getEventId());
+                intent.putExtra("event1Id", selected_event.getEventId());
+                System.out.println(selected_event.getEventId());
                 intent.putExtra("poster", selected_event.getPosterPhoto());
                 startActivity(intent);
             }
