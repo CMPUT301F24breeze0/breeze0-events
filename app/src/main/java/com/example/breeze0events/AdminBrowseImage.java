@@ -25,12 +25,16 @@ public class AdminBrowseImage extends AppCompatActivity {
         ImageView poster_photo= findViewById(R.id.posterPhoto);
         String posterPhotoValue= getIntent().getStringExtra("poster");
         Button delete_button=findViewById(R.id.delete_button);
-
+        Button back_button=findViewById(R.id.back_button);
+        back_button.setOnClickListener(v->{
+            finish();
+        });
         delete_button.setOnClickListener(v->{
             overallStorageController.getEvent(eventId,new EventCallback(){
                 public void onSuccess(Event event){
                     event.setPosterPhoto(null);
                     overallStorageController.updateEvent(event);
+                    finish();
                 }
                 public void onFailure(String errorMessage){
 
