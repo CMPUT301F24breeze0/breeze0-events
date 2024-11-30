@@ -59,8 +59,8 @@ public class AdminEventDetail extends AppCompatActivity {
         eventName = findViewById(R.id.EventName);
         eventDate = findViewById(R.id.EventDate);
         maxEntrants = findViewById(R.id.MaxEntrants);
-        signUpDueDay = findViewById(R.id.duedate);
-        eventDescription = findViewById(R.id.description);
+        // signUpDueDay = findViewById(R.id.duedate);
+        // beventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
         encryptedPosterImage = getEncryptedImageFromStorage();
 
@@ -73,7 +73,7 @@ public class AdminEventDetail extends AppCompatActivity {
                 selected_event = event;
                 eventTitle.setText("Event Detail");
                 eventName.setText("Event Name: " + selected_event.getName());
-                eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
+                eventDate.setText("Event start from " + event.getStartDate() + " to " + event.getEndDate());
                 maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
                 //signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
