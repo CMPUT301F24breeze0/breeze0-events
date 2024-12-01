@@ -10,48 +10,49 @@
     android:background="@color/ui_background">
 
 
-
     <ListView
         android:id="@+id/entrant_list_view"
 
-        android:layout_width="372dp"
-        android:layout_height="557dp"
-        android:background="#40484D"
-
+        android:layout_width="357dp"
+        android:layout_height="536dp"
+        android:background="@drawable/view_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.41"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.173" />
+        app:layout_constraintVertical_bias="0.294" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="28dp"
-        android:background="@color/ui_background"
+        android:layout_marginTop="16dp"
         android:text="Entrant List"
-        android:textColor="#F4EEEE"
+        android:textAlignment="center"
+        android:textColor="@color/text_color"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/back_in_organizer_list"
-        android:layout_width="127dp"
-        android:layout_height="40dp"
+        android:layout_width="109dp"
+        android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/button_color"
         android:text="Back"
         android:textColor="@color/text_color"
+        app:icon="@drawable/return_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/entrant_list_view" />
+        app:layout_constraintTop_toBottomOf="@+id/entrant_list_view"
+        app:layout_constraintVertical_bias="0.483" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

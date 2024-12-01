@@ -71,10 +71,10 @@ public class AdminEventDetail extends AppCompatActivity {
             @Override
             public void onSuccess(Event event) {
                 selected_event = event;
-                eventTitle.setText("Event Detail");
-                eventName.setText("Event Name: " + selected_event.getName());
-                eventDate.setText("Event start from " + event.getStartDate() + " to " + event.getEndDate());
-                maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
+                eventTitle.setText("         Event Detail");
+                eventName.setText("Title: " + selected_event.getName());
+                eventDate.setText("Start From " + event.getStartDate() + "\nTo " + event.getEndDate());
+                maxEntrants.setText("Max No. of Entrants: " + event.getLimitedNumber());
                 //signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
                 String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
