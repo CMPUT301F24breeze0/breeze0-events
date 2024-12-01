@@ -18,12 +18,13 @@
 
         <TextView
             android:id="@+id/FacilityDetail"
-            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="Facility Detail"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="34sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.129"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,13 +32,14 @@
 
         <TextView
             android:id="@+id/facilityName"
-            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="16dp"
             android:text="Facility Name: "
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="20sp"
+            android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.047"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,45 +47,48 @@
 
         <TextView
             android:id="@+id/facilityID"
-            android:layout_marginStart="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="16dp"
             android:text="Facility ID: "
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="20sp"
+            android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.046"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/EventName" />
 
-        <TextView
-            android:id="@+id/ViolatedPolicies"
-            android:layout_marginStart="6dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Violated Policies: "
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.056"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventDate" />
+<!--        <TextView-->
+<!--            android:id="@+id/ViolatedPolicies"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="6dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="Violated Policies: "-->
+<!--            android:textColor="@color/text_color"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="italic"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.056"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/EventDate" />-->
 
-        <TextView
-            android:id="@+id/Evidence"
-            android:layout_marginStart="6dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Evidence: "
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/MaxEntrants" />
+<!--        <TextView-->
+<!--            android:id="@+id/Evidence"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="6dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="Evidence: "-->
+<!--            android:textColor="@color/text_color"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="italic"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.052"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/MaxEntrants" />-->
 
 
     </LinearLayout>
@@ -95,7 +100,8 @@
         android:layout_marginStart="60dp"
         android:layout_marginBottom="68dp"
         android:backgroundTint="#40484D"
-        android:text="Cancel"
+        android:text="BACK"
+        app:icon="@drawable/return_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -107,6 +113,8 @@
         android:layout_marginBottom="68dp"
         android:backgroundTint="#40484D"
         android:text="Delete"
+
+        app:icon="@drawable/delete_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"

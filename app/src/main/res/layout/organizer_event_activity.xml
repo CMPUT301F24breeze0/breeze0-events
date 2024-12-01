@@ -234,7 +234,7 @@
         <EditText
             android:id="@+id/entrants_bar"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:hint="Enter the Number of Entrants Here"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/organizer_edit_event_activity_no_of_entrant_title"

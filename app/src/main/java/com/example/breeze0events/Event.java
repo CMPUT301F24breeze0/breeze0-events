@@ -8,7 +8,7 @@ import java.util.List;
  * This is a class that defines an Event.
  */
 
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable<Event>{
     private String eventId; // Event ID
     private String name; // Name of the event
     private String qrCode; // QR code for the event
@@ -174,5 +174,10 @@ public class Event implements Serializable {
                 ", organizers=" + organizers +
                 ", geolocation='" + geolocation + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Event event) {
+        return Integer.compare(Integer.parseInt(this.eventId), Integer.parseInt(event.getEventId()));
     }
 }
