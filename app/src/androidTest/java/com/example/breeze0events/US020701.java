@@ -36,7 +36,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static org.hamcrest.Matchers.anything;
-import static org.mockito.Mockito.*;
 
 @RunWith(AndroidJUnit4.class)
 public class US020701 {

@@ -1,70 +1,52 @@
 package com.example.breeze0events;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.anything;
+import android.content.Intent;
 
-import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+/**
+ * UI test for OrganizerEventDisplayEntrants.
+ * This test adds a new entrant to the list and checks if it is displayed correctly.
+ */
 @RunWith(AndroidJUnit4.class)
 public class US020201 {
 
     @Rule
-    public ActivityTestRule<OrganizerMyListActivity> activityRule = new ActivityTestRule<>(OrganizerMyListActivity.class);
-
-    @Before
-    public void setUp() {
-        // Initialize Intents to monitor activity launches
-        Intents.init();
-    }
-
-    @After
-    public void tearDown() {
-        // Release Intents
-        Intents.release();
-    }
+    public ActivityTestRule<OrganizerEventDisplayEntrants> activityRule =
+            new ActivityTestRule<>(OrganizerEventDisplayEntrants.class, false, false);
 
     @Test
-    public void testUIElementsPresence() {
-        // Verify that the buttons are displayed
-        onView(withId(R.id.map_button)).check(matches(withText("Map")));
-        onView(withId(R.id.my_facility_button)).check(matches(withText("My Facility")));
-        onView(withId(R.id.new_event_button)).check(matches(withText("New")));
-    }
+    public void testAddNewEntrantAndVerifyInList() throws InterruptedException {
+        // Create a list of initial entrants
+        ArrayList<String> initialEntrants = new ArrayList<>();
+        initialEntrants.add("entrant_001");
+        initialEntrants.add("entrant_002");
 
-    @Test
-    public void testMapButtonLaunchesOrganizerMapActivity() {
-        // Click the map button and verify if it launches OrganizerMapActivity
-        onView(withId(R.id.map_button)).perform(click());
-        intended(hasComponent(OrganizerMapActivity.class.getName()));
-    }
+        // Prepare intent with the initial entrants
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra("entrants_id", initialEntrants);
 
-    @Test
-    public void testMyFacilityButtonLaunchesOrganizerFacilityActivity() {
-        // Click the my_facility_button and verify if it launches OrganizerFacilityActivity
-        onView(withId(R.id.my_facility_button)).perform(click());
-        intended(hasComponent(OrganizerFacilityActivity.class.getName()));
-    }
+        // Launch the activity with the intent
+        activityRule.launchActivity(intent);
+        // Verify that the initial entrants are displayed in the list
+        onView(ViewMatchers.withText("entrant_001"))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        onView(ViewMatchers.withText("entrant_002"))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-    @Test
-    public void testNewEventButtonLaunchesOrganizerEventActivity() {
-        // Click the new_event_button and verify if it launches OrganizerEventActivity
-        onView(withId(R.id.new_event_button)).perform(click());
-        intended(hasComponent(OrganizerEventActivity.class.getName()));
     }
-
 }

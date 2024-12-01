@@ -158,7 +158,6 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 Log.e("OrganizerSampling", "Failed to load event details: " + errorMessage);
                 Toast.makeText(OrganizerSamplingActivity.this, "Failed to load event details", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
     }

@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -79,32 +80,9 @@ public class US020402 {
         onView(withId(R.id.event_name_bar)).perform(typeText(UPDATED_EVENT_NAME)); // Enter updated event name
         // Simulate a click on the start date bar and select a date from the calendar
         onView(withId(R.id.entrants_bar)).perform(typeText(UPDATED_ENTRANTS)); // Enter updated number of entrantsrm(click()); // Simulate a click on the entrants bar
-        onView(withId(R.id.event_end_date_bar)).perform(click()); // Click the start date field
+        onView(withId(R.id.event_start_date_bar)).perform(replaceText("2023-12-01")); // Set start date directly
+        onView(withId(R.id.event_end_date_bar)).perform(replaceText("2023-12-10")); // Set end date directly
 
-/*
-        // Step 3: Click the "Save" button to save updates
-        onView(withId(R.id.organizer_edit_event_activity_add_button)).perform(click());
-
-        // Step 4: Verify that the event details were saved by attempting to retrieve it from storage
-        OverallStorageController controller = new OverallStorageController();
-        controller.getEvent(MOCK_EVENT_ID, new EventCallback() {
-            @Override
-            public void onSuccess(Event event) {
-                // Check that the event details match the updates
-                if (!event.getName().equals(UPDATED_EVENT_NAME) ||
-                        !event.getStartDate().equals(UPDATED_START_DATE) ||
-                        !event.getEndDate().equals(UPDATED_END_DATE) ||
-                        !event.getLimitedNumber().equals(UPDATED_ENTRANTS)) {
-                    fail("Event details do not match the expected updated values");
-                }
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                // Trigger a failure in the test if event retrieval fails
-                fail("Failed to retrieve updated event: " + errorMessage);
-            }
-        });*/
     }
 
     @Test
