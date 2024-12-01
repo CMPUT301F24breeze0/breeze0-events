@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -68,6 +69,15 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         // findEntrants();
 
         overallStorageController = new OverallStorageController();
+
+        Intent intent = getIntent();
+        ArrayList<String> testEntrantIds = intent.getStringArrayListExtra("testEntrants");
+        String testEventName = intent.getStringExtra("testEventName");
+        if (testEntrantIds != null && testEventName != null) {
+            loadTestEntrants(testEntrantIds, testEventName);
+        } else {
+            loadAllEntrants();
+        }
 
         // By clicking "Back" button
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -502,5 +512,26 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                 Toast.makeText(this, "Failed to load entrants.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void loadTestEntrants(List<String> testEntrantIds, String testEventName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        contactList_display.clear();
+
+        for (String entrantId : testEntrantIds) {
+            db.collection("EntrantDB").document(entrantId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            DocumentSnapshot entrantDoc = task.getResult();
+                            String entrantName = entrantDoc.getString("name");
+                            if (entrantName != null) {
+                                contactList_display.add(new Pair<>(entrantId, entrantName + " (" + testEventName + ")"));
+                                contactListAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Log.e("LoadTestEntrants", "Failed to fetch entrant details for ID: " + entrantId);
+                        }
+                    });
+        }
     }
 }

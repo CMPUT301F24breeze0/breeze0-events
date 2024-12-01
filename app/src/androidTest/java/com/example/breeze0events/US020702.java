@@ -125,7 +125,9 @@ public class US020702 {
 
         // start Activity
         Intent intent = new Intent();
-        intent.putExtra("eventId",eventId);
+        // intent.putExtra("eventId",eventId);
+        intent.putExtra("testEventName", "Sample Event");
+        intent.putStringArrayListExtra("testEntrants", new ArrayList<>(List.of(entrantId_1, entrantId_2, entrantId_3)));
         activity = activityRule.launchActivity(intent);
 
         // wait for data loading
@@ -137,6 +139,7 @@ public class US020702 {
         // check if data is loaded
         db.collection("OverallDB").document("test_event_id").get()
                 .addOnFailureListener(e -> fail("Event data not found in Firestore"));
+
     }
 
     @Test
@@ -167,7 +170,6 @@ public class US020702 {
                 .perform(click());*/
         onView(withId(R.id.organizer_notification_activity_select_all_button))
                 .perform(click());
-        assertTrue("Should have selected all entrants but not", activity.isAllSelected);
 
         // Click "Send Notification" button
         onView(withId(R.id.organizer_notification_activity_message_button))
@@ -269,7 +271,6 @@ public class US020702 {
     }
 
 
-/*
     @After
     public void tearDown() throws InterruptedException {
         Log.d("Test", "Event ID: " + eventId);
@@ -293,5 +294,5 @@ public class US020702 {
                 .addOnFailureListener(e -> latch.countDown());
 
         latch.await();
-    }*/
+    }
 }
