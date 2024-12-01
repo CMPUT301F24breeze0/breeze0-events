@@ -1,10 +1,12 @@
 package com.example.breeze0events;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,24 +36,33 @@ public class AdminentrantProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         entrantList=new ArrayList<>();
         eventList=new ArrayList<>();
-        setContentView(R.layout.organization_profile_detail);
+        setContentView(R.layout.entrantprofiledetail);
         overallStorageController = new OverallStorageController();
         id=getIntent().getStringExtra("SELECTED_ID");
         position=getIntent().getIntExtra("SELECTED_POSITION",-1);
         entrantList=getIntent().getStringArrayListExtra("Entrant_LIST");
-        EditText name=findViewById(R.id.editName);
-        TextView device=findViewById(R.id.device_content);
+        TextView name=findViewById(R.id.setName);
+        TextView email=findViewById(R.id.setEmail);
+        ImageView image=findViewById(R.id.profileImage);
 
         overallStorageController.getEntrant(String.valueOf(id), new EntrantCallback() {
             @Override
             public void onSuccess(Entrant entrant) {
                 //System.out.println(entrant.getEventsName());
-                eventidMap=entrant.getEventsName().entrySet().iterator().next();
+                //eventidMap=entrant.getEventsName().entrySet().iterator().next();
                 for (String value : entrant.getEventsName().keySet()) {
                     eventList.add(value);
                 };
-                name.setText(entrant.getEntrantId());
-                device.setText(entrant.getDevice());
+                name.setText(entrant.getName());
+                email.setText(entrant.getEmail());
+                try {
+                    Bitmap decryptedBitmap = ImageHashGenerator.decryptImage(entrant.getProfilePhoto());
+
+                    image.setImageBitmap(decryptedBitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("ImageError", "Error decrypting and setting image: " + e.getMessage());
+                }
             }
 
             @Override
@@ -64,25 +75,29 @@ public class AdminentrantProfile extends AppCompatActivity {
         back_button.setOnClickListener(v->{
             finish();
         });
-        Button delete_button=findViewById(R.id.delete);
+        Button delete_button=findViewById(R.id.delete_in_profile_detail);
         delete_button.setOnClickListener(v->{
-            for(int i=0;i<eventList.size();i++){
-                //eventid=eventList.get(i);
-                System.out.println(eventList.get(i));
-                overallStorageController.getEvent(String.valueOf(eventList.get(i)),new EventCallback(){
-                    @Override
-                    public void onSuccess(Event event){
-                        event.getEntrants().remove(id);
-                        overallStorageController.deleteEntrant(String.valueOf(id));
-                        Log.d("event","envent sucessfully delete");
-                    }
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        overallStorageController.deleteEntrant(String.valueOf(id));
-                        Log.e("event", "Failed to fetch event: " + errorMessage);
-                    }
-                });
+            if(!eventList.isEmpty()) {
+                for (int i = 0; i <= eventList.size(); i++) {
+                    //eventid=eventList.get(i);
+                    System.out.println(id);
+                    overallStorageController.getEvent(String.valueOf(eventList.get(i)), new EventCallback() {
+                        @Override
+                        public void onSuccess(Event event) {
+                            event.getEntrants().remove(id);
+                            overallStorageController.deleteEntrant(String.valueOf(id));
+                            System.out.println(id);
+                            Log.d("event", "envent sucessfully delete");
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Log.e("event", "Failed to fetch event: " + errorMessage);
+                        }
+                    });
+                }
             }
+            else{overallStorageController.deleteEntrant(String.valueOf(id));}
 
             entrantList.remove(position);
             Intent result=new Intent();
