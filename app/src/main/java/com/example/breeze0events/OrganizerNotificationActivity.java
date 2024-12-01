@@ -43,9 +43,10 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     private String organizerId;
     private HashSet<Integer> selectedPositions;
     private String selectedEventId = null;
-    private boolean isAllSelected = false;
+    public boolean isAllSelected = false;
     private String selectedEventName = "";
     private List<String> selectedStatuses = new ArrayList<>();
+    // private String testEventId;
 
 
     @Override
@@ -70,13 +71,21 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
 
         overallStorageController = new OverallStorageController();
 
+        // Intent intent = getIntent();
+        // testEventId = intent.getStringExtra("eventId");
         Intent intent = getIntent();
-        ArrayList<String> testEntrantIds = intent.getStringArrayListExtra("testEntrants");
-        String testEventName = intent.getStringExtra("testEventName");
-        if (testEntrantIds != null && testEventName != null) {
-            loadTestEntrants(testEntrantIds, testEventName);
+        String testEventId = intent.getStringExtra("eventId");
+        ArrayList<String> testEntrants = intent.getStringArrayListExtra("testEntrants");
+
+        if (testEventId != null || testEntrants != null) {
+            Log.d("TestMode", "Running in test mode");
+            if (testEventId != null) {
+                loadTestEventEntrants(testEventId);
+            } else if (testEntrants != null) {
+                loadTestEntrants(testEntrants);
+            }
         } else {
-            loadAllEntrants();
+            findEntrants();
         }
 
         // By clicking "Back" button
@@ -87,22 +96,14 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             }
         });
 
-        // by clicking "Refresh" button
 
         // By clicking "Filter" button
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showStatusFilterDialog();
-            }
-        });
-        /*
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 showEventFilterDialog();
             }
-        });*/
+        });
 
         // By clicking "Message" button
         messageButton.setOnClickListener(new View.OnClickListener() {
@@ -155,12 +156,24 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             }
         });
 
-        loadAllEntrants();
     }
 
     private void findEntrants() {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
+        /*
+        collectionRef.document(testEventId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    List<String> entrants = (List<String>) documentSnapshot.get("entrants");
+                    for (String entrantId : entrants) {
+                        contactList_display.add(new Pair<>(entrantId, ""));
+                    }
+                    contactListAdapter.notifyDataSetChanged();
+                    Log.d("OrganizerMyListActivity", "Event ID: " + testEventId + ", Entrants: " + entrants);
+                })
+                .addOnFailureListener(e->{Log.e("Fail", "Fail to fetch",e);});*/
+
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -171,7 +184,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                             List<String> organizers = (List<String>) document.get("organizers");
                             int eventId = Integer.parseInt(document.getId());
                             List<String> entrants = (List<String>) document.get("entrants");
-
                             if (organizers != null && organizers.contains(organizerId)) {
                                 contactList_display.clear();
                                 // contactList_display.addAll(entrants);
@@ -352,64 +364,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         builder.show();
     }
 
-    private void loadFilteredEntrants() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection("OverallDB");
 
-        Log.d("LoadEntrants", "Filtering entrants based on selected statuses: " + selectedStatuses);
-
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    contactList_display.clear();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        try {
-                            List<String> organizers = (List<String>) document.get("organizers");
-                            List<String> entrants = (List<String>) document.get("entrants");
-                            String eventName = document.getString("name");
-                            String eventId = document.getId();
-
-                            if (organizers != null && organizers.contains(organizerId) && entrants != null) {
-                                for (String entrantId : entrants) {
-                                    db.collection("EntrantDB").document(entrantId).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful() && task.getResult() != null) {
-                                                        DocumentSnapshot entrantDoc = task.getResult();
-
-                                                        if (entrantDoc.contains("status")) {
-                                                            Object statusObject = entrantDoc.get("status");
-                                                            if (statusObject instanceof Map) {
-                                                                Map<String, String> statuses = (Map<String, String>) statusObject;
-                                                                String statusForEvent = statuses.get(eventId);
-
-                                                                if (statusForEvent != null && selectedStatuses.contains(statusForEvent)) {
-                                                                    String entrantName = entrantDoc.getString("name");
-                                                                    contactList_display.add(new Pair<>(entrantId, entrantName + " (" + eventName + ")"));
-                                                                    Log.d("LoadFilteredEntrants", "Entrant added: " + entrantName + " (" + eventName + ")");
-                                                                }
-                                                            }
-                                                        }
-                                                        contactListAdapter.notifyDataSetChanged();
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        } catch (ClassCastException e) {
-                            Log.e("LoadFilteredEntrants", "Invalid data type: " + e.getMessage());
-                        }
-                    }
-                } else {
-                    Log.e("FirestoreError", "Error loading entrants", task.getException());
-                    Toast.makeText(OrganizerNotificationActivity.this, "Failed to filter entrants.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    /*
     private void loadFilteredEntrants() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
@@ -472,105 +427,50 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                         }
                     }
                 });
-    }*/
-    private void loadAllEntrants() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection("OverallDB");
-
-
-        collectionRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                contactList_display.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    try {
-                        List<String> organizers = (List<String>) document.get("organizers");
-                        List<String> entrants = (List<String>) document.get("entrants");
-                        String eventName = document.getString("name");
-
-                        if (organizers != null && organizers.contains(organizerId) && entrants != null) {
-                            for (String entrantId : entrants) {
-                                db.collection("EntrantDB").document(entrantId).get()
-                                        .addOnCompleteListener(entrantTask -> {
-                                            if (entrantTask.isSuccessful() && entrantTask.getResult() != null) {
-                                                DocumentSnapshot entrantDoc = entrantTask.getResult();
-                                                String entrantName = entrantDoc.getString("name");
-                                                if (entrantName != null) {
-                                                    contactList_display.add(new Pair<>(entrantId, entrantName + " (" + eventName + ")"));
-                                                    contactListAdapter.notifyDataSetChanged();
-                                                }
-                                            } else {
-                                                Log.e("LoadEntrants", "Failed to fetch entrant details for ID: " + entrantId);
-                                            }
-                                        });
-                            }
-                        }
-                    } catch (ClassCastException e) {
-                        Log.e("LoadAllEntrants", "Invalid data type: " + e.getMessage());
-                    }
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching events: ", task.getException());
-                Toast.makeText(this, "Failed to load entrants.", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-    private void loadTestEntrants(List<String> testEntrantIds, String testEventName) {
+    private void loadTestEventEntrants(String testEventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("OverallDB").document(testEventId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        List<String> entrants = (List<String>) document.get("entrants");
+                        selectedEventName = document.getString("name"); // 设置事件名称
+                        contactList_display.clear();
+
+                        if (entrants != null) {
+                            for (String entrantId : entrants) {
+                                contactList_display.add(new Pair<>(entrantId, entrantId + " (" + selectedEventName + ")"));
+                            }
+                            contactListAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.e("LoadTestEventEntrants", "Failed to load test event entrants", task.getException());
+                    }
+                });
+    }
+
+    private void loadTestEntrants(List<String> testEntrants) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         contactList_display.clear();
 
-        for (String entrantId : testEntrantIds) {
+        for (String entrantId : testEntrants) {
             db.collection("EntrantDB").document(entrantId).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful() && task.getResult() != null) {
-                            DocumentSnapshot entrantDoc = task.getResult();
-                            String entrantName = entrantDoc.getString("name");
+                            DocumentSnapshot document = task.getResult();
+                            String entrantName = document.getString("name");
                             if (entrantName != null) {
-                                contactList_display.add(new Pair<>(entrantId, entrantName + " (" + testEventName + ")"));
+                                contactList_display.add(new Pair<>(entrantId, entrantName));
                                 contactListAdapter.notifyDataSetChanged();
                             }
                         } else {
-                            Log.e("LoadTestEntrants", "Failed to fetch entrant details for ID: " + entrantId);
+                            Log.e("LoadTestEntrants", "Failed to load test entrant: " + entrantId, task.getException());
                         }
                     });
         }
-
-        /*
-        collectionRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                contactList_display.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    try {
-                        List<String> organizers = (List<String>) document.get("organizers");
-                        List<String> entrants = (List<String>) document.get("entrants");
-                        String eventName = document.getString("name");
-
-                        if (organizers != null && organizers.contains(organizerId) && entrants != null) {
-                            for (String entrantId : entrants) {
-                                db.collection("EntrantDB").document(entrantId).get()
-                                        .addOnCompleteListener(entrantTask -> {
-                                            if (entrantTask.isSuccessful() && entrantTask.getResult() != null) {
-                                                DocumentSnapshot entrantDoc = entrantTask.getResult();
-                                                String entrantName = entrantDoc.getString("name");
-                                                if (entrantName != null) {
-                                                    contactList_display.add(new Pair<>(entrantId, entrantName + " (" + eventName + ")"));
-                                                    contactListAdapter.notifyDataSetChanged();
-                                                }
-                                            } else {
-                                                Log.e("LoadEntrants", "Failed to fetch entrant details for ID: " + entrantId);
-                                            }
-                                        });
-                            }
-                        }
-                    } catch (ClassCastException e) {
-                        Log.e("LoadAllEntrants", "Invalid data type: " + e.getMessage());
-                    }
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching events: ", task.getException());
-                Toast.makeText(this, "Failed to load entrants.", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
     }
+
 }
+
