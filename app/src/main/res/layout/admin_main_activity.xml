@@ -25,7 +25,7 @@
         android:id="@+id/organization"
         android:layout_width="175dp"
         android:layout_height="60dp"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="325dp"
         android:backgroundTint="@color/button_color"
         android:text="Organizer profile"
         android:textColor="@color/text_color"
