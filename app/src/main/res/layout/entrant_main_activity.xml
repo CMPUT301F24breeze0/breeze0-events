@@ -71,7 +71,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
 
-    <!-- Bottom Buttons: Notification, Profile -->
+    <!-- Bottom Buttons: Notification, Profile, Refresh-->
     <Button
         android:id="@+id/buttonNotification"
         android:layout_width="0dp"
