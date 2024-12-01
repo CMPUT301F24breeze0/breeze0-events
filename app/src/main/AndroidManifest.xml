@@ -217,6 +217,9 @@
             android:exported="true"
             android:theme="@style/Theme.Breeze0events"/>
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
 
     </application>
