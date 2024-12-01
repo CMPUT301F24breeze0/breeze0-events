@@ -2,6 +2,7 @@ package com.example.breeze0events;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -42,9 +43,10 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     private String organizerId;
     private HashSet<Integer> selectedPositions;
     private String selectedEventId = null;
-    private boolean isAllSelected = false;
+    public boolean isAllSelected = false;
     private String selectedEventName = "";
     private List<String> selectedStatuses = new ArrayList<>();
+    // private String testEventId;
 
 
     @Override
@@ -69,6 +71,23 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
 
         overallStorageController = new OverallStorageController();
 
+        // Intent intent = getIntent();
+        // testEventId = intent.getStringExtra("eventId");
+        Intent intent = getIntent();
+        String testEventId = intent.getStringExtra("eventId");
+        ArrayList<String> testEntrants = intent.getStringArrayListExtra("testEntrants");
+
+        if (testEventId != null || testEntrants != null) {
+            Log.d("TestMode", "Running in test mode");
+            if (testEventId != null) {
+                loadTestEventEntrants(testEventId);
+            } else if (testEntrants != null) {
+                loadTestEntrants(testEntrants);
+            }
+        } else {
+            findEntrants();
+        }
+
         // By clicking "Back" button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +96,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             }
         });
 
-        // by clicking "Refresh" button
 
         // By clicking "Filter" button
         filterButton.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +159,21 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     }
 
     private void findEntrants() {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
+        /*
+        collectionRef.document(testEventId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    List<String> entrants = (List<String>) documentSnapshot.get("entrants");
+                    for (String entrantId : entrants) {
+                        contactList_display.add(new Pair<>(entrantId, ""));
+                    }
+                    contactListAdapter.notifyDataSetChanged();
+                    Log.d("OrganizerMyListActivity", "Event ID: " + testEventId + ", Entrants: " + entrants);
+                })
+                .addOnFailureListener(e->{Log.e("Fail", "Fail to fetch",e);});*/
+
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -153,7 +184,6 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                             List<String> organizers = (List<String>) document.get("organizers");
                             int eventId = Integer.parseInt(document.getId());
                             List<String> entrants = (List<String>) document.get("entrants");
-
                             if (organizers != null && organizers.contains(organizerId)) {
                                 contactList_display.clear();
                                 // contactList_display.addAll(entrants);
@@ -334,6 +364,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         builder.show();
     }
 
+
     private void loadFilteredEntrants() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
@@ -398,4 +429,48 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                 });
     }
 
+    private void loadTestEventEntrants(String testEventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("OverallDB").document(testEventId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        List<String> entrants = (List<String>) document.get("entrants");
+                        selectedEventName = document.getString("name"); // 设置事件名称
+                        contactList_display.clear();
+
+                        if (entrants != null) {
+                            for (String entrantId : entrants) {
+                                contactList_display.add(new Pair<>(entrantId, entrantId + " (" + selectedEventName + ")"));
+                            }
+                            contactListAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Log.e("LoadTestEventEntrants", "Failed to load test event entrants", task.getException());
+                    }
+                });
+    }
+
+    private void loadTestEntrants(List<String> testEntrants) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        contactList_display.clear();
+
+        for (String entrantId : testEntrants) {
+            db.collection("EntrantDB").document(entrantId).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            DocumentSnapshot document = task.getResult();
+                            String entrantName = document.getString("name");
+                            if (entrantName != null) {
+                                contactList_display.add(new Pair<>(entrantId, entrantName));
+                                contactListAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Log.e("LoadTestEntrants", "Failed to load test entrant: " + entrantId, task.getException());
+                        }
+                    });
+        }
+    }
+
 }
+
