@@ -1,19 +1,13 @@
 package com.example.breeze0events;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.matcher.ViewMatchers.withHint;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import android.content.Intent;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,9 +25,23 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static org.hamcrest.Matchers.anything;
+import static org.mockito.Mockito.*;
+
+@RunWith(AndroidJUnit4.class)
 public class US020702 {
 
-    //  As an organizer I want to send notifications to all selected entrants
+    // As an organizer I want to send notifications to all selected entrants
 
     @Rule
     public ActivityTestRule<OrganizerNotificationActivity> activityRule =
@@ -287,6 +296,7 @@ public class US020702 {
                 .addOnSuccessListener(aVoid -> latch.countDown())
                 .addOnFailureListener(e -> latch.countDown());
 
+
         db.collection("EntrantDB").document(entrantId_2).delete()
                 .addOnSuccessListener(aVoid -> latch.countDown())
                 .addOnFailureListener(e -> latch.countDown());
@@ -300,3 +310,4 @@ public class US020702 {
     }
 
 }
+
