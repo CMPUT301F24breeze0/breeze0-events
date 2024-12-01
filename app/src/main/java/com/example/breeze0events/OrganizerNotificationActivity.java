@@ -477,6 +477,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("OverallDB");
 
+
         collectionRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 contactList_display.clear();
@@ -533,5 +534,43 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                         }
                     });
         }
+
+        /*
+        collectionRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                contactList_display.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    try {
+                        List<String> organizers = (List<String>) document.get("organizers");
+                        List<String> entrants = (List<String>) document.get("entrants");
+                        String eventName = document.getString("name");
+
+                        if (organizers != null && organizers.contains(organizerId) && entrants != null) {
+                            for (String entrantId : entrants) {
+                                db.collection("EntrantDB").document(entrantId).get()
+                                        .addOnCompleteListener(entrantTask -> {
+                                            if (entrantTask.isSuccessful() && entrantTask.getResult() != null) {
+                                                DocumentSnapshot entrantDoc = entrantTask.getResult();
+                                                String entrantName = entrantDoc.getString("name");
+                                                if (entrantName != null) {
+                                                    contactList_display.add(new Pair<>(entrantId, entrantName + " (" + eventName + ")"));
+                                                    contactListAdapter.notifyDataSetChanged();
+                                                }
+                                            } else {
+                                                Log.e("LoadEntrants", "Failed to fetch entrant details for ID: " + entrantId);
+                                            }
+                                        });
+                            }
+                        }
+                    } catch (ClassCastException e) {
+                        Log.e("LoadAllEntrants", "Invalid data type: " + e.getMessage());
+                    }
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching events: ", task.getException());
+                Toast.makeText(this, "Failed to load entrants.", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
     }
 }

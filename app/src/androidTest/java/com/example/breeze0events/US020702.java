@@ -128,6 +128,8 @@ public class US020702 {
         // intent.putExtra("eventId",eventId);
         intent.putExtra("testEventName", "Sample Event");
         intent.putStringArrayListExtra("testEntrants", new ArrayList<>(List.of(entrantId_1, entrantId_2, entrantId_3)));
+        intent.putExtra("eventId",eventId);
+
         activity = activityRule.launchActivity(intent);
 
         // wait for data loading
@@ -294,5 +296,7 @@ public class US020702 {
                 .addOnFailureListener(e -> latch.countDown());
 
         latch.await();
+
     }
+
 }
