@@ -35,7 +35,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * OrganizerNotificationActivity handles the functionality of allowing an organizer to filter entrants,
+ * select specific entrants, and send notifications.
+ */
 public class OrganizerNotificationActivity extends AppCompatActivity{
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
