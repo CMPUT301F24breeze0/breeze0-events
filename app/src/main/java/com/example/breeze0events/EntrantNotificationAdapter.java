@@ -65,6 +65,7 @@ public class EntrantNotificationAdapter extends ArrayAdapter<NewPair<String, Str
                     })
                     .setPositiveButton("View MyList", (dialog, which) -> {
                         onNotificationListener.OnNotification();
+                        deleteNotification(notificationId);
                     });
             builder.create().show();
         });
