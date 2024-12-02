@@ -2,7 +2,9 @@ package com.example.breeze0events;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,7 +58,7 @@ public class AdminentrantProfile extends AppCompatActivity {
                 name.setText(entrant.getName());
                 email.setText(entrant.getEmail());
                 try {
-                    Bitmap decryptedBitmap = ImageHashGenerator.decryptImage(entrant.getProfilePhoto());
+                    Bitmap decryptedBitmap = decodeBase64Image(entrant.getProfilePhoto());
 
                     image.setImageBitmap(decryptedBitmap);
                 } catch (Exception e) {
@@ -105,5 +107,9 @@ public class AdminentrantProfile extends AppCompatActivity {
             setResult(RESULT_OK,result);
             finish();
         });
+    }
+    public static Bitmap decodeBase64Image(String base64ImageString) {
+        byte[] imageBytes = Base64.decode(base64ImageString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
 }
