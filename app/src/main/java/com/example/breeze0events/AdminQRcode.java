@@ -121,7 +121,7 @@ public class AdminQRcode extends AppCompatActivity {
                     qrCodeImageView.setImageBitmap(null);
                     deleteButton.setEnabled(false);
                     Toast.makeText(this, "QR code deleted successfully", Toast.LENGTH_SHORT).show();
-                    //BackToEventList(); // in case user click the qr code again, but it is not updated
+                    BackToEventList(); // in case user click the qr code again, but it is not updated
                 })
                 .addOnFailureListener(e -> {
                     Log.e("AdminQRcode", "Failed to delete QR code field", e);
@@ -133,6 +133,7 @@ public class AdminQRcode extends AppCompatActivity {
      */
     private void BackToEventList() {
         Intent intent = new Intent(AdminQRcode.this, AdminEventActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);  //reference: https://stackoverflow.com/questions/23718356/why-does-flag-activity-clear-top-not-work
         startActivity(intent);
         finish();
     }
