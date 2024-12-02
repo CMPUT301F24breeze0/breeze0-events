@@ -51,12 +51,14 @@ public class OrganizerEventDisplayQRcode extends AppCompatActivity {
         // Generate the QR code and display it
         String qrHashCode = (String) getIntent().getSerializableExtra("qrcode");// Replace with your hash code
         QRHashGenerator qrhashgenerator=new QRHashGenerator();
-        Bitmap qrCodeBitmap = qrhashgenerator.generateQRCode(qrHashCode);
+        if(qrHashCode!=null) {
+            Bitmap qrCodeBitmap = qrhashgenerator.generateQRCode(qrHashCode);
 
-        if (qrCodeBitmap != null) {
-            qrCodeImageView.setImageBitmap(qrCodeBitmap);
-        } else {
-            Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+            if (qrCodeBitmap != null) {
+                qrCodeImageView.setImageBitmap(qrCodeBitmap);
+            } else {
+                Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
