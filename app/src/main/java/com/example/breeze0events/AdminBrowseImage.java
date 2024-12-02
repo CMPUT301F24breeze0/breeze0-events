@@ -32,9 +32,16 @@ public class AdminBrowseImage extends AppCompatActivity {
         delete_button.setOnClickListener(v->{
             overallStorageController.getEvent(eventId,new EventCallback(){
                 public void onSuccess(Event event){
-                    event.setPosterPhoto(null);
-                    overallStorageController.updateEvent(event);
-                    finish();
+                    if (event.getPosterPhoto()!=null) {
+
+
+                        event.setPosterPhoto(null);
+                        overallStorageController.updateEvent(event);
+                        finish();
+                    }
+                    else{
+                        finish();
+                    }
                 }
                 public void onFailure(String errorMessage){
 
