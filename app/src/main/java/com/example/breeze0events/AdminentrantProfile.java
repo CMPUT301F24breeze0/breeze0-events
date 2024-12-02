@@ -57,6 +57,7 @@ public class AdminentrantProfile extends AppCompatActivity {
                 for (String value : entrant.getEventsName().keySet()) {
                     eventList.add(value);
                 };
+                System.out.println(eventList);
                 name.setText(entrant.getName());
                 email.setText(entrant.getEmail());
                 try {
@@ -84,7 +85,6 @@ public class AdminentrantProfile extends AppCompatActivity {
         delete_button.setOnClickListener(v->{
             if(!eventList.isEmpty()) {
                 for (int i = 0; i < eventList.size(); i++) {
-                    System.out.println(id);
                     overallStorageController.getEvent(String.valueOf(eventList.get(i)), new EventCallback() {
                         @Override
                         public void onSuccess(Event event) {
@@ -97,6 +97,7 @@ public class AdminentrantProfile extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorMessage) {
+                            overallStorageController.deleteEntrant(String.valueOf(id));
                             Log.e("event", "Failed to fetch event: " + errorMessage);
                         }
                     });
