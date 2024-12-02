@@ -191,7 +191,7 @@ public class AdminEventDetail extends AppCompatActivity {
                     setResult(RESULT_OK, resultIntent);
 
                     Toast.makeText(this, "Event deleted successfully.", Toast.LENGTH_SHORT).show();
-                    BackToEventList();
+                    //BackToEventList();
                     finish();
                 })
                 .addOnFailureListener(e -> {
