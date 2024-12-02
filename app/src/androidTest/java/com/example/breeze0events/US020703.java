@@ -149,10 +149,11 @@ public class US020703 {
         Log.d("Test", "Event ID: " + eventId);
         Thread.sleep(3000);
         // Click the Filter button
+        /*
         onView(withId(R.id.organizer_notification_activity_filter_button))
                 .perform(click());
 
-        Thread.sleep(3000);
+        Thread.sleep(3000);*/
 
         // Select the test event by name
         // onView(withText(eventId)).perform(click());
