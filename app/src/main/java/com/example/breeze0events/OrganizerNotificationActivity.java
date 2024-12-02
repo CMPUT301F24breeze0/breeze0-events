@@ -17,6 +17,9 @@ import android.util.Pair;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.breeze0events.NewPair;
+import com.example.breeze0events.OrganizerNotificationCustomAdapter;
+import com.example.breeze0events.OverallStorageController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -89,7 +92,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                 loadTestEntrants(testEntrants);
             }
         } else {
-            findEntrants();
+            // findEntrants();
         }
 
         // By clicking "Back" button
@@ -448,7 +451,7 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
                     if (task.isSuccessful() && task.getResult() != null) {
                         DocumentSnapshot document = task.getResult();
                         List<String> entrants = (List<String>) document.get("entrants");
-                        selectedEventName = document.getString("name"); // 设置事件名称
+                        selectedEventName = document.getString("name");
                         contactList_display.clear();
 
                         if (entrants != null) {

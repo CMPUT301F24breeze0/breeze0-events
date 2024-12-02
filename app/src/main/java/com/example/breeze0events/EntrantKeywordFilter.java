@@ -70,7 +70,6 @@ public class EntrantKeywordFilter extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.entrant_filter, null);
-        LocalFilter = view.findViewById(R.id.location_filter);
         KeywordFilter = view.findViewById(R.id.keyword_filter);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

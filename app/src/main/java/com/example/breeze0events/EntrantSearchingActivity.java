@@ -55,7 +55,6 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
     @Override
     public void UpdateKeyword(String keyword, String location) {
         this.keyword = keyword;
-        this.location = location;
         updateList();
     }
 
@@ -147,8 +146,7 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
             overallStorageController.getEvent(String.valueOf(i), new EventCallback() {
                 @Override
                 public void onSuccess(Event event) {
-                    if (event.getName().toLowerCase().contains(keyword.toLowerCase()) &&
-                                    event.getFacility().toLowerCase().contains(location.toLowerCase())){
+                    if (event.getName().toLowerCase().contains(keyword.toLowerCase())){
                         dataList.add(event);
                     }
                     semaphore--;
