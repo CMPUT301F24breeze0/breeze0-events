@@ -20,7 +20,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-
+/**
+ * SelectFacilityForEventActivity is a DialogFragment that allows the user to select a facility from a list.
+ * It fetches facility data from Firebase Firestore and displays the facilities in a single-choice list view.
+ */
 public class SelectFacilityForEventActivity extends DialogFragment {
 
     private ListView facilityListView;
@@ -28,11 +31,22 @@ public class SelectFacilityForEventActivity extends DialogFragment {
     private ArrayList<String> facilityList,facilityIdList;
     private FacilitySelectListener listener;
     private FirebaseFirestore db; // Firebase instance
-
+    /**
+     * Interface for the activity to receive the selected facility.
+     */
     public interface FacilitySelectListener {
+        /**
+         * Called when a facility is selected.
+         *
+         * @param selectedFacility The ID of the selected facility.
+         */
         void onFacilitySelected(String selectedFacility);
     }
-
+    /**
+     * Ensures that the activity implements the FacilitySelectListener interface.
+     *
+     * @param context The context of the activity hosting this fragment.
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -42,7 +56,12 @@ public class SelectFacilityForEventActivity extends DialogFragment {
             throw new ClassCastException(context.toString() + " must implement FacilitySelectListener");
         }
     }
-
+    /**
+     * Creates the dialog for selecting a facility.
+     *
+     * @param savedInstanceState The previously saved state, if available.
+     * @return The Dialog instance for selecting a facility.
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         facilityList = new ArrayList<>(); // Initialize facility list
