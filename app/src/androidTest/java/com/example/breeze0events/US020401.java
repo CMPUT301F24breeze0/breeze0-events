@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -64,8 +65,8 @@ public class US020401 {
 
         // Step 2: Fill in the event details
         onView(withId(R.id.event_name_bar)).perform(typeText("Sample Event")); // Enter event name
-        onView(withId(R.id.event_start_date_bar)).perform(typeText("2023-12-01")); // Enter start date
-        onView(withId(R.id.event_end_date_bar)).perform(typeText("2023-12-10")); // Enter end date
+        onView(withId(R.id.event_start_date_bar)).perform(replaceText("2023-12-01")); // Set start date directly
+        onView(withId(R.id.event_end_date_bar)).perform(replaceText("2023-12-10")); // Set end date directly
         onView(withId(R.id.entrants_bar)).perform(typeText("100")); // Enter the number of entrants
 
         // Step 3: Click the "Add" button to save the event
