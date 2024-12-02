@@ -49,7 +49,8 @@ public class US020601 {
     }
 
     @Test
-    public void testEntrantDisplayListShowsItems() {
+    public void testEntrantDisplayListShowsItems() throws InterruptedException {
+        Thread.sleep(3000);
         // Verify that each name is displayed in the ListView
         Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_requested))
                 .check(ViewAssertions.matches(ViewMatchers.hasDescendant(withText("John Doe"))));
