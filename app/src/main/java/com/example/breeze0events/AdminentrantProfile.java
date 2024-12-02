@@ -89,6 +89,7 @@ public class AdminentrantProfile extends AppCompatActivity {
                         @Override
                         public void onSuccess(Event event) {
                             System.out.println(event.getEntrants());
+                            event.removeEntrant(id);
                             overallStorageController.updateEvent(event);
                             overallStorageController.deleteEntrant(String.valueOf(id));
                             System.out.println(id);
