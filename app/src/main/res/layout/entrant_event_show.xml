@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:text="Event Name"
         android:textColor="@color/text_color"
-        android:textSize="30dp"
+        android:textSize="35dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +36,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Event General Information"
-            android:textSize="20dp"
+            android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Event Name: \n Event Date:\nMAX No. of Entrants\n Sign up Due Date\n Event Description\n No. of Attendee"
+            android:textSize="20dp"
+            android:text="Event Name: \n\n Event Date:\n\nMAX No. of Entrants\n\n Sign up Due Date\n\n Event Description\n\n No. of Attendee"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Event_Maintitle" />
 
@@ -89,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="4dp"
+            android:textSize="15dp"
             android:text="Scan this QR Code\n for more information"
             app:layout_constraintBottom_toTopOf="@+id/Entrent_event_QRcode"
             app:layout_constraintEnd_toStartOf="@+id/Entrant_event_poster"
@@ -106,6 +108,4 @@
             app:layout_constraintStart_toEndOf="@+id/Entrent_event_QRcode" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

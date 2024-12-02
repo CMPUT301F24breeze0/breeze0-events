@@ -22,13 +22,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class US020502 {
+public class US020503 {
 
     @Rule
     public ActivityTestRule<OrganizerSamplingActivity> activityRule =
@@ -104,7 +103,7 @@ public class US020502 {
                     latch.countDown();  // Proceed to avoid test hanging
                 });
 
-        latch.await(10, TimeUnit.SECONDS);
+        latch.await();
 
         // Initialize Intent to launch OrganizerSamplingActivity
         Intent intent = new Intent();

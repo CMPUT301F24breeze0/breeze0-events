@@ -1,6 +1,7 @@
 package com.example.breeze0events;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import android.util.Base64;
 import android.widget.Toast;
@@ -58,6 +60,7 @@ public class EntrantEventDetail extends AppCompatActivity {
     private int Mutex=1, mutext2 = 0;
     private FusedLocationProviderClient fusedLocationClient;
     private GeoPoint entrantGeoPoint;
+    private boolean geoRequest;
 
     /**
      * Called when the activity is created. Sets up the UI components, fetches event data,
@@ -84,9 +87,6 @@ public class EntrantEventDetail extends AppCompatActivity {
         String id = intent.getStringExtra("eventID");
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // initialize geolocation
-        requestLocation();
-
         // Receive data from firebase
         overallStorageController.getEvent(String.valueOf(id), new EventCallback() {
             // FIXME: 2024/10/27 Add functionality to show Max number of entrants
@@ -97,9 +97,9 @@ public class EntrantEventDetail extends AppCompatActivity {
                 eventLocation = event.getFacility();
                 event_title.setText(event.getName());
                 String information = "Event Name: "+event.getName()
-                        +"\nEvent Date: "+event.getStartDate()
-                        +"\nSign up Due Date: "+event.getEndDate()
-                        +"\nEvent Organizers: "+event.getOrganizers();
+                        +"\n\nEvent Date: "+event.getStartDate()
+                        +"\n\nSign up Due Date: "+event.getEndDate()
+                        +"\n\nEvent Organizers: "+event.getOrganizers();
                 event_information.setText(information);
                 try {
                     QRcode.setImageBitmap(QRHashGenerator.generateQRCode(event.getQrCode()));
@@ -110,6 +110,23 @@ public class EntrantEventDetail extends AppCompatActivity {
                 }catch(Exception e) {
 
                 }
+                if(Objects.equals(event.getGeolocation(), "true")){
+                    geoRequest = true;
+                }
+                // initialize geolocation
+                if (geoRequest){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EntrantEventDetail.this);
+                    builder.setTitle("This Event requires your geolocation ")
+                            .setMessage("Do you want to continue or return?")
+                            .setCancelable(false)
+                            .setNeutralButton("Return", (dialog, which) -> {
+                                finish();
+                            })
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                requestLocation();
+                            });
+                    builder.create().show();
+                }
                 Mutex = 0;
             }
             @Override
@@ -117,6 +134,7 @@ public class EntrantEventDetail extends AppCompatActivity {
 
             }
         });
+
         QRcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +168,7 @@ public class EntrantEventDetail extends AppCompatActivity {
                             Toast.makeText(EntrantEventDetail.this,"You have joined this event", Toast.LENGTH_SHORT ).show();
                         }else{
                             entrant.set_add_Event(eventID, eventLocal.getName(), "Joined");
-                            if (entrantGeoPoint == null || entrantGeoPoint.getLatitude() == -1 || entrantGeoPoint.getLongitude() == -1){
+                            if ((entrantGeoPoint== null || entrantGeoPoint.getLatitude() == -1 || entrantGeoPoint.getLongitude() == -1) && geoRequest){
                                 Toast.makeText(EntrantEventDetail.this,"Geolocation access failed", Toast.LENGTH_SHORT ).show();
                             }else{
                                 entrant.addGeoPoint(eventID,entrantGeoPoint);
@@ -176,7 +194,7 @@ public class EntrantEventDetail extends AppCompatActivity {
         Toast.makeText(EntrantEventDetail.this,"Geolocation updating", Toast.LENGTH_SHORT ).show();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            entrantGeoPoint = null;
+            entrantGeoPoint = new GeoPoint(-1,-1);
             Toast.makeText(EntrantEventDetail.this,"Geolocation updating failed", Toast.LENGTH_SHORT ).show();
             return;
         }
@@ -248,6 +266,4 @@ public class EntrantEventDetail extends AppCompatActivity {
             }
         }
     }
-
-
 }

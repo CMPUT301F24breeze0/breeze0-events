@@ -60,7 +60,9 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
     private Uri selectedPosterUri = null;
 
     private ImageView posterImageView;
-    private String eventFacility,qrHashCode,ImageHashCode;
+    String eventFacility;
+    private String qrHashCode;
+    private String ImageHashCode;
 
     ArrayList<String> facilityList;
     // ImageView posterImageView;
@@ -99,6 +101,9 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
         overallStorageController = new OverallStorageController();
         posterImageView = findViewById(R.id.organizer_edit_event_activity_poster_image);
 
+        start_date.setFocusable(false);
+        end_date.setFocusable(false);
+
         // set header
         TextView headerTextView = findViewById(R.id.organizer_edit_event_activity_header);
         if (headerText != null) {
@@ -117,11 +122,16 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
 
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                start_date.setText(String.format("%d-%02d-%02d", Year, Month, Day));
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1 , dayOfMonth);
                     start_date.setText(selectedDate);
                     Toast.makeText(OrganizerEventActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
                 });
@@ -139,11 +149,16 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 Calendar calendar = Calendar.getInstance();
                 calendarView.setDate(calendar.getTimeInMillis());
 
+                int Year = calendar.get(Calendar.YEAR);
+                int Month = calendar.get(Calendar.MONTH) + 1;
+                int Day = calendar.get(Calendar.DAY_OF_MONTH);
+                end_date.setText(String.format("%d-%02d-%02d", Year, Month, Day));
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(OrganizerEventActivity.this);
                 alert.setTitle("Select a Date");
                 alert.setView(calendarView);
                 calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                    String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    String selectedDate = String.format("%d-%02d-%02d", year, month+1, dayOfMonth);
                     end_date.setText(selectedDate);
                 });
                 alert.setPositiveButton("Confirm", (dialog, which) -> {
@@ -210,7 +225,10 @@ public class OrganizerEventActivity extends AppCompatActivity implements SelectF
                 Toast.makeText(OrganizerEventActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if (start_date.getText().toString().compareTo(end_date.getText().toString())>0){
+                Toast.makeText(OrganizerEventActivity.this, "start date cannot be after end date", Toast.LENGTH_SHORT).show();
+                return;
+            }
             List<String> organizers = new ArrayList<>();
             organizers.add(organizerId);
             List<String> newEntrants = Arrays.asList(entrantsList.split("\\s*,\\s*"));
