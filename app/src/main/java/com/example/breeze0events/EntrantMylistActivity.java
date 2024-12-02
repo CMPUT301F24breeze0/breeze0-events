@@ -80,6 +80,7 @@ public class EntrantMylistActivity extends AppCompatActivity implements
 
         RefreshButton.setOnClickListener(v -> {
             updateProfile();
+            checkForNotifications();
         });
 
         // Profile modification button
@@ -119,6 +120,9 @@ public class EntrantMylistActivity extends AppCompatActivity implements
                     // Show badge if there are unread notifications
                     notificationBadge.setVisibility(View.VISIBLE);
                     notificationBadge.setText(String.valueOf(notifications.size())); // Optional: show count
+                }
+                else {
+                    notificationBadge.setVisibility(View.GONE);
                 }
             }
 
