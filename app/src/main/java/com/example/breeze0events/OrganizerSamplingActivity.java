@@ -1,5 +1,7 @@
 package com.example.breeze0events;
 
+import static com.google.common.primitives.UnsignedInts.max;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -248,14 +250,14 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
      * Updates the text view displaying the remaining slots for entrants.
      */
     private void updateRemainingSlots() {
-        int remainingSlots = limitedNumber - requestedCount - acceptedCount;
+        int remainingSlots = max(limitedNumber - requestedCount - acceptedCount,0);
         remainingSlotsTextView.setText("Remaining slots: " + remainingSlots);
     }
     /**
      * Randomly picks new applicants from the list of joined entrants.
      */
     void pickNewApplicants() {
-        int remainingSlots = limitedNumber - requestedCount - acceptedCount ;
+        int remainingSlots = max(limitedNumber - requestedCount - acceptedCount,0) ;
         if (remainingSlots <= 0) {
             Toast.makeText(this, "No remaining slots available", Toast.LENGTH_SHORT).show();
             return;
