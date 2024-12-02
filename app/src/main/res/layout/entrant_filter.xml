@@ -4,22 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:textColor="@color/button_color"
-        android:text="Location Filter:"/>
-    <EditText
-        android:id="@+id/location_filter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter the location here"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="TextContrastCheck"
-        android:importantForAutofill="no"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
