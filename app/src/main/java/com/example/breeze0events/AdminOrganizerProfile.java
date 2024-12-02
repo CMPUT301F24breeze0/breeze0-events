@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AdminOrganizerProfile class provides a detailed view of a specific organizer profile within
@@ -54,6 +57,7 @@ public class AdminOrganizerProfile extends AppCompatActivity {
         back_button.setOnClickListener(v->{
             finish();
         });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Button delete_button=findViewById(R.id.delete);
         delete_button.setOnClickListener(v->{
             String eventid;
@@ -69,17 +73,29 @@ public class AdminOrganizerProfile extends AppCompatActivity {
                      */
                     public void onSuccess(Event event){
                         List<String> entrantList= new ArrayList<>();
-                        entrantList=event.getEntrants();
-                        for(int j=0;j<entrantList.size();j++){
-                            overallStorageController.getEntrant(entrantList.get(j),new EntrantCallback(){
-                                @Override
-                                public void onSuccess(Entrant entrant){
-                                    entrant.getEventsName().remove(finalEventid);
-                                }
-                                public void onFailure(String errorMessage) {
-                                    Log.e("organizer", "Failed to fetch organizer: " + errorMessage);
-                                }
-                            });
+                        for (String entrantId : event.getEntrants()) {
+                            db.collection("EntrantDB").document(entrantId)
+                                    .get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            Map<String, Object> eventsMap = (Map<String, Object>) documentSnapshot.get("events");
+                                            Map<String, Object> geolocationMap = (Map<String, Object>) documentSnapshot.get("Geolocation");
+                                            Map<String, Object> statusMap = (Map<String, Object>) documentSnapshot.get("status");
+
+                                            if (eventsMap != null) eventsMap.remove(finalEventid);
+                                            if (geolocationMap != null)
+                                                geolocationMap.remove(finalEventid);
+                                            if (statusMap != null) statusMap.remove(finalEventid);
+
+                                            db.collection("EntrantDB").document(entrantId)
+                                                    .update("events", eventsMap,
+                                                            "Geolocation", geolocationMap,
+                                                            "status", statusMap)
+                                                    .addOnSuccessListener(aVoid1 -> Log.d("AdminEventDetail", "Event, Geolocation, and Status removed for Entrant: " + entrantId))
+                                                    .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Entrant: " + entrantId, e));
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to fetch Entrant: " + entrantId, e));
                         }
                         overallStorageController.deleteEvent(finalEventid);
                     }

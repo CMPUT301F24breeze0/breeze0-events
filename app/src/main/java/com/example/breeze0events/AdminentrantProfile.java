@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -77,6 +79,7 @@ public class AdminentrantProfile extends AppCompatActivity {
         back_button.setOnClickListener(v->{
             finish();
         });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Button delete_button=findViewById(R.id.delete_in_profile_detail);
         delete_button.setOnClickListener(v->{
             if(!eventList.isEmpty()) {
@@ -85,7 +88,8 @@ public class AdminentrantProfile extends AppCompatActivity {
                     overallStorageController.getEvent(String.valueOf(eventList.get(i)), new EventCallback() {
                         @Override
                         public void onSuccess(Event event) {
-                            event.getEntrants().remove(id);
+                            System.out.println(event.getEntrants());
+                            overallStorageController.updateEvent(event);
                             overallStorageController.deleteEntrant(String.valueOf(id));
                             System.out.println(id);
                             Log.d("event", "envent sucessfully delete");
