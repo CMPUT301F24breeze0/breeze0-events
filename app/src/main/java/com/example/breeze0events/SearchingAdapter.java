@@ -28,7 +28,7 @@ public class SearchingAdapter extends ArrayAdapter<Event> {
         TextView nameTextView = convertView.findViewById(R.id.Event_title);
 
         // Set ID and event name
-        idTextView.setText(String.valueOf(event.getEventId()));
+        idTextView.setText(String.valueOf(event.getEventId()) + ". ");
         nameTextView.setText(event.getName());
 
         return convertView;

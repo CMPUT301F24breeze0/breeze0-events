@@ -44,7 +44,6 @@ public class EntrantSearchingActivity extends AppCompatActivity implements Entra
     private Button refreshButton;
     private FirebaseFirestore db;
     private OverallStorageController overallStorageController;
-    // FIXME need a functionality to shown the next page or more than 20 events
     int limit = 20, semaphore = 0;
 
     /**
