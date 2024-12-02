@@ -27,15 +27,13 @@
         android:id="@+id/map_activity_back_button"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/ui_background"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@color/button_color"
         android:text="Back"
         android:textColor="@color/text_color"
-        app:layout_constraintTop_toBottomOf="@id/map_fragment_header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- OSMDroid MapView to display OpenStreetMap -->
     <org.osmdroid.views.MapView
@@ -44,9 +42,11 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         android:contentDescription="This is a map view showing the entrant location"
-        app:layout_constraintTop_toBottomOf="@id/map_activity_back_button"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/map_activity_back_button"
+        app:layout_constraintVertical_bias="0.533" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
