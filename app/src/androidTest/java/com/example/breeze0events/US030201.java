@@ -109,7 +109,7 @@ public class US030201 {
             onView(withId(R.id.organization)).perform(click());
 
             // Click on the specific organizer item
-            onData(withItemContent("Test Organizer"))
+            onData(withItemContent("123"))
                     .inAdapterView(withId(R.id.organizer_list_view))
                     .perform(click());
 
@@ -148,12 +148,12 @@ public class US030201 {
             onView(withId(R.id.entrant)).perform(click());
 
             // Click on the specific entrant item
-            onData(withItemContent("Test Entrant"))
+            onData(withItemContent("12345"))
                     .inAdapterView(withId(R.id.entrant_list_view))
                     .perform(click());
 
             // Perform the delete action
-            onView(withId(R.id.delete)).perform(click());
+            onView(withId(R.id.delete_in_profile_detail)).perform(click());
             Thread.sleep(4000); // Wait for deletion
 
             // Assert the entrant is no longer displayed in the list
