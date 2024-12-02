@@ -59,8 +59,8 @@ public class AdminEventDetail extends AppCompatActivity {
         eventName = findViewById(R.id.EventName);
         eventDate = findViewById(R.id.EventDate);
         maxEntrants = findViewById(R.id.MaxEntrants);
-        signUpDueDay = findViewById(R.id.duedate);
-        eventDescription = findViewById(R.id.description);
+        // signUpDueDay = findViewById(R.id.duedate);
+        // beventDescription = findViewById(R.id.description);
         overallStorageController = new OverallStorageController();
         encryptedPosterImage = getEncryptedImageFromStorage();
 
@@ -71,11 +71,11 @@ public class AdminEventDetail extends AppCompatActivity {
             @Override
             public void onSuccess(Event event) {
                 selected_event = event;
-                eventTitle.setText("Event Detail");
-                eventName.setText("Event Name: " + selected_event.getName());
-                eventDate.setText("Event start from " + event.getStartDate() + " - " + event.getEndDate());
-                maxEntrants.setText("Max number of entrants: " + event.getLimitedNumber());
-                signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
+                eventTitle.setText("         Event Detail");
+                eventName.setText("Title: " + selected_event.getName());
+                eventDate.setText("Start From " + event.getStartDate() + "\nTo " + event.getEndDate());
+                maxEntrants.setText("Max No. of Entrants: " + event.getLimitedNumber());
+                //signUpDueDay.setText("Sign-up due: " + /* add due date if available */ "");
                 //eventDescription.setText(event.getDescription());
                 String encryptedPosterImage = event.getPosterPhoto(); // Retrieve encrypted image from event
                 if (encryptedPosterImage != null && !encryptedPosterImage.isEmpty()) {

@@ -11,9 +11,10 @@
         android:id="@+id/organizer_facility_activity_back_button"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/button_color"
         android:text="Back"
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/ui_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

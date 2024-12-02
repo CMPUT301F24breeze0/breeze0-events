@@ -9,54 +9,75 @@
 
     <Button
         android:id="@+id/organizer_facility_activity_back_button"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:text="Back"
+        android:layout_width="66dp"
+        android:layout_height="50dp"
+
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/button_color"
+        android:text=" "
         android:textColor="@color/text_color"
-        android:backgroundTint="@color/ui_background"
+        app:icon="@drawable/backicon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/organization"
-        android:layout_width="179dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="176dp"
+        android:layout_width="175dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="284dp"
         android:backgroundTint="@color/button_color"
-        android:text="Organization profile"
+        android:text="Organizer profile"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/entrant"
-        android:layout_width="179dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="68dp"
+        android:layout_width="175dp"
+        android:layout_height="60dp"
+
+        android:layout_marginTop="12dp"
         android:backgroundTint="@color/button_color"
-
         android:text="Entrant profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
 
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/organization" />
 
-
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:fontFamily="cursive"
-        android:text="Welcome"
+        android:layout_width="319dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="144dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Welcome to your Profile Page, Admin! Review your account details, update what you need to, and ensure your profile is up-to-date"
         android:textColor="#96FFFFFF"
-        android:textSize="48sp"
-        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="casual"
+        android:text="Profiles"
+        android:textColor="#C0C7CD"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,93 +30,94 @@ import java.util.HashMap;
  */
 public class AdminEntrantProfileActivity extends AppCompatActivity  {
 
-        private OverallStorageController overallStorageController;
-        private FirebaseFirestore db;
-        private HashMap<String, String> entrantIdMap;
-        private ArrayAdapter<String> entrantListAdapter;
-        private ArrayList<String> entrantList;
-        private ListView entrantListView;
-        private final ActivityResultLauncher<Intent> profileDetailLauncher =
-                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            entrantList = data.getStringArrayListExtra("UPDATED_LIST");
-                            entrantListAdapter.clear();
-                            entrantListAdapter.addAll(entrantList);
-                            entrantListAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.entrant_profile_list);
-            overallStorageController = new OverallStorageController();
-            entrantListView = findViewById(R.id.entrant_list_view);
-            entrantList = new ArrayList<>();
-            entrantListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantList);
-            entrantListView.setAdapter(entrantListAdapter);
-            FirebaseFirestore db =FirebaseFirestore.getInstance();
-            CollectionReference collectionRef=db.collection("EntrantDB");
-            entrantIdMap = new HashMap<>();
-            collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    /**
-                     * it is for getting the all entrant from database and display in the listview
-                     * @param  task it is the all entrant in the database
-                     */
-                    if (task.isSuccessful()) {
-                        Log.d("FirestoreDebug", "Query successful, documents fetched: " + task.getResult().size());
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("FirestoreDebug", "Document ID: " + document.getId());
-                            String docId = document.getId();
-                            overallStorageController.getEntrant(String.valueOf(docId), new EntrantCallback() {
-                                @Override
-                                public void onSuccess(Entrant entrant) {
-
-                                    String entrantInfo = "Entrant: " + entrant.getEntrantId();
-                                    entrantIdMap.put(entrantInfo,docId);
-                                    System.out.println(entrantInfo);
-                                    entrantList.add(entrantInfo);
-                                    entrantListAdapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onFailure(String errorMessage) {
-
-                                }
-                            });
-                        }
-                    } else {
-                        Log.e("FirestoreError", "Error getting documents: ", task.getException());
+    private OverallStorageController overallStorageController;
+    private FirebaseFirestore db;
+    private HashMap<String, String> entrantIdMap;
+    private ArrayAdapter<String> entrantListAdapter;
+    private ArrayList<String> entrantList;
+    private ListView entrantListView;
+    private final ActivityResultLauncher<Intent> profileDetailLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        entrantList = data.getStringArrayListExtra("UPDATED_LIST");
+                        entrantListAdapter.clear();
+                        entrantListAdapter.addAll(entrantList);
+                        entrantListAdapter.notifyDataSetChanged();
                     }
                 }
             });
-            Button back_button=findViewById(R.id.back_in_organizer_list);
-            back_button.setOnClickListener(v->{
-                finish();
-            });
-            entrantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    /**
-                     * it is for transform the the selected entrant's imformation to next page so we can access and make change to entrant information
-                     * @param parent it is the parent of view
-                     * @param view it is the current view
-                     * @param position it is the position i selected
-                     * @param id the row ID of the item that was clicked
-                     */
-                    String entrantInfo = entrantList.get(position);
-                    String entrantId=entrantIdMap.get(entrantInfo);
-                    Intent intent = new Intent(AdminEntrantProfileActivity.this, AdminentrantProfile.class);
-                    intent.putExtra("SELECTED_POSITION", position);
-                    intent.putExtra("SELECTED_ID",entrantId);
-                    intent.putStringArrayListExtra("Entrant_LIST",entrantList);
-                    profileDetailLauncher.launch(intent);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.entrant_profile_list);
+        overallStorageController = new OverallStorageController();
+        entrantListView = findViewById(R.id.entrant_list_view);
+        entrantList = new ArrayList<>();
+        entrantListAdapter = new ArrayAdapter<>(this, R.layout.list_item_layout, entrantList);
+        entrantListView.setAdapter(entrantListAdapter);
+        FirebaseFirestore db =FirebaseFirestore.getInstance();
+        CollectionReference collectionRef=db.collection("EntrantDB");
+        entrantIdMap = new HashMap<>();
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                /**
+                 * it is for getting the all entrant from database and display in the listview
+                 * @param  task it is the all entrant in the database
+                 */
+                if (task.isSuccessful()) {
+                    Log.d("FirestoreDebug", "Query successful, documents fetched: " + task.getResult().size());
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("FirestoreDebug", "Document ID: " + document.getId());
+                        String docId = document.getId();
+                        overallStorageController.getEntrant(String.valueOf(document.getId()), new EntrantCallback() {
+                            @Override
+                            public void onSuccess(Entrant entrant) {
+
+                                String entrantInfo = "Entrant: " + entrant.getEntrantId();
+                                entrantIdMap.put(entrantInfo,document.getId());
+                                System.out.println(entrantInfo);
+                                entrantList.add(entrantInfo);
+                                entrantListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                System.out.println(errorMessage);
+                            }
+                        });
+                    }
+                } else {
+                    Log.e("FirestoreError", "Error getting documents: ", task.getException());
                 }
-            });
-        }
+            }
+        });
+        Button back_button=findViewById(R.id.back_in_organizer_list);
+        back_button.setOnClickListener(v->{
+            Intent intent1=new Intent(AdminEntrantProfileActivity.this,AdminOperateActivity.class);
+            startActivity(intent1);
+        });
+        entrantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /**
+                 * it is for transform the the selected entrant's imformation to next page so we can access and make change to entrant information
+                 * @param parent it is the parent of view
+                 * @param view it is the current view
+                 * @param position it is the position i selected
+                 * @param id the row ID of the item that was clicked
+                 */
+                String entrantInfo = entrantList.get(position);
+                String entrantId=entrantIdMap.get(entrantInfo);
+                Intent intent = new Intent(AdminEntrantProfileActivity.this, AdminentrantProfile.class);
+                intent.putExtra("SELECTED_POSITION", position);
+                intent.putExtra("SELECTED_ID",entrantId);
+                intent.putStringArrayListExtra("Entrant_LIST",entrantList);
+                profileDetailLauncher.launch(intent);
+            }
+        });
+    }
 
 
 

@@ -69,5 +69,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.0.0'")
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     testImplementation ("org.mockito:mockito-core:4.11.0")
+    androidTestImplementation ("org.mockito:mockito-android:4.11.0")
     testImplementation ("androidx.test:core:1.5.0")
 }

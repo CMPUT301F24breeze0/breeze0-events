@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="Facility"
+        android:fontFamily="casual"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#C0C7CD"
         app:layout_constraintBottom_toTopOf="@+id/facilityList"
@@ -31,20 +32,22 @@
         android:dividerHeight="2dp"
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="58dp"
         android:layout_marginBottom="70dp"
-        android:background="#40484D"/>
+        android:background="@drawable/view_background"/>
 
     <Button
         android:id="@+id/refresh_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="67sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#40484D"
-        android:text="Refresh"
+        android:text="@string/about"
+        app:icon="@drawable/refreshicon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toEndOf="@+id/facilityText"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,6 +58,8 @@
         android:layout_marginBottom="12dp"
         android:backgroundTint="#40484D"
         android:text="BACK"
+
+        app:icon="@drawable/return_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

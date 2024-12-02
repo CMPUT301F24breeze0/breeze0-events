@@ -6,72 +6,83 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <Button
-        android:id="@+id/profileButton"
-        android:layout_width="133dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="72dp"
-        android:backgroundTint="#40484D"
-        android:text="Profile"
-        android:textSize="17sp"
-        android:visibility="invisible"
-        app:icon="@android:drawable/ic_menu_my_calendar"
-        app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/admin_welcome_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginTop="92dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Welcome, Admin! Manage your events and oversee operations effectively."
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/facility"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/removeButton1"
-        android:layout_width="169dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="12dp"
         android:backgroundTint="#40484D"
         android:text="Profiles"
+        android:textColor="@color/text_color"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/facility" />
 
     <Button
         android:id="@+id/facility"
-        android:layout_width="169dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="296dp"
         android:backgroundTint="#40484D"
         android:text="Facility"
+        android:textColor="@color/text_color"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/removeButton2"
-        android:layout_width="169dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#40484D"
         android:text="Events"
+        android:textColor="@color/text_color"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/removeButton1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.039" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="72dp"
         android:fontFamily="cursive"
         android:text="Welcome"
         android:textColor="#96FFFFFF"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
