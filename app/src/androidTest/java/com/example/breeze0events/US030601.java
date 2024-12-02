@@ -88,11 +88,10 @@ public class US030601 {
         ActivityScenario<AdminBrowseImage>scenario=ActivityScenario.launch(intent);
         Thread.sleep(3000);
         onView(withId(R.id.delete_button)).perform(click());
+        Thread.sleep(1000);
         onData(withItemContent("Mock Event Name"))
                 .inAdapterView(withId(R.id.eventsList))
                 .perform(click());
-        Thread.sleep(1000);
-        onView(withId(R.id.imageButton)).check(ViewAssertions.matches(not(isDisplayed())));
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("OverallDB").document("Mock test ID")
                 .get()

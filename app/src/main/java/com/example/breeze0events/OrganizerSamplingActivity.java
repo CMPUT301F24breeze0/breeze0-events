@@ -284,6 +284,23 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             }
         }
 
+        for (DocumentSnapshot entrant : joinedEntrants) {
+            if (!selectedEntrants.contains(entrant)) {
+                Map<String, String> statusMap = (Map<String, String>) entrant.get("status");
+                Map<String, String> eventsMap = (Map<String, String>) entrant.get("events");
+
+                if (eventsMap != null && statusMap != null && eventsMap.containsKey(eventId) && "Joined".equals(statusMap.get(eventId))) {
+                    String notificationMessage = "You are not selected to join the event.";
+                    db.collection("EntrantDB").document(entrant.getId())
+                            .update(
+                                    "notifications", FieldValue.arrayUnion(new NewPair<>(selectedEvent.getName(), notificationMessage))
+                            )
+                            .addOnSuccessListener(aVoid -> Log.d("OrganizerSampling", "Status and notification updated to Not Selected for entrant: " + entrant.getId()))
+                            .addOnFailureListener(e -> Log.e("OrganizerSampling", "Failed to update status or notification", e));
+                }
+            }
+        }
+
         loadEntrantsWithJoinedStatus();
     }
     /**
