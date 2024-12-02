@@ -42,10 +42,10 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintHorizontal_bias="0.054"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintVertical_bias="0.214" />
 
     <TextView
         android:id="@+id/setName"
@@ -76,15 +76,13 @@
         android:id="@+id/back_in_profile_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="56dp"
         android:backgroundTint="@color/button_color"
         android:text="Back"
         app:icon="@drawable/return_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delete_in_profile_detail"
-        app:layout_constraintHorizontal_bias="0.21"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16"
-        app:layout_constraintVertical_bias="0.821" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/delete_in_profile_detail"
