@@ -154,6 +154,13 @@ public class AdminEventDetail extends AppCompatActivity {
                                 .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Organizer: " + organizerId, e));
                     }
 
+                    for (String entrantId : selected_event.getEntrants()){
+                        db.collection("EntrantDB").document(entrantId)
+                                .update("events", com.google.firebase.firestore.FieldValue.arrayRemove(id))
+                                .addOnSuccessListener(aVoid1 -> Log.d("AdminEventDetail", "Event removed from Entrant: " + entrantId))
+                                .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Entrant: " + entrantId, e));
+                    }
+
                     if (eventList != null) {
                         eventList.removeIf(event -> event.getEventId().equals(id));
                     }

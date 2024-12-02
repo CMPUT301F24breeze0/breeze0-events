@@ -105,7 +105,11 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         pickApplicantButton.setOnClickListener(v -> pickNewApplicants());
 
         // by clicking refresh button
-        refreshButton.setOnClickListener(v -> loadEntrantsWithJoinedStatus());
+        // refreshButton.setOnClickListener(v -> loadEntrantsWithJoinedStatus());
+        refreshButton.setOnClickListener(v -> {
+            loadEntrantsWithJoinedStatus();
+            updateRemainingSlots();
+        });
 
         // Cancel entrants who requested to join the event
         cancelButton.setOnClickListener(v-> changeRequestToReject());
@@ -149,6 +153,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                 changeRequestToReject();
             }
         });
+        setupRealTimeListener();
     }
     /**
      * Loads event details such as the limited number of entrants allowed.
@@ -302,6 +307,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
         }
 
         loadEntrantsWithJoinedStatus();
+        updateRemainingSlots();
     }
     /**
      * Changes the status of all "Requested" entrants to "Rejected."
@@ -349,11 +355,26 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                                 Log.e("OrganizerSampling", "Invalid document structure for entrant: " + document.getId());
                             }
                         }
+                        updateRemainingSlots();
                     } else {
                         // Log and display an error if the database query fails
                         Log.e("OrganizerSampling", "Failed to load entrants", task.getException());
                         Toast.makeText(OrganizerSamplingActivity.this, "Failed to load entrants", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void setupRealTimeListener() {
+        db.collection("EntrantDB").addSnapshotListener((snapshots, error) -> {
+            if (error != null) {
+                Log.e("OrganizerSampling", "Error listening for changes", error);
+                return;
+            }
+
+            if (snapshots != null) {
+                Log.d("OrganizerSampling", "Database updated, reloading entrants");
+                loadEntrantsWithJoinedStatus();
+            }
+        });
     }
 }
