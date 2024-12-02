@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller class to manage overall storage of entrants, organizers, events, facilities, and admins
+ * using Firebase Firestore.
+ */
 public class OverallStorageController {
     private ListenerRegistration statusListener;
     private ArrayList<String> lastChangedEventId;
@@ -24,6 +28,12 @@ public class OverallStorageController {
     private static final String TAG = "OverallStorageController";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * Starts listening for status changes of an entrant.
+     *
+     * @param entrantId The ID of the entrant to listen to.
+     * @param callback  A callback interface for handling status updates.
+     */
     // Status listener
     public void startStatusListener(String entrantId, StatusCallback callback) {
         if (statusListener != null) {
@@ -47,6 +57,10 @@ public class OverallStorageController {
             }
         });
     }
+
+    /**
+     * Stops the current status listener.
+     */
     public void stopStatusListener() {
         if (statusListener != null) {
             statusListener.remove();
@@ -54,14 +68,32 @@ public class OverallStorageController {
         }
     }
 
+    /**
+     * Retrieves the latest status of an entrant.
+     *
+     * @return An ArrayList of strings representing the latest status changes.
+     */
     public ArrayList<String> getLatestStatus() {
         return lastChangedEventId;
     }
-
+    /**
+     * Interface for handling status updates.
+     */
     public interface StatusCallback {
+        /**
+         * Called when the status changes.
+         *
+         * @param status An ArrayList of strings representing the new status.
+         */
         void onStatusChanged(ArrayList<String> status);
     }
 
+    /**
+     * Fetches entrant information by ID.
+     *
+     * @param entrantId The ID of the entrant to retrieve.
+     * @param callback  A callback interface for handling entrant retrieval.
+     */
     // Get Entrant
     public void getEntrant(String entrantId, final EntrantCallback callback) {
         DocumentReference docRef = db.collection("EntrantDB").document(entrantId);
@@ -105,7 +137,11 @@ public class OverallStorageController {
         });
     }
 
-    // Add Entrant
+    /**
+     * Adds a new entrant to the database.
+     *
+     * @param entrant The entrant object to add.
+     */
     public void addEntrant(Entrant entrant) {
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("entrantId", entrant.getEntrantId());
@@ -133,7 +169,11 @@ public class OverallStorageController {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding entrant", e));
     }
 
-    // Update Entrant
+    /**
+     * Updates an existing entrant in the database.
+     *
+     * @param entrant The entrant object with updated data.
+     */
     public void updateEntrant(Entrant entrant) {
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("entrantId", entrant.getEntrantId());
@@ -161,16 +201,23 @@ public class OverallStorageController {
                 .addOnFailureListener(e -> Log.w(TAG, "Error updating entrant", e));
     }
 
-    // Delete Entrant
+    /**
+     * Deletes an entrant from the database.
+     *
+     * @param entrantId The ID of the entrant to delete.
+     */
     public void deleteEntrant(String entrantId) {
         db.collection("EntrantDB").document(entrantId).delete()
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Entrant successfully deleted!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error deleting entrant", e));
     }
 
-    // **Organizer Functions**
-
-    // Get Organizer
+    /**
+     * Retrieves organizer information by ID.
+     *
+     * @param organizerId The ID of the organizer to retrieve.
+     * @param callback    A callback interface for handling organizer retrieval.
+     */
     public void getOrganizer(String organizerId, final OrganizerCallback callback) {
         DocumentReference docRef = db.collection("OrganizerDB").document(organizerId);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
