@@ -162,7 +162,7 @@ public class AdminEventDetail extends AppCompatActivity {
                                     if (documentSnapshot.exists()) {
                                         Map<String, Object> eventsMap = (Map<String, Object>) documentSnapshot.get("events");
                                         Map<String, Object> geolocationMap = (Map<String, Object>) documentSnapshot.get("Geolocation");
-                                        Map<String, Object> statusMap = (Map<String, Object>) documentSnapshot.get("Status");
+                                        Map<String, Object> statusMap = (Map<String, Object>) documentSnapshot.get("status");
 
                                         if (eventsMap != null) eventsMap.remove(id);
                                         if (geolocationMap != null) geolocationMap.remove(id);
