@@ -14,7 +14,10 @@ public class OrganizerNotificationCustomAdapter extends ArrayAdapter<Pair<String
     private Context context;
     private ArrayList<Pair<String, String>> data;
     private HashSet<Integer> selectedPositions;
-
+    /**
+     * OrganizerNotificationCustomAdapter is a custom adapter for displaying a list of entrants.
+     * It supports highlighting selected items and customizing the appearance of list items.
+     */
     public OrganizerNotificationCustomAdapter(Context context, ArrayList<Pair<String, String>> data, HashSet<Integer> selectedPositions) {
         super(context, 0, data);
         this.context = context;
@@ -26,7 +29,12 @@ public class OrganizerNotificationCustomAdapter extends ArrayAdapter<Pair<String
     public int getCount() {
         return data.size();
     }
-
+    /**
+     * Returns the data item at the specified position.
+     *
+     * @param position The position of the item in the data set.
+     * @return The entrant data as a Pair (ID and name).
+     */
     @Override
     public Pair<String, String> getItem(int position) {
         return data.get(position);
@@ -36,7 +44,13 @@ public class OrganizerNotificationCustomAdapter extends ArrayAdapter<Pair<String
     public long getItemId(int position) {
         return position;
     }
-
+    /**
+     * Returns the unique ID for the item at the specified position.
+     * Since the position is unique in the list, it is returned as the ID.
+     *
+     * @param position The position of the item in the data set.
+     * @return The position of the item.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

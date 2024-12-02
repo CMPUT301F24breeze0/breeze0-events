@@ -20,7 +20,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * OrganizerSamplingActivity allows event organizers to manage entrant sampling for events.
+ * The activity provides functionalities to:
+ * - Load and display entrant details.
+ * - Categorize entrants based on their statuses (Requested, Accepted, Rejected, Joined).
+ * - Pick new applicants to join the event.
+ * - Finalize the event by rejecting remaining requests.
+ */
 public class OrganizerSamplingActivity extends AppCompatActivity {
     public OverallStorageController overallStorageController;
     private FirebaseFirestore db;
@@ -34,6 +41,11 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
     public String eventId; // The ID of the current event
     Event selectedEvent;
     Button finalizeButton;
+    /**
+     * Initializes the activity and sets up UI components.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +148,11 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Loads event details such as the limited number of entrants allowed.
+     *
+     * @param eventId The ID of the event to load.
+     */
     private void loadEventDetails(String eventId) {
         overallStorageController.getEvent(eventId, new EventCallback() {
             @Override
@@ -161,7 +177,9 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Loads entrants from the database and categorizes them based on their statuses.
+     */
     private void loadEntrantsWithJoinedStatus() {
         entrantDisplayRequested.clear();
         entrantDisplayAccepted.clear();
@@ -226,12 +244,16 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    /**
+     * Updates the text view displaying the remaining slots for entrants.
+     */
     private void updateRemainingSlots() {
         int remainingSlots = limitedNumber - requestedCount - acceptedCount;
         remainingSlotsTextView.setText("Remaining slots: " + remainingSlots);
     }
-
+    /**
+     * Randomly picks new applicants from the list of joined entrants.
+     */
     void pickNewApplicants() {
         int remainingSlots = limitedNumber - requestedCount - acceptedCount ;
         if (remainingSlots <= 0) {
@@ -262,6 +284,9 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
 
         loadEntrantsWithJoinedStatus();
     }
+    /**
+     * Changes the status of all "Requested" entrants to "Rejected."
+     */
     void changeRequestToReject(){
         // Access the EntrantDB collection in the Firestore database
         db.collection("EntrantDB").get()

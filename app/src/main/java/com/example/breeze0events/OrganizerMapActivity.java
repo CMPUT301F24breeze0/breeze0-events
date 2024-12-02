@@ -20,13 +20,19 @@ import java.util.Objects;
 import android.util.Pair;
 
 /**
- * OrganizerMapActivity provides a map view for organizers using OSMDroid to load OpenStreetMap with multiple markers.
+ * OrganizerMapActivity provides a map view for organizers, leveraging OSMDroid to render OpenStreetMap
+ * and display multiple markers based on entrant and event data stored in Firebase.
  */
 public class OrganizerMapActivity extends AppCompatActivity {
 
     private MapView mapView;
     private OverallStorageController overallStorageController;
 
+    /**
+     * Initializes the activity, sets up the map view, back button, and loads markers asynchronously.
+     *
+     * @param savedInstanceState Bundle containing saved state data.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +59,24 @@ public class OrganizerMapActivity extends AppCompatActivity {
         addLocationsAndMarkers();
     }
 
-    // Helper method to add a marker to the map
+    /**
+     * Adds a marker to the map at the specified location with a given title.
+     *
+     * @param location GeoPoint object containing latitude and longitude coordinates.
+     * @param title    The title to be displayed when the marker is tapped.
+     */
     private void addMarker(GeoPoint location, String title) {
         Marker marker = new Marker(mapView);
-        marker.setPosition(new org.osmdroid.util.GeoPoint(location.getLatitude(),location.getLongitude()));
+        marker.setPosition(new org.osmdroid.util.GeoPoint(location.getLatitude(), location.getLongitude()));
         marker.setTitle(title);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM); // Set anchor point
         mapView.getOverlays().add(marker); // Add the marker to the map
     }
 
+    /**
+     * Retrieves entrant and event data from Firebase and adds corresponding markers to the map.
+     * Uses OverallStorageController to fetch data and process it asynchronously.
+     */
     private void addLocationsAndMarkers() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         overallStorageController = new OverallStorageController();
@@ -112,18 +127,27 @@ public class OrganizerMapActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Resumes the MapView when the activity resumes.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume(); // Resume MapView when activity is resumed
     }
 
+    /**
+     * Pauses the MapView when the activity pauses.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause(); // Pause MapView to save resources
     }
 
+    /**
+     * Releases MapView resources properly when the activity is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

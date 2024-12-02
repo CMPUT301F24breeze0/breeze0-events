@@ -48,7 +48,11 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
     private List<String> selectedStatuses = new ArrayList<>();
     // private String testEventId;
 
-
+    /**
+     * Initializes the activity, sets up UI components, and loads entrant data.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +161,9 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         });
 
     }
-
+    /**
+     * Loads entrants from the Firestore database for the organizer's events.
+     */
     private void findEntrants() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -206,7 +212,9 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
             }
         });
     }
-
+    /**
+     * Displays a dialog for composing and sending a notification to selected entrants.
+     */
     private void showMessageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Send Notification");
@@ -239,7 +247,11 @@ public class OrganizerNotificationActivity extends AppCompatActivity{
         builder.show();
     }
 
-
+    /**
+     * Sends a notification to the database for all selected entrants.
+     *
+     * @param message The notification message to send.
+     */
     private void sendMessageToDatabase(String message) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
