@@ -80,8 +80,7 @@ public class AdminentrantProfile extends AppCompatActivity {
         Button delete_button=findViewById(R.id.delete_in_profile_detail);
         delete_button.setOnClickListener(v->{
             if(!eventList.isEmpty()) {
-                for (int i = 0; i <= eventList.size(); i++) {
-                    //eventid=eventList.get(i);
+                for (int i = 0; i < eventList.size(); i++) {
                     System.out.println(id);
                     overallStorageController.getEvent(String.valueOf(eventList.get(i)), new EventCallback() {
                         @Override
