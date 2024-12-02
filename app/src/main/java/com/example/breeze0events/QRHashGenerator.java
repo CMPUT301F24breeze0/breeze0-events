@@ -8,9 +8,19 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
+/**
+ * The QRHashGenerator class provides utility methods to:
+ * 1. Generate a SHA-256 hash from an input string.
+ * 2. Generate a QR code bitmap from a hashed string.
+ */
 public class QRHashGenerator {
 
+    /**
+     * Generates a SHA-256 hash from the provided input string.
+     *
+     * @param input The input string to hash.
+     * @return The SHA-256 hash of the input string, or null if hashing fails.
+     */
     public static String generateHash(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -27,6 +37,12 @@ public class QRHashGenerator {
             return null;
         }
     }
+    /**
+     * Generates a QR code bitmap from the provided hashed string.
+     *
+     * @param qrHashCode The hashed string to encode in the QR code.
+     * @return A Bitmap representing the QR code, or null if generation fails.
+     */
     public static Bitmap generateQRCode(String qrHashCode) {
         QRCodeWriter writer = new QRCodeWriter();
         try {

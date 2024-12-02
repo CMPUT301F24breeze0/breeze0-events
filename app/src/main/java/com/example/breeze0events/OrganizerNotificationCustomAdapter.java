@@ -9,7 +9,11 @@ import android.widget.TextView;
 import android.util.Pair;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+/**
+ * OrganizerNotificationCustomAdapter is a custom adapter for displaying a list of entrants.
+ * Each item in the list represents an entrant, showing their ID and name.
+ * The adapter supports highlighting selected items and customizing the appearance of the list items.
+ */
 public class OrganizerNotificationCustomAdapter extends ArrayAdapter<Pair<String, String>> {
     private Context context;
     private ArrayList<Pair<String, String>> data;
