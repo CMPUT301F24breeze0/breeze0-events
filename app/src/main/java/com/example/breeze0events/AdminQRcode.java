@@ -121,7 +121,7 @@ public class AdminQRcode extends AppCompatActivity {
                     qrCodeImageView.setImageBitmap(null);
                     deleteButton.setEnabled(false);
                     Toast.makeText(this, "QR code deleted successfully", Toast.LENGTH_SHORT).show();
-                    BackToEventList(); // in case user click the qr code again, but it is not updated
+                    //BackToEventList(); // in case user click the qr code again, but it is not updated
                 })
                 .addOnFailureListener(e -> {
                     Log.e("AdminQRcode", "Failed to delete QR code field", e);

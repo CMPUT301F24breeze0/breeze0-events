@@ -118,8 +118,9 @@ public class US030101 {
                 .inRoot(isDialog())
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
-
-
+        Thread.sleep(1000);
+        onView(withId(R.id.back_in_main)).perform(click());
+        Thread.sleep(1000);
         onView(withId(R.id.eventsList))
                 .check(ViewAssertions.matches(not(withText("Test Event for Deletion"))));
 

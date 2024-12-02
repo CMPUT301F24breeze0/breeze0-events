@@ -94,12 +94,18 @@ public class US030302 {
 
     @Test
     public void testDeleteQRCode() throws InterruptedException {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), AdminQRcode.class);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), AdminEventActivity.class);
         intent.putExtra("qrcode", "MockQRCodeValue");
         intent.putExtra("eventId", "Mock test ID");
-        ActivityScenario<AdminQRcode> scenario = ActivityScenario.launch(intent);
+        ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(intent);
 
         Thread.sleep(3000);
+        onData(withItemContent("Mock Event Name"))
+                .inAdapterView(withId(R.id.eventsList))
+                .perform(click());
+
+        Thread.sleep(1000);
+        onView(withId(R.id.QRCodeButton)).perform(click());
 
         onView(withId(R.id.QRcode)).check(ViewAssertions.matches(isDisplayed()));
 
@@ -111,6 +117,11 @@ public class US030302 {
                 .perform(click());
 
         Thread.sleep(1000);
+        onView(withId(R.id.back_in_main)).perform(click());
+
+        Thread.sleep(500);
+        onView(withId(R.id.back_in_main)).perform(click());
+        Thread.sleep(500);
 
         onView(withId(R.id.refreshButton)).perform(click());
 
