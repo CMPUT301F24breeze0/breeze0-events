@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The AdminEventDetail activity provides an interface for administrators to view detailed information
@@ -154,12 +155,31 @@ public class AdminEventDetail extends AppCompatActivity {
                                 .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Organizer: " + organizerId, e));
                     }
 
-                    for (String entrantId : selected_event.getEntrants()){
+                    for (String entrantId : selected_event.getEntrants()) {
                         db.collection("EntrantDB").document(entrantId)
-                                .update("events", com.google.firebase.firestore.FieldValue.arrayRemove(id))
-                                .addOnSuccessListener(aVoid1 -> Log.d("AdminEventDetail", "Event removed from Entrant: " + entrantId))
-                                .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Entrant: " + entrantId, e));
+                                .get()
+                                .addOnSuccessListener(documentSnapshot -> {
+                                    if (documentSnapshot.exists()) {
+                                        Map<String, Object> eventsMap = (Map<String, Object>) documentSnapshot.get("events");
+                                        Map<String, Object> geolocationMap = (Map<String, Object>) documentSnapshot.get("Geolocation");
+                                        Map<String, Object> statusMap = (Map<String, Object>) documentSnapshot.get("Status");
+
+                                        if (eventsMap != null) eventsMap.remove(id);
+                                        if (geolocationMap != null) geolocationMap.remove(id);
+                                        if (statusMap != null) statusMap.remove(id);
+
+                                        db.collection("EntrantDB").document(entrantId)
+                                                .update("events", eventsMap,
+                                                        "Geolocation", geolocationMap,
+                                                        "status", statusMap)
+                                                .addOnSuccessListener(aVoid1 -> Log.d("AdminEventDetail", "Event, Geolocation, and Status removed for Entrant: " + entrantId))
+                                                .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to update Entrant: " + entrantId, e));
+                                    }
+                                })
+                                .addOnFailureListener(e -> Log.e("AdminEventDetail", "Failed to fetch Entrant: " + entrantId, e));
                     }
+
+
 
                     if (eventList != null) {
                         eventList.removeIf(event -> event.getEventId().equals(id));
