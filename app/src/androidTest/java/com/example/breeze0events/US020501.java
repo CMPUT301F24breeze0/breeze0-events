@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -39,12 +40,30 @@ public class US020501 {
 
     private OrganizerSamplingActivity activity;
     private FirebaseFirestore db;
+    private OverallStorageController overallStorageController;
 
     @Before
     public void setUp() throws InterruptedException {
         // Initialize Firestore instance
         db = FirebaseFirestore.getInstance();
         CountDownLatch latch = new CountDownLatch(2);
+
+        // Create an Event object with eventId = "6"
+        Event event = new Event();
+        event.setEventId("test_event_id");
+        event.setName("Sample Event");
+        event.setQrCode("sample_qr_code");
+        event.setPosterPhoto("sample_poster_photo");
+        event.setFacility("Sample Facility");
+        event.setStartDate("2023-12-01");
+        event.setEndDate("2023-12-02");
+        event.setLimitedNumber("100");
+        ArrayList<String> entrants=new ArrayList<>();
+        entrants.add("test_entrant_id");
+        event.setEntrants(entrants);
+        ArrayList<String> organizers=new ArrayList<>();
+        organizers.add("933f7579293bbf16");
+        event.setOrganizers(organizers);
 
         // Create an Event object with eventId = "test_event_id"
         Map<String, Object> eventData = new HashMap<>();
@@ -71,6 +90,7 @@ public class US020501 {
                     latch.countDown();  // Proceed to avoid test hanging
                 });
 
+
         // Add a sample Entrant with status "Joined"
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("name", "Test Entrant");
@@ -80,7 +100,6 @@ public class US020501 {
         entrantData.put("status", new HashMap<String, String>() {{
             put("test_event_id", "Joined");
         }});
-        entrantData.put("notifications", new ArrayList<Map<String, String>>());
 
         db.collection("EntrantDB").document("test_entrant_id").set(entrantData)
                 .addOnSuccessListener(aVoid -> latch.countDown())
@@ -89,24 +108,33 @@ public class US020501 {
                     latch.countDown();  // Proceed to avoid test hanging
                 });
 
-        latch.await();
+        latch.await(10, TimeUnit.SECONDS);
 
         // Initialize Intent to launch OrganizerSamplingActivity
         Intent intent = new Intent();
-        intent.putExtra("eventId", "test_event_id");
+        intent.putExtra("selected_event", event); // Pass the Event object as extra
+        intent.putExtra("eventId", event.getEventId()); // Pass eventId separately if needed
 
         // Launch the activity with the intent
         activity = activityRule.launchActivity(intent);
+
+        // Initialize activity parameters after launch
+        activity.limitedNumber = 100;
+        activity.requestedCount = 0;
+
     }
 
     @Test
     public void testNotificationUpdateAfterButtonClick() throws InterruptedException {
+        Thread.sleep(3000);
         // Perform the button click
         Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_pick_new_applicant_button))
                 .perform(ViewActions.click());
 
         // Wait for Firestore to complete updates
         CountDownLatch latch = new CountDownLatch(1);
+
+        Thread.sleep(10000);
 
         db.collection("EntrantDB").document("test_entrant_id").get()
                 .addOnSuccessListener(documentSnapshot -> {
