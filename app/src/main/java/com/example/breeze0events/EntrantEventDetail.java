@@ -110,6 +110,10 @@ public class EntrantEventDetail extends AppCompatActivity {
                 }catch(Exception e) {
 
                 }
+                if(Objects.equals(event.getLimitedNumber(), "0")){
+                    Toast.makeText(EntrantEventDetail.this,"This event is closed", Toast.LENGTH_SHORT).show();;
+                    finish();
+                }
                 if(Objects.equals(event.getGeolocation(), "true")){
                     geoRequest = true;
                 }
