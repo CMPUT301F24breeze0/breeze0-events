@@ -14,12 +14,17 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-// Adapter for handling notifications
+/**
+ * EntrantNotificationActivity represents the Adapter for handling notifications
+ */
 public class EntrantNotificationAdapter extends ArrayAdapter<NewPair<String, String>> {
     private final OnNotificationListener onNotificationListener;
     private final OverallStorageController overallStorageController;
     private final String deviceId;
-
+    /**
+     * OnNotificationListener represents the functionality to jump back to Mylist Activity to check
+     * the corresponding status or information changes.
+     */
     public interface OnNotificationListener {
         void OnNotification();
     }
