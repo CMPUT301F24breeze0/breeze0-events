@@ -7,7 +7,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location Filter:\n(You can enter part of the location name to filter)"/>
+        android:textSize="20dp"
+        android:textColor="@color/button_color"
+        android:text="Location Filter:"/>
     <EditText
         android:id="@+id/location_filter"
         android:layout_width="match_parent"
@@ -21,7 +23,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Keyword Filter:\n(You can enter part of the event name to filter)"/>
+        android:textSize="20dp"
+        android:textColor="@color/button_color"
+        android:text="Keyword Filter:"/>
     <EditText
         android:id="@+id/keyword_filter"
         android:layout_width="match_parent"

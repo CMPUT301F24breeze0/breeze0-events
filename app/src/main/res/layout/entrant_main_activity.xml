@@ -72,23 +72,39 @@
         android:layout_marginBottom="16dp" />
 
     <!-- Bottom Buttons: Notification, Profile -->
-    <Button
-        android:id="@+id/buttonNotification"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Notification"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/text_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttonProfile"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp" />
 
     <!-- Notification Badge -->
+
+    <Button
+        android:id="@+id/buttonNotification"
+        android:layout_width="129dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/button_color"
+        android:text="Notification"
+        android:textColor="@color/text_color"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonRefresh"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonRefresh"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/button_color"
+        android:text="Refresh"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonProfile"
+        app:layout_constraintStart_toEndOf="@id/buttonNotification" />
+
     <TextView
         android:id="@+id/notification_badge"
-        android:layout_width="20dp"
+        android:layout_width="0dp"
         android:layout_height="20dp"
         android:background="@drawable/badge_background"
         android:textColor="@android:color/white"
@@ -102,13 +118,15 @@
     <Button
         android:id="@+id/buttonProfile"
         android:layout_width="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
-        android:text="Profile"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/button_color"
+        android:text="Profile"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonNotification"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintStart_toEndOf="@id/buttonRefresh" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
