@@ -1,16 +1,15 @@
 package com.example.breeze0events;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
-
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,46 +19,32 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 @RunWith(AndroidJUnit4.class)
-public class US020502 {
+public class US020501 {
 
+    // US020501: As an organizer I want to send a notification to chosen entrants to sign up for events.
+    //This is the notification that they "won" the lottery.
+    // latch
     @Rule
     public ActivityTestRule<OrganizerSamplingActivity> activityRule =
             new ActivityTestRule<>(OrganizerSamplingActivity.class, true, false);
 
     private OrganizerSamplingActivity activity;
     private FirebaseFirestore db;
-    private OverallStorageController overallStorageController;
 
     @Before
     public void setUp() throws InterruptedException {
         // Initialize Firestore instance
         db = FirebaseFirestore.getInstance();
         CountDownLatch latch = new CountDownLatch(2);
-
-        // Create an Event object with eventId = "6"
-        Event event = new Event();
-        event.setEventId("test_event_id");
-        event.setName("Sample Event");
-        event.setQrCode("sample_qr_code");
-        event.setPosterPhoto("sample_poster_photo");
-        event.setFacility("Sample Facility");
-        event.setStartDate("2023-12-01");
-        event.setEndDate("2023-12-02");
-        event.setLimitedNumber("100");
-        ArrayList<String> entrants=new ArrayList<>();
-        entrants.add("test_entrant_id");
-        event.setEntrants(entrants);
-        ArrayList<String> organizers=new ArrayList<>();
-        organizers.add("933f7579293bbf16");
-        event.setOrganizers(organizers);
 
         // Create an Event object with eventId = "test_event_id"
         Map<String, Object> eventData = new HashMap<>();
@@ -86,7 +71,6 @@ public class US020502 {
                     latch.countDown();  // Proceed to avoid test hanging
                 });
 
-
         // Add a sample Entrant with status "Joined"
         Map<String, Object> entrantData = new HashMap<>();
         entrantData.put("name", "Test Entrant");
@@ -96,6 +80,7 @@ public class US020502 {
         entrantData.put("status", new HashMap<String, String>() {{
             put("test_event_id", "Joined");
         }});
+        entrantData.put("notifications", new ArrayList<Map<String, String>>());
 
         db.collection("EntrantDB").document("test_entrant_id").set(entrantData)
                 .addOnSuccessListener(aVoid -> latch.countDown())
@@ -104,47 +89,42 @@ public class US020502 {
                     latch.countDown();  // Proceed to avoid test hanging
                 });
 
-        latch.await(10, TimeUnit.SECONDS);
+        latch.await();
 
         // Initialize Intent to launch OrganizerSamplingActivity
         Intent intent = new Intent();
-        intent.putExtra("selected_event", event); // Pass the Event object as extra
-        intent.putExtra("eventId", event.getEventId()); // Pass eventId separately if needed
+        intent.putExtra("eventId", "test_event_id");
 
         // Launch the activity with the intent
         activity = activityRule.launchActivity(intent);
-
-        // Initialize activity parameters after launch
-        activity.limitedNumber = 100;
-        activity.requestedCount = 0;
-
     }
 
     @Test
-    public void testPickNewApplicantsButtonClick() throws InterruptedException {
-        // Perform a click on the button that triggers pickNewApplicants
-        Thread.sleep(3000);
-
-        // Check if joinedEntrants has elements
-        assertFalse("joinedEntrants should not be empty", activity.joinedEntrants.isEmpty());
-
-        // Verify that joinedEntrants has at least one entry with status "Requested"
-        boolean hasJoinedEntrant = false;
-
-        for (DocumentSnapshot entrant : activity.joinedEntrants) {
-            Map<String, String> status = (Map<String, String>) entrant.get("status");
-            if ("Joined".equals(status.get("test_event_id"))) {
-                hasJoinedEntrant = true;
-                Log.d("OrganizerSamplingTest", "Selected entrant: " + entrant.get("name"));
-                break;  // Stop once we find a selected entrant
-            }
-        }
-
-        // Assert that there is at least one selected entrant
-        assertTrue("There should be at least one selected entrant", hasJoinedEntrant);
+    public void testNotificationUpdateAfterButtonClick() throws InterruptedException {
+        // Perform the button click
         Espresso.onView(ViewMatchers.withId(R.id.organizer_sampling_activity_pick_new_applicant_button))
                 .perform(ViewActions.click());
-        assertTrue("joinedEntrants should not be empty", activity.joinedEntrants.isEmpty());
+
+        // Wait for Firestore to complete updates
+        CountDownLatch latch = new CountDownLatch(1);
+
+        db.collection("EntrantDB").document("test_entrant_id").get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        ArrayList<Map<String, String>> notifications =
+                                (ArrayList<Map<String, String>>) documentSnapshot.get("notifications");
+                        assertTrue("Notifications should not be empty", notifications != null && !notifications.isEmpty());
+                    } else {
+                        fail("Entrant document not found");
+                    }
+                    latch.countDown();
+                })
+                .addOnFailureListener(e -> {
+                    fail("Failed to retrieve entrant document: " + e.getMessage());
+                    latch.countDown();
+                });
+
+        latch.await();  // Wait for Firestore updates to complete
     }
 
     @After
@@ -156,11 +136,13 @@ public class US020502 {
 
         // Clean up Firestore documents created during the test
         db.collection("OverallDB").document("test_event_id").delete()
-                .addOnSuccessListener(aVoid -> Log.d("US020502", "Test event deleted successfully"))
-                .addOnFailureListener(e -> Log.e("US020502", "Failed to delete test event", e));
+                .addOnSuccessListener(aVoid -> Log.d("US020501", "Test event deleted successfully"))
+                .addOnFailureListener(e -> Log.e("US020501", "Failed to delete test event", e));
 
         db.collection("EntrantDB").document("test_entrant_id").delete()
-                .addOnSuccessListener(aVoid -> Log.d("US020502", "Test entrant deleted successfully"))
-                .addOnFailureListener(e -> Log.e("US020502", "Failed to delete test entrant", e));
+                .addOnSuccessListener(aVoid -> Log.d("US020501", "Test entrant deleted successfully"))
+                .addOnFailureListener(e -> Log.e("US020501", "Failed to delete test entrant", e));
     }
 }
+
+
