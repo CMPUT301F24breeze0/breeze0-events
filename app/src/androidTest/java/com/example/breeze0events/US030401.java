@@ -128,9 +128,10 @@ public class US030401 {
     public void testEventListDisplayedAndEventDetailsOpened() throws InterruptedException {
         try (ActivityScenario<AdminEventActivity> scenario = ActivityScenario.launch(AdminEventActivity.class)) {
             // Verify the event list is displayed
+            Thread.sleep(4000);
             onView(withId(R.id.eventsList))
                     .check(ViewAssertions.matches(isDisplayed()));
-
+            Thread.sleep(4000);
             // Verify the mock event is present in the list
             onData(withItemContent(mockEventName))
                     .inAdapterView(withId(R.id.eventsList))

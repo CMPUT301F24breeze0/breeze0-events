@@ -119,7 +119,7 @@ public class US030101 {
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
-
+        Thread.sleep(1000);
         onView(withId(R.id.eventsList))
                 .check(ViewAssertions.matches(not(withText("Test Event for Deletion"))));
 

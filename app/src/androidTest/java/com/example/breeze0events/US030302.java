@@ -110,9 +110,6 @@ public class US030302 {
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
-        Thread.sleep(1000);
-
-        onView(withId(R.id.refreshButton)).perform(click());
 
         Thread.sleep(1000);
 

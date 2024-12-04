@@ -153,7 +153,7 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                 changeRequestToReject();
             }
         });
-        setupRealTimeListener();
+  
     }
     /**
      * Loads event details such as the limited number of entrants allowed.
@@ -364,17 +364,4 @@ public class OrganizerSamplingActivity extends AppCompatActivity {
                 });
     }
 
-    private void setupRealTimeListener() {
-        db.collection("EntrantDB").addSnapshotListener((snapshots, error) -> {
-            if (error != null) {
-                Log.e("OrganizerSampling", "Error listening for changes", error);
-                return;
-            }
-
-            if (snapshots != null) {
-                Log.d("OrganizerSampling", "Database updated, reloading entrants");
-                loadEntrantsWithJoinedStatus();
-            }
-        });
-    }
 }

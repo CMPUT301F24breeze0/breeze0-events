@@ -192,7 +192,7 @@ public class AdminEventDetail extends AppCompatActivity {
 
                     Toast.makeText(this, "Event deleted successfully.", Toast.LENGTH_SHORT).show();
                     BackToEventList();
-                    finish();
+                    //finish();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("AdminEventDetail", "Failed to delete event from OverallDB", e);
@@ -205,6 +205,7 @@ public class AdminEventDetail extends AppCompatActivity {
      */
     private void BackToEventList() {
         Intent intent = new Intent(AdminEventDetail.this, AdminEventActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);  //reference: https://stackoverflow.com/questions/23718356/why-does-flag-activity-clear-top-not-work
         startActivity(intent);
         finish();
     }
